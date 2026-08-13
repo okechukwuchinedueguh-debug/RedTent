@@ -139,6 +139,8 @@ export const appRouter = router({
       }
       return db.updateProfileIdentity(ctx.user.id, { ...(input.username ? { username: input.username } : {}), ...photoValues });
     }),
+    removePhoto: protectedProcedure.mutation(({ ctx }) => db.clearProfilePhoto(ctx.user.id)),
+    completeOnboarding: protectedProcedure.mutation(({ ctx }) => db.completeProfileOnboarding(ctx.user.id)),
   }),
   cycles: router({
     summary: protectedProcedure.query(async ({ ctx }) => getCurrentCycle(ctx.user.id)),

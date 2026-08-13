@@ -2,7 +2,8 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { copy } from "@/lib/redtent";
-import { Camera, ImagePlus, Loader2, LockKeyhole, LogOut, ShieldCheck, Sparkles, UserRound } from "lucide-react";
+import { getProfilePhotoPresentation } from "@/lib/profilePhoto";
+import { Camera, ImagePlus, Loader2, LockKeyhole, LogOut, ShieldCheck, Sparkles, Trash2, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -39,6 +40,14 @@ export default function ProfilePage() {
     onSuccess: async () => { await profile.refetch(); toast.success("Your Redtent preferences are saved."); },
     onError: error => toast.error(error.message),
   });
+  const removePhoto = trpc.profile.removePhoto.useMutation({
+    onSuccess: async () => {
+      setPendingPhoto(null);
+      await Promise.all([profile.refetch(), utils.profile.get.invalidate(), utils.dashboard.overview.invalidate()]);
+      toast.success("Your profile photo has been removed.");
+    },
+    onError: error => toast.error(error.message),
+  });
 
   const selectPhoto = (file?: File) => {
     if (!file) return;
@@ -51,7 +60,9 @@ export default function ProfilePage() {
   };
 
   const savedPhoto = profile.data?.profilePhotoUrl || null;
-  const photo = pendingPhoto || savedPhoto;
+  const photoState = getProfilePhotoPresentation(pendingPhoto, savedPhoto);
+  const photo = photoState.kind === "photo" ? photoState.url : null;
+  const photoAction = photoState.action;
   const displayName = username || profile.data?.username || user?.name || "Redtent member";
   const usernameValid = !username || /^[a-z0-9_]{3,24}$/.test(username);
 
@@ -61,13 +72,13 @@ export default function ProfilePage() {
     <section className="rose-card mt-7 p-5 sm:p-7">
       <p className="eyebrow">Your Redtent identity</p>
       <h2 className="mt-1 font-display text-2xl">Make your space feel like yours.</h2>
-      <p className="mt-2 text-sm leading-6 text-[#806A63]">Your username is unique to Redtent. Your profile photo is private to your account and can be replaced whenever you choose.</p>
+      <p className="mt-2 text-sm leading-6 text-[#806A63]">Your username is unique to Redtent. Your profile photo is private to your account and can be replaced or removed whenever you choose.</p>
       <div className="mt-6 flex flex-col gap-5 sm:flex-row sm:items-center">
         <div className="relative grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-[1.6rem] bg-[#C76E79] text-2xl font-bold text-white shadow-[0_10px_25px_rgba(172,79,96,0.22)]">
           {photo ? <img src={photo} alt="Your selected Redtent profile" className="h-full w-full object-cover" /> : <UserRound className="h-9 w-9" />}
           <button type="button" onClick={() => photoInput.current?.click()} className="absolute inset-x-2 bottom-2 flex items-center justify-center gap-1 rounded-lg bg-[#3E2527]/80 px-2 py-1.5 text-[10px] font-bold text-white backdrop-blur"><Camera className="h-3 w-3" /> Change</button>
         </div>
-        <div className="min-w-0 flex-1"><p className="text-lg font-semibold text-[#533A34]">{displayName}</p><p className="mt-1 text-sm text-[#806A63]">{user?.email || "Your secure Redtent account"}</p><button type="button" onClick={() => photoInput.current?.click()} className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#A84D5F]"><ImagePlus className="h-4 w-4" /> {photo ? "Choose another photo" : "Add a profile photo"}</button></div>
+        <div className="min-w-0 flex-1"><p className="text-lg font-semibold text-[#533A34]">{displayName}</p><p className="mt-1 text-sm text-[#806A63]">{user?.email || "Your secure Redtent account"}</p><div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2"><button type="button" onClick={() => photoInput.current?.click()} className="inline-flex items-center gap-2 text-sm font-semibold text-[#A84D5F]"><ImagePlus className="h-4 w-4" /> {photo ? "Choose another photo" : "Add a profile photo"}</button>{photoAction !== "none" ? <button type="button" onClick={() => photoAction === "discard" ? setPendingPhoto(null) : removePhoto.mutate()} disabled={removePhoto.isPending} className="inline-flex items-center gap-2 text-sm font-semibold text-[#8B5D55] disabled:opacity-60"><Trash2 className="h-4 w-4" /> {removePhoto.isPending ? "Removing photo..." : photoAction === "discard" ? "Discard selected photo" : "Remove photo"}</button> : null}</div></div>
       </div>
       <input ref={photoInput} onChange={event => selectPhoto(event.target.files?.[0])} accept="image/jpeg,image/png,image/webp" type="file" className="hidden" />
       <label className="mt-6 block"><span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-[#7E655D]">Username</span><div className="relative"><span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#9B827A]">@</span><input value={username} onChange={event => setUsername(event.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))} maxLength={24} className="field-input pl-7" placeholder="your_redtent_name" aria-describedby="username-help" /></div><span id="username-help" className={`mt-1.5 block text-xs ${username && !usernameValid ? "text-[#B04D5C]" : "text-[#8D756C]"}`}>{username && !usernameValid ? "Use 3 to 24 lowercase letters, numbers, or underscores." : "Use lowercase letters, numbers, or underscores. You can leave this blank until you are ready."}</span></label>

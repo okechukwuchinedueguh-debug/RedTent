@@ -14,7 +14,8 @@ Redtent is a mobile-first, authenticated wellbeing application for menstrual-cyc
 | Your Patterns and Tomorrow | Deterministic observations and an on-demand next-day briefing derived only from the user’s saved records. They state uncertainty and do not diagnose or claim causation. |
 | Ask Redtent | A contextual AI surface where the user explicitly chooses whether recent wellness, Food Lens, and Your Space data is included for a single question. Conversation messages are kept in browser session state, not persisted as a new personal-data record. |
 | Personal preferences | Optional food-culture, preference, restriction, and wellness-goal fields that help Food Lens and Ask Redtent produce more relevant general guidance. |
-| Account identity | An optional unique Redtent username and replaceable profile photo, with a private fallback avatar when no image is chosen. |
+| Account identity | An optional unique Redtent username and replaceable or removable profile photo, with a private fallback avatar when no image is chosen. |
+| First-time setup | A three-step, dismissible onboarding flow for optional identity details, cycle context, and a clear privacy reminder. Completion is saved only to the signed-in user profile. |
 | Responsive experience | A bottom navigation bar for mobile and a persistent sidebar for desktop. |
 
 ## Technology architecture
@@ -40,7 +41,7 @@ All personal feature procedures use the authenticated user from the server conte
 
 Food image files are uploaded under a user-specific object-storage path. Only the storage key, serving URL, phase, and structured analysis JSON are saved in the database. The server obtains a short-lived signed image URL only for the LLM vision request; the LLM call itself is server-side.
 
-Profile photos follow the same user-specific storage approach. Redtent accepts only JPEG, PNG, or WebP files up to 2 MB, stores only the generated object key and serving URL in the user’s own profile row, and scopes every identity mutation to the authenticated user. Usernames are normalized to lowercase characters, numbers, and underscores, then protected by a unique database index.
+Profile photos follow the same user-specific storage approach. Redtent accepts only JPEG, PNG, or WebP files up to 2 MB, stores only the generated object key and serving URL in the user’s own profile row, and scopes every identity mutation to the authenticated user. A user may remove their photo at any time; Redtent clears the stored references and restores the fallback avatar. Usernames are normalized to lowercase characters, numbers, and underscores, then protected by a unique database index.
 
 ## Cycle and health-safety boundaries
 
@@ -75,3 +76,9 @@ The automated test suite covers the cycle-phase boundaries and estimates, histor
 ## Deployment
 
 Create a project checkpoint after validation. From the project management interface, use the **Publish** button to deploy the checkpoint. The managed platform handles runtime configuration and injected credentials; no external hosting configuration is required for the default deployment path.
+
+### Custom production domain
+
+Redtent can use a branded custom domain through the managed project’s **Settings → Domains** panel. First choose the exact hostname, such as `app.example.com` or `redtent.example.com`. Add that hostname in the panel, then create the DNS record shown by the platform at the domain registrar. Keep the current managed `manus.space` address active until DNS validation reports success, test sign-in and each application route on the new hostname, then set the new hostname as the primary public address.
+
+The domain owner must provide the exact domain or subdomain and have access to its DNS settings. No application code or secret needs to change for the connection. If Redtent continues to use the separate Vercel deployment, configure the domain against one hosting provider only to avoid conflicting DNS records; the managed Redtent deployment already supports custom domains.

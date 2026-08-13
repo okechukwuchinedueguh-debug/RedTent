@@ -35,6 +35,7 @@ export const userProfiles = mysqlTable(
     username: varchar("username", { length: 32 }),
     profilePhotoKey: varchar("profilePhotoKey", { length: 500 }),
     profilePhotoUrl: varchar("profilePhotoUrl", { length: 700 }),
+    onboardingCompletedAt: timestamp("onboardingCompletedAt"),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   },

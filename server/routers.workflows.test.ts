@@ -13,6 +13,9 @@ const mocks = vi.hoisted(() => ({
   createFoodEntry: vi.fn(),
   getProfileByUsername: vi.fn(),
   updateProfileIdentity: vi.fn(),
+  updateProfile: vi.fn(),
+  clearProfilePhoto: vi.fn(),
+  completeProfileOnboarding: vi.fn(),
   storagePut: vi.fn(),
   storageGetSignedUrl: vi.fn(),
   listLLMModels: vi.fn(),
@@ -114,5 +117,39 @@ describe("core Redtent workflows", () => {
     const caller = appRouter.createCaller(contextFor(77));
     await expect(caller.profile.updateIdentity({ username: "taken_name" })).rejects.toMatchObject({ code: "CONFLICT" });
     expect(mocks.updateProfileIdentity).not.toHaveBeenCalled();
+  });
+
+  it("clears only the authenticated user’s profile-photo reference", async () => {
+    mocks.clearProfilePhoto.mockResolvedValue({ userId: 77, profilePhotoUrl: null });
+    const caller = appRouter.createCaller(contextFor(77));
+    await expect(caller.profile.removePhoto()).resolves.toMatchObject({ userId: 77, profilePhotoUrl: null });
+    expect(mocks.clearProfilePhoto).toHaveBeenCalledWith(77);
+  });
+
+  it("records onboarding completion only for the authenticated user", async () => {
+    mocks.completeProfileOnboarding.mockResolvedValue({ userId: 77, onboardingCompletedAt: new Date() });
+    const caller = appRouter.createCaller(contextFor(77));
+    await expect(caller.profile.completeOnboarding()).resolves.toMatchObject({ userId: 77 });
+    expect(mocks.completeProfileOnboarding).toHaveBeenCalledWith(77);
+  });
+
+  it("saves the complete onboarding path in the authenticated user’s private profile", async () => {
+    mocks.getProfileByUsername.mockResolvedValue(undefined);
+    mocks.storagePut.mockResolvedValue({ key: "redtent/77/profile/profile-photo.webp", url: "/manus-storage/redtent/77/profile/profile-photo.webp" });
+    mocks.updateProfileIdentity.mockResolvedValue({ userId: 77, username: "calm_cycle" });
+    mocks.updateProfile.mockResolvedValue({ userId: 77, preferredCycleLength: 30, preferredPeriodLength: 6 });
+    mocks.createCycleLog.mockResolvedValue(601);
+    mocks.completeProfileOnboarding.mockResolvedValue({ userId: 77, onboardingCompletedAt: new Date() });
+    const caller = appRouter.createCaller(contextFor(77));
+
+    await caller.profile.updateIdentity({ username: "calm_cycle", photoDataUrl: "data:image/webp;base64,aGVsbG8=" });
+    await caller.profile.save({ preferredCycleLength: 30, preferredPeriodLength: 6 });
+    await caller.cycles.create({ startAt: new Date("2026-08-04T12:00:00.000Z") });
+    await caller.profile.completeOnboarding();
+
+    expect(mocks.updateProfileIdentity).toHaveBeenCalledWith(77, expect.objectContaining({ username: "calm_cycle", profilePhotoUrl: expect.stringContaining("redtent/77/profile/") }));
+    expect(mocks.updateProfile).toHaveBeenCalledWith(77, { preferredCycleLength: 30, preferredPeriodLength: 6 });
+    expect(mocks.createCycleLog).toHaveBeenCalledWith(77, expect.objectContaining({ startAt: new Date("2026-08-04T00:00:00.000Z") }));
+    expect(mocks.completeProfileOnboarding).toHaveBeenCalledWith(77);
   });
 });

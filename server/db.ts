@@ -73,9 +73,19 @@ export async function getProfileByUsername(username: string) {
   return result[0];
 }
 
-export async function updateProfileIdentity(userId: number, values: { username?: string; profilePhotoKey?: string; profilePhotoUrl?: string }) {
+export async function updateProfileIdentity(userId: number, values: { username?: string; profilePhotoKey?: string | null; profilePhotoUrl?: string | null }) {
   const db = await requiredDb();
   await db.insert(userProfiles).values({ userId, ...values }).onDuplicateKeyUpdate({ set: values });
+  return getOrCreateProfile(userId);
+}
+
+export async function clearProfilePhoto(userId: number) {
+  return updateProfileIdentity(userId, { profilePhotoKey: null, profilePhotoUrl: null });
+}
+
+export async function completeProfileOnboarding(userId: number) {
+  const db = await requiredDb();
+  await db.insert(userProfiles).values({ userId, onboardingCompletedAt: new Date() }).onDuplicateKeyUpdate({ set: { onboardingCompletedAt: new Date() } });
   return getOrCreateProfile(userId);
 }
 

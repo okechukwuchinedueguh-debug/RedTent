@@ -17,6 +17,7 @@ import {
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { trpc } from "@/lib/trpc";
+import OnboardingFlow from "./OnboardingFlow";
 
 const mobileItems = [
   { path: "/", label: "Today", icon: House },
@@ -91,6 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
       <main className="min-h-screen pb-24 lg:ml-[250px] lg:pb-8">{children}</main>
       <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-[#EBDDD7] bg-[#FFFDFB]/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden">{nav(mobileItems, true)}</nav>
+      {profile.data && !profile.data.onboardingCompletedAt ? <OnboardingFlow /> : null}
     </div>
   );
 }

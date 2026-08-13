@@ -58,3 +58,13 @@
 - [x] Commit the latest Redtent product reform to the Vercel-connected Git branch and verify the resulting Vercel deployment.
 - [x] Commit every latest Redtent reform file to the Vercel-connected Git branch and record the resulting commit SHA.
 - [x] Verify that Vercel reaches READY for the latest Redtent commit and record the deployment URL.
+- [x] Add a first-time onboarding flow that guides users through cycle context and identity setup.
+- [x] Add a profile-photo removal action that safely clears the user-scoped photo reference and restores the fallback avatar.
+- [x] Document the custom production-domain connection requirements and configuration path for Redtent.
+- [x] Add regression coverage and validate the completed onboarding and photo-removal flows before release.
+- [x] Add an end-to-end server workflow regression for onboarding identity, cycle settings, an optional period start, and completion persistence.
+- [x] Verify the Profile photo-removal control restores the fallback avatar without exposing a user photo reference.
+- [x] Re-run final validation after the additional onboarding and photo-removal checks.
+- [ ] Connect the exact Redtent custom domain after the domain owner supplies the chosen hostname and DNS access.
+- [x] Add focused presentation-state coverage for the Profile remove-photo control and fallback avatar transition.
+- [x] Re-run final onboarding and photo-removal validation after the focused control-state coverage is complete.
