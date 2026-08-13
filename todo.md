@@ -44,5 +44,5 @@
 - [x] Add explicit Food Lens contexts for meals, groceries, menus, labels, recipes, and shelves with safe context-specific guidance and regression coverage.
 - [x] Diagnose and resolve the persistent mobile loading state observed after the Food Lens capture-context update.
 - [x] Commit the latest Redtent product reform to the Vercel-connected Git branch and verify the resulting Vercel deployment.
-- [ ] Commit every latest Redtent reform file to the Vercel-connected Git branch and record the resulting commit SHA.
-- [ ] Verify that Vercel reaches READY for the latest Redtent commit and record the deployment URL.
+- [x] Commit every latest Redtent reform file to the Vercel-connected Git branch and record the resulting commit SHA.
+- [x] Verify that Vercel reaches READY for the latest Redtent commit and record the deployment URL.
