@@ -11,4 +11,11 @@ describe("mobile navigation hosting-overlay clearance", () => {
     expect(layout).toContain("app-mobile-navigation fixed inset-x-0");
     expect(layout).not.toContain("app-mobile-navigation fixed inset-x-0 bottom-0");
   });
+
+  it("keeps every destination accessible around a central period-log action", () => {
+    expect(layout).toContain("MobilePeriodLogButton navigate={setLocation}");
+    expect(layout).toContain('import { MobilePeriodLogButton } from "./MobilePeriodLogButton"');
+    expect(layout).toContain("mobileNavigation[0]");
+    expect(layout).toContain("mobileNavigation[1]");
+  });
 });

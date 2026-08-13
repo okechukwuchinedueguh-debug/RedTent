@@ -137,6 +137,7 @@
   .theme-choice { display: inline-flex; min-height: 2.7rem; align-items: center; justify-content: center; gap: 0.4rem; border: 1px solid #e8d9d4; border-radius: 0.75rem; background: #fffdfb; color: #765852; font-size: 0.75rem; font-weight: 700; }
   .theme-choice.active { border-color: #b65b69; background: #f8e4e5; color: #963e50; box-shadow: inset 0 0 0 1px #efd0ca; }
   .app-mobile-navigation { bottom: max(4.75rem, calc(env(safe-area-inset-bottom) + 4rem)); }
+  .mobile-period-log-action { min-height: 4.25rem; }
   @media (min-width: 640px) { .container { padding-left: 1.5rem; padding-right: 1.5rem; } }
   @media (min-width: 1024px) { .container { padding-left: 2rem; padding-right: 2rem; max-width: 1280px; } }
 }
@@ -170,6 +171,7 @@
 .dark [class*="bg-[#DED0DF]"] { background-color: #403448 !important; }
 .dark [class*="bg-[#F8E8E5]"] { background-color: #4a3037 !important; }
 .dark .app-sidebar, .dark .app-mobile-navigation { border-color: #513943 !important; background-color: rgba(39, 28, 34, 0.96) !important; }
+.dark .mobile-period-log-action { background: #c45c71 !important; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34); }
 .dark .onboarding-surface { border-color: #694955; background: #2c2027 !important; }
 .dark .onboarding-choice { background: #3c2d35 !important; color: #f8e9e5 !important; }
 .dark .onboarding-choice--selected { background: #bf5368 !important; color: #fff7f4 !important; box-shadow: 0 0 0 1px #e48999 inset; }

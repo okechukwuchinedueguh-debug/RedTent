@@ -107,4 +107,16 @@
 - [x] Re-run final validation after confirming both the mobile calendar and onboarding states are readable in dark mode.
 - [x] Add mobile bottom-navigation clearance above the hosting branding overlay while preserving device safe-area support.
 - [x] Validate the adjusted mobile navigation in dark and light appearances with regression coverage.
-- [ ] Save and publish the mobile navigation clearance update.
+- [x] Save and publish the mobile navigation clearance update.
+- [x] Add a prominent center mobile navigation action that opens the period-entry flow.
+- [x] Preserve access to all mobile navigation destinations while adding the center period-log action.
+- [x] Add regression coverage and mobile visual validation for the central period-log action.
+- [ ] Save and publish the mobile period-log action update.
+- [x] Add a rendered CyclePage interaction test that opens the period-entry sheet from the deep link and verifies the route replacement.
+- [x] Add a rendered DashboardLayout interaction test that activates the central mobile Log period control.
+- [x] Add a CyclePage integration regression that opens the period-entry sheet from the deep link and replaces the route with the clean Cycle path.
+- [x] Add a central mobile Log period interaction regression that navigates into the tested period-entry flow.
+- [x] Add focused regression coverage that verifies the period-log deep link opens the entry sheet and clears its query parameter.
+- [x] Capture and review the mobile Log period action with the period-entry flow open.
+- [x] Mount CyclePage with mocked route and tRPC state to verify the period-entry sheet opens from the deep link and replaces the route with /cycle.
+- [x] Mount DashboardLayout with mocked authenticated state to verify its central mobile Log period control navigates into the period-entry flow.

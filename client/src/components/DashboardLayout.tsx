@@ -1,7 +1,7 @@
 import { startLogin } from "@/const";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLocation } from "wouter";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BookHeart,
   CalendarDays,
@@ -18,6 +18,7 @@ import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { trpc } from "@/lib/trpc";
 import OnboardingFlow from "./OnboardingFlow";
+import { MobilePeriodLogButton } from "./MobilePeriodLogButton";
 
 const mobileItems = [
   { path: "/", label: "Today", icon: House },
@@ -80,6 +81,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     );
   });
 
+  const mobileNavigation = [mobileItems.slice(0, 2), mobileItems.slice(2)];
+
   return (
     <div className="min-h-screen warm-canvas text-[#3F2A25]">
       {isOffline && <div role="status" className="fixed inset-x-3 top-3 z-50 mx-auto max-w-md rounded-xl bg-[#513039] px-4 py-3 text-center text-xs font-semibold text-white shadow-lg">You’re offline. Your latest saved information may not be available until you reconnect.</div>}
@@ -92,7 +95,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
       <main className="min-h-screen pb-40 lg:ml-[250px] lg:pb-8">{children}</main>
-      <nav className="app-mobile-navigation fixed inset-x-0 z-40 grid grid-cols-5 border-t border-[#EBDDD7] bg-[#FFFDFB]/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden">{nav(mobileItems, true)}</nav>
+      <nav className="app-mobile-navigation fixed inset-x-0 z-40 flex items-end border-t border-[#EBDDD7] bg-[#FFFDFB]/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden" aria-label="Primary navigation"><div className="grid flex-1 grid-cols-2">{nav(mobileNavigation[0], true)}</div><MobilePeriodLogButton navigate={setLocation} /><div className="grid flex-1 grid-cols-3">{nav(mobileNavigation[1], true)}</div></nav>
       {profile.data && (!profile.data.onboardingCompletedAt || isOnboardingPreview) ? <OnboardingFlow /> : null}
     </div>
   );
