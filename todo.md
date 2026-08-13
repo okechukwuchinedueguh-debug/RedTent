@@ -75,10 +75,17 @@
 - [x] Add a smooth light-to-dark and dark-to-light theme transition that respects reduced-motion preferences.
 - [x] Validate the theme transition behavior and publish the updated Redtent release.
 - [x] Exercise the Profile theme controls and confirm smooth light-to-dark and dark-to-light transitions in the rendered app.
-- [ ] Save and publish the Redtent theme-transition checkpoint.
-- [ ] Push the theme-transition release to the Vercel-connected branch and verify its Vercel deployment reaches READY.
+- [x] Save and publish the Redtent theme-transition checkpoint.
+- [x] Push the theme-transition release to the Vercel-connected branch and verify its Vercel deployment reaches READY.
 - [x] Add focused transition-state coverage for live theme application and the reduced-motion fallback.
 - [x] Reconfirm the rendered Redtent theme transition after the live transition-state validation.
 - [x] Commit the completed invitation and theme release to the Vercel-connected Git branch and verify its Vercel deployment.
 - [x] Add focused presentation-state coverage for the Profile remove-photo control and fallback avatar transition.
 - [x] Re-run final onboarding and photo-removal validation after the focused control-state coverage is complete.
+- [x] Add a privacy-preserving shareable Redtent invitation link that contains no inviter or wellness data.
+- [x] Add an explicit copy-link action and clear feedback to the Invite a friend experience.
+- [x] Add regression coverage and responsive validation for invitation-link generation and copying.
+- [x] Ensure generated invitation links use Redtent’s public published URL rather than a local development host.
+- [ ] Save and publish the Redtent shareable invitation-link update.
+- [x] Add focused coverage for the invitation copy-link success and clipboard-failure feedback states.
+- [x] Validate the new invitation-link row and Copy link action on a mobile Profile layout.
