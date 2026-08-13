@@ -158,8 +158,30 @@
 .dark .field-input:focus { border-color: #d78292; box-shadow: 0 0 0 4px rgba(215, 130, 146, 0.20); }
 .dark .theme-choice { border-color: #624852; background: #2e2229; color: #e5d2ce; }
 .dark .theme-choice.active { border-color: #d78292; background: #593440; color: #ffe2e6; box-shadow: inset 0 0 0 1px #875260; }
-.dark [class*="text-[#"] { color: #f1dfda !important; }
-.dark [class*="bg-[#F3ECEE]"], .dark [class*="bg-[#F4E5E0]"], .dark [class*="bg-[#F8EEE8]"], .dark [class*="bg-[#F7EAE6]"] { background-color: #352730 !important; }
+.dark [class*="text-[#"] { color: #f7e9e5 !important; }
+.dark [class*="bg-[#F3ECEE]"], .dark [class*="bg-[#F4E5E0]"], .dark [class*="bg-[#F8EEE8]"], .dark [class*="bg-[#F7EAE6]"], .dark [class*="bg-[#F7E7E3]"], .dark [class*="bg-[#F7E8E4]"], .dark [class*="bg-[#F8EEE9]"] { background-color: #3a2b33 !important; }
+.dark [class*="bg-[#FFFDFB]"], .dark [class*="bg-[#FFFCFA]"] { background-color: #2c2027 !important; }
+.dark [class*="bg-[#FFF3F3]"] { background-color: #4b303a !important; }
+.dark [class*="bg-[#FFF2F2]"] { background-color: #4b2f38 !important; }
+.dark [class*="bg-[#FFF9EA]"] { background-color: #44371f !important; }
+.dark [class*="bg-[#F8E1B3]"] { background-color: #4d3b20 !important; }
+.dark [class*="bg-[#DCE9D9]"] { background-color: #294538 !important; }
+.dark [class*="bg-[#DED0DF]"] { background-color: #403448 !important; }
+.dark [class*="bg-[#F8E8E5]"] { background-color: #4a3037 !important; }
+.dark .app-sidebar, .dark .app-mobile-navigation { border-color: #513943 !important; background-color: rgba(39, 28, 34, 0.96) !important; }
+.dark .onboarding-surface { border-color: #694955; background: #2c2027 !important; }
+.dark .onboarding-choice { background: #3c2d35 !important; color: #f8e9e5 !important; }
+.dark .onboarding-choice--selected { background: #bf5368 !important; color: #fff7f4 !important; box-shadow: 0 0 0 1px #e48999 inset; }
+.dark .calendar-status { border-color: #60454d !important; background: #35262e !important; color: #faeae6 !important; }
+.dark .calendar-status--late { border-color: #bf6576 !important; background: #4a2b35 !important; }
+.dark .calendar-status--upcoming, .dark .calendar-status--today { border-color: #b7954a !important; background: #46371e !important; }
+.dark .calendar-day { border-color: #624851 !important; background: #34262d !important; color: #fae9e4 !important; }
+.dark .calendar-day--logged { border-color: #d67c8b !important; background: #b95267 !important; color: #fff8f6 !important; }
+.dark .calendar-day--estimated { border-color: #d98b99 !important; background: #4d3039 !important; color: #ffe7eb !important; }
+.dark .calendar-day--follicular { border-color: #9f8243 !important; background: #4b391f !important; color: #ffedbd !important; }
+.dark .calendar-day--ovulation { border-color: #669a76 !important; background: #294535 !important; color: #e2f6df !important; }
+.dark .calendar-day--luteal { border-color: #9477a6 !important; background: #413248 !important; color: #f2e7ff !important; }
+.dark .calendar-day--menstrual, .dark .calendar-day--past { border-color: #c36f7c !important; background: #4b2e37 !important; color: #ffe8eb !important; }
 
 @media (prefers-reduced-motion: no-preference) {
   html.theme-transitioning,

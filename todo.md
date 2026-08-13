@@ -97,4 +97,11 @@
 - [x] Make a minimalist cycle calendar the first meaningful signed-in experience on the dashboard.
 - [x] Add careful, non-diagnostic calendar states for a period expected in a few days and a late expected period.
 - [x] Add regression coverage and responsive validation for the new theme default and calendar-first dashboard.
-- [ ] Save and publish the revised Redtent login and cycle-calendar experience.
+- [x] Save and publish the revised Redtent login and cycle-calendar experience.
+- [x] Correct dark-mode text, calendar-cell, onboarding, and navigation contrast using consistent dark-surface tokens.
+- [x] Preserve the Light default and validate the corrected dark mode on mobile calendar and onboarding states.
+- [x] Add regression coverage for the dark-theme contrast contract and run the complete Redtent suite.
+- [ ] Save, publish, commit, and push the dark-mode contrast fix to the Vercel-connected branch.
+- [ ] Verify the resulting Vercel deployment reaches READY and record its URL.
+- [x] Capture and review the corrected onboarding overlay in mobile dark mode.
+- [x] Re-run final validation after confirming both the mobile calendar and onboarding states are readable in dark mode.

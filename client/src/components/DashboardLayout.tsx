@@ -40,6 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const profile = trpc.profile.get.useQuery(undefined, { enabled: Boolean(user) });
   const [location, setLocation] = useLocation();
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== "undefined" && !navigator.onLine);
+  const isOnboardingPreview = import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).get("onboarding") === "preview";
 
   useEffect(() => {
     const updateStatus = () => setIsOffline(!navigator.onLine);
@@ -82,7 +83,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen warm-canvas text-[#3F2A25]">
       {isOffline && <div role="status" className="fixed inset-x-3 top-3 z-50 mx-auto max-w-md rounded-xl bg-[#513039] px-4 py-3 text-center text-xs font-semibold text-white shadow-lg">You’re offline. Your latest saved information may not be available until you reconnect.</div>}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[250px] flex-col border-r border-[#E9D9D2] bg-[#FFFDFB]/90 px-4 py-5 backdrop-blur lg:flex">
+      <aside className="app-sidebar fixed inset-y-0 left-0 z-30 hidden w-[250px] flex-col border-r border-[#E9D9D2] bg-[#FFFDFB]/90 px-4 py-5 backdrop-blur lg:flex">
         <button className="flex items-center gap-3 px-3 text-left" onClick={() => setLocation("/")}><div className="brand-mark">R</div><span className="font-display text-[27px]">Redtent</span></button>
         <nav className="mt-10 space-y-1">{nav(desktopItems)}</nav>
         <div className="mt-auto rounded-2xl bg-[#F8EEE8] p-3">
@@ -91,8 +92,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
       <main className="min-h-screen pb-24 lg:ml-[250px] lg:pb-8">{children}</main>
-      <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-[#EBDDD7] bg-[#FFFDFB]/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden">{nav(mobileItems, true)}</nav>
-      {profile.data && !profile.data.onboardingCompletedAt ? <OnboardingFlow /> : null}
+      <nav className="app-mobile-navigation fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-[#EBDDD7] bg-[#FFFDFB]/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden">{nav(mobileItems, true)}</nav>
+      {profile.data && (!profile.data.onboardingCompletedAt || isOnboardingPreview) ? <OnboardingFlow /> : null}
     </div>
   );
 }

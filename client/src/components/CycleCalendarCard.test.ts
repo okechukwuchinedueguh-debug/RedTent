@@ -24,5 +24,6 @@ describe("CycleCalendarCard", () => {
     expect(markup).toContain("Cycle timing can shift");
     expect(markup).toContain("Past estimate");
     expect(markup).toContain("Add period date");
+    expect(markup).toContain("calendar-status--late");
   });
 });
