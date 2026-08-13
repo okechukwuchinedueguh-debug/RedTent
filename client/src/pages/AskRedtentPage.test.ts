@@ -11,5 +11,11 @@ describe("AskRedtentPage mobile layout contract", () => {
     expect(source).toContain("clamp(17rem, calc(100dvh - 31rem), 31rem)");
     expect(source).toContain("order-2 h-fit p-5 lg:order-1");
     expect(source).toContain("order-1 overflow-hidden");
+    expect(source).toContain("ask.conversations.create");
+    expect(source).toContain("Save in Your Space");
+    expect(source).toContain("ask.conversations.get");
+    expect(source).toContain("savedConversation.data.messages");
+    expect(source).toContain("savedConversation.error");
+    expect(source).toContain("We could not open it just now.");
   });
 });

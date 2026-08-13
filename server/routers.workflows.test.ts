@@ -16,6 +16,10 @@ const mocks = vi.hoisted(() => ({
   updateProfile: vi.fn(),
   clearProfilePhoto: vi.fn(),
   completeProfileOnboarding: vi.fn(),
+  createAskConversation: vi.fn(),
+  listAskConversations: vi.fn(),
+  getAskConversation: vi.fn(),
+  deleteAskConversation: vi.fn(),
   storagePut: vi.fn(),
   storageGetSignedUrl: vi.fn(),
   listLLMModels: vi.fn(),
@@ -151,5 +155,28 @@ describe("core Redtent workflows", () => {
     expect(mocks.updateProfile).toHaveBeenCalledWith(77, { preferredCycleLength: 30, preferredPeriodLength: 6 });
     expect(mocks.createCycleLog).toHaveBeenCalledWith(77, expect.objectContaining({ startAt: new Date("2026-08-04T00:00:00.000Z") }));
     expect(mocks.completeProfileOnboarding).toHaveBeenCalledWith(77);
+  });
+
+  it("stores and retrieves a saved Ask Redtent conversation only through the authenticated user scope", async () => {
+    const messages = [
+      { role: "user" as const, content: "What could I eat tonight?" },
+      { role: "assistant" as const, content: "Here are a few gentle options to consider." },
+    ];
+    const savedConversation = { id: 701, userId: 77, title: "What could I eat tonight?", includeWellness: 1, includeFood: 1, includeJournal: 0, createdAt: new Date(), updatedAt: new Date(), messages };
+    mocks.createAskConversation.mockResolvedValue(701);
+    mocks.listAskConversations.mockResolvedValue([savedConversation]);
+    mocks.getAskConversation.mockResolvedValue(savedConversation);
+    mocks.deleteAskConversation.mockResolvedValue(true);
+    const caller = appRouter.createCaller(contextFor(77));
+
+    await expect(caller.ask.conversations.create({ title: savedConversation.title, includeWellness: true, includeFood: true, includeJournal: false, messages })).resolves.toEqual({ id: 701 });
+    await expect(caller.ask.conversations.list()).resolves.toEqual([savedConversation]);
+    await expect(caller.ask.conversations.get({ id: 701 })).resolves.toEqual(savedConversation);
+    await expect(caller.ask.conversations.delete({ id: 701 })).resolves.toEqual({ success: true });
+
+    expect(mocks.createAskConversation).toHaveBeenCalledWith(77, expect.objectContaining({ title: savedConversation.title, messages }));
+    expect(mocks.listAskConversations).toHaveBeenCalledWith(77);
+    expect(mocks.getAskConversation).toHaveBeenCalledWith(77, 701);
+    expect(mocks.deleteAskConversation).toHaveBeenCalledWith(77, 701);
   });
 });

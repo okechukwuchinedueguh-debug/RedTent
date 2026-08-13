@@ -43,6 +43,13 @@
       "when": 1786637218678,
       "tag": "0005_glossy_longshot",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1786658388418,
+      "tag": "0006_hesitant_ravenous",
+      "breakpoints": true
     }
   ]
 }

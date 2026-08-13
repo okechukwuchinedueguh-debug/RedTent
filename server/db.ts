@@ -1,6 +1,8 @@
-import { and, desc, eq, gte, lte } from "drizzle-orm";
+import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
+  askConversationMessages,
+  askConversations,
   cycleLogs,
   foodEntries,
   type InsertUser,
@@ -184,4 +186,49 @@ export async function deleteFoodEntry(userId: number, id: number) {
   const db = await requiredDb();
   const result = await db.delete(foodEntries).where(and(eq(foodEntries.id, id), eq(foodEntries.userId, userId)));
   return result[0].affectedRows > 0;
+}
+
+type SavedAskMessage = { role: "user" | "assistant"; content: string };
+
+export async function createAskConversation(userId: number, values: { title: string; includeWellness: boolean; includeFood: boolean; includeJournal: boolean; messages: SavedAskMessage[] }) {
+  const db = await requiredDb();
+  return db.transaction(async tx => {
+    const result = await tx.insert(askConversations).values({
+      userId,
+      title: values.title,
+      includeWellness: values.includeWellness ? 1 : 0,
+      includeFood: values.includeFood ? 1 : 0,
+      includeJournal: values.includeJournal ? 1 : 0,
+    });
+    const conversationId = Number(result[0].insertId);
+    await tx.insert(askConversationMessages).values(values.messages.map(message => ({
+      conversationId,
+      userId,
+      role: message.role,
+      content: message.content,
+    })));
+    return conversationId;
+  });
+}
+
+export async function listAskConversations(userId: number) {
+  const db = await requiredDb();
+  return db.select().from(askConversations).where(eq(askConversations.userId, userId)).orderBy(desc(askConversations.updatedAt));
+}
+
+export async function getAskConversation(userId: number, id: number) {
+  const db = await requiredDb();
+  const conversation = await db.select().from(askConversations).where(and(eq(askConversations.id, id), eq(askConversations.userId, userId))).limit(1);
+  if (!conversation[0]) return undefined;
+  const messages = await db.select().from(askConversationMessages).where(and(eq(askConversationMessages.conversationId, id), eq(askConversationMessages.userId, userId))).orderBy(asc(askConversationMessages.createdAt), asc(askConversationMessages.id));
+  return { ...conversation[0], messages };
+}
+
+export async function deleteAskConversation(userId: number, id: number) {
+  const db = await requiredDb();
+  return db.transaction(async tx => {
+    await tx.delete(askConversationMessages).where(and(eq(askConversationMessages.conversationId, id), eq(askConversationMessages.userId, userId)));
+    const result = await tx.delete(askConversations).where(and(eq(askConversations.id, id), eq(askConversations.userId, userId)));
+    return result[0].affectedRows > 0;
+  });
 }

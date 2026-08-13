@@ -222,6 +222,22 @@ export const appRouter = router({
       if (typeof answer !== "string") throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Ask Redtent needs a moment. Please try again." });
       return { answer, usedContext: { wellness: input.includeWellness, food: input.includeFood, journal: input.includeJournal } };
     }),
+    conversations: router({
+      list: protectedProcedure.query(({ ctx }) => db.listAskConversations(ctx.user.id)),
+      get: protectedProcedure.input(z.object({ id: z.number().int().positive() })).query(async ({ ctx, input }) => {
+        const conversation = await db.getAskConversation(ctx.user.id, input.id);
+        if (!conversation) throw new TRPCError({ code: "NOT_FOUND", message: "That saved Ask Redtent conversation was not found." });
+        return conversation;
+      }),
+      create: protectedProcedure.input(z.object({
+        title: z.string().trim().min(1).max(180),
+        includeWellness: z.boolean(),
+        includeFood: z.boolean(),
+        includeJournal: z.boolean(),
+        messages: z.array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().trim().min(1).max(8000) })).min(2).max(24),
+      })).mutation(async ({ ctx, input }) => ({ id: await db.createAskConversation(ctx.user.id, input) })),
+      delete: protectedProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => ({ success: await db.deleteAskConversation(ctx.user.id, input.id) })),
+    }),
   }),
 });
 

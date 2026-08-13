@@ -109,9 +109,42 @@ export const foodEntries = mysqlTable(
   table => ({ userCreatedIndex: index("food_user_created_idx").on(table.userId, table.createdAt) })
 );
 
+export const askConversations = mysqlTable(
+  "ask_conversations",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    title: varchar("title", { length: 180 }).notNull(),
+    includeWellness: int("includeWellness").default(1).notNull(),
+    includeFood: int("includeFood").default(1).notNull(),
+    includeJournal: int("includeJournal").default(0).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({ userUpdatedIndex: index("ask_conversation_user_updated_idx").on(table.userId, table.updatedAt) })
+);
+
+export const askConversationMessages = mysqlTable(
+  "ask_conversation_messages",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    conversationId: int("conversationId").notNull(),
+    userId: int("userId").notNull(),
+    role: mysqlEnum("role", ["user", "assistant"]).notNull(),
+    content: text("content").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    userConversationIndex: index("ask_message_user_conversation_idx").on(table.userId, table.conversationId),
+    conversationCreatedIndex: index("ask_message_conversation_created_idx").on(table.conversationId, table.createdAt),
+  })
+);
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 export type CycleLog = typeof cycleLogs.$inferSelect;
 export type WellnessEntry = typeof wellnessEntries.$inferSelect;
 export type JournalEntry = typeof journalEntries.$inferSelect;
 export type FoodEntry = typeof foodEntries.$inferSelect;
+export type AskConversation = typeof askConversations.$inferSelect;
+export type AskConversationMessage = typeof askConversationMessages.$inferSelect;
