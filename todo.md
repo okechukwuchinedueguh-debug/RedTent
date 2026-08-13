@@ -105,3 +105,6 @@
 - [x] Verify the resulting Vercel deployment reaches READY and record its URL.
 - [x] Capture and review the corrected onboarding overlay in mobile dark mode.
 - [x] Re-run final validation after confirming both the mobile calendar and onboarding states are readable in dark mode.
+- [x] Add mobile bottom-navigation clearance above the hosting branding overlay while preserving device safe-area support.
+- [x] Validate the adjusted mobile navigation in dark and light appearances with regression coverage.
+- [ ] Save and publish the mobile navigation clearance update.

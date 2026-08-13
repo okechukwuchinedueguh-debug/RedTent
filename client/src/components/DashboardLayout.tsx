@@ -91,8 +91,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <button onClick={logout} className="mt-3 flex w-full items-center gap-2 rounded-xl px-2 py-2 text-xs font-semibold text-[#8B4E52] transition hover:bg-white"><LogOut className="h-3.5 w-3.5" /> Sign out</button>
         </div>
       </aside>
-      <main className="min-h-screen pb-24 lg:ml-[250px] lg:pb-8">{children}</main>
-      <nav className="app-mobile-navigation fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-[#EBDDD7] bg-[#FFFDFB]/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden">{nav(mobileItems, true)}</nav>
+      <main className="min-h-screen pb-40 lg:ml-[250px] lg:pb-8">{children}</main>
+      <nav className="app-mobile-navigation fixed inset-x-0 z-40 grid grid-cols-5 border-t border-[#EBDDD7] bg-[#FFFDFB]/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden">{nav(mobileItems, true)}</nav>
       {profile.data && (!profile.data.onboardingCompletedAt || isOnboardingPreview) ? <OnboardingFlow /> : null}
     </div>
   );
