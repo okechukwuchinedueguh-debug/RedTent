@@ -19,7 +19,7 @@ export const phaseColors = {
   luteal: "bg-[#90708E] text-white",
 } as const;
 
-export const symptoms = ["Cramps", "Bloating", "Headache", "Breast tenderness", "Acne", "Fatigue", "Back pain", "Cravings"];
+export const symptoms = ["Cramps", "Bloating", "Headache", "Breast tenderness", "Acne", "Fatigue", "Back pain", "Cravings", "Sleep changes", "Appetite changes", "Mood changes", "Skin changes"];
 
 export const localDateInput = (date = new Date()) => {
   const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);

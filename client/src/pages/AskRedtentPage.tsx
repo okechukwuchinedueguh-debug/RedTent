@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
 
-const prompts = ["Why am I feeling tired today?", "What could I eat tonight?", "My period may be coming soon. What meals could I prepare?", "What patterns have you noticed this month?"];
+const prompts = ["What would make my post-menstrual days feel supported?", "My period may be coming soon. What can I notice without overthinking it?", "What could I eat tonight?", "What patterns have you noticed this month?"];
 
 export default function AskRedtentPage() {
   const [location, setLocation] = useLocation();

@@ -147,3 +147,6 @@
 - [x] Complete and document a final mobile dark-mode audit of every routed Redtent screen and shared control before claiming app-wide contrast completion.
 - [x] Capture an initial mobile dark-mode audit across Today, Cycle, Food Lens, Ask Redtent, Your Patterns, Your Space, and Profile; each reviewed route now has readable primary text and controls.
 - [x] Validate and repair the routed Nourish guidance view at /guidance as part of the app-wide dark-mode audit.
+- [x] Define non-diagnostic post-menstrual and premenstrual experience states from the existing private cycle context.
+- [x] Add supportive post-menstrual and premenstrual signs, check-ins, and practical context across Cycle, Wellness, Nourish, and Ask Redtent.
+- [ ] Add focused user-scoped regression coverage, mobile validation, and GitHub/Vercel synchronization for the phase-context update.

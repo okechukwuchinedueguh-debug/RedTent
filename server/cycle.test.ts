@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CycleLog } from "../drizzle/schema";
-import { getCalendarMarks, getCycleSummary, getPhaseForCycleDay } from "./cycle";
+import { getCalendarMarks, getCycleExperience, getCycleSummary, getPhaseForCycleDay, type CycleSummary } from "./cycle";
 
 const log = (start: string, end?: string): CycleLog => ({
   id: Math.floor(Math.random() * 1000),
@@ -29,6 +29,29 @@ describe("cycle calculations", () => {
     expect(getPhaseForCycleDay(12, 28, 5)).toBe("follicular");
     expect(getPhaseForCycleDay(14, 28, 5)).toBe("ovulation");
     expect(getPhaseForCycleDay(25, 28, 5)).toBe("luteal");
+  });
+
+  it("derives post-menstrual context only in the early days after a logged period ends", () => {
+    const summary: CycleSummary = { cycleDay: 7, phase: "follicular", phaseDay: 2, daysUntilNextPhase: 6, nextPhase: "ovulation", nextPeriodAt: null, currentCycleStartAt: null, averageCycleLength: 28, medianCycleLength: 28, averagePeriodLength: 5, variation: 0, confidence: "high" };
+    const experience = getCycleExperience(summary);
+
+    expect(experience.id).toBe("post-menstrual");
+    expect(experience.detail).toContain("Some people notice");
+    expect(experience.detail).not.toContain("causes");
+  });
+
+  it("derives premenstrual context only in the estimated final week before a period", () => {
+    const summary: CycleSummary = { cycleDay: 25, phase: "luteal", phaseDay: 9, daysUntilNextPhase: 3, nextPhase: "menstrual", nextPeriodAt: null, currentCycleStartAt: null, averageCycleLength: 28, medianCycleLength: 28, averagePeriodLength: 5, variation: 0, confidence: "high" };
+    const experience = getCycleExperience(summary);
+
+    expect(experience.id).toBe("premenstrual");
+    expect(experience.label).toBe("Premenstrual context");
+    expect(experience.detail).toContain("estimated within about a week");
+  });
+
+  it("keeps the experience at a general luteal context outside the premenstrual window", () => {
+    const summary: CycleSummary = { cycleDay: 18, phase: "luteal", phaseDay: 2, daysUntilNextPhase: 10, nextPhase: "menstrual", nextPeriodAt: null, currentCycleStartAt: null, averageCycleLength: 28, medianCycleLength: 28, averagePeriodLength: 5, variation: 0, confidence: "high" };
+    expect(getCycleExperience(summary).id).toBe("luteal");
   });
 
   it("marks historical period dates separately from future estimates", () => {

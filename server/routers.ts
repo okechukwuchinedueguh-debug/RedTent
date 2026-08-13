@@ -5,7 +5,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { invokeLLM, listLLMModels } from "./_core/llm";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
-import { getCalendarMarks, getCycleSummary, phaseGuidance, type CyclePhase } from "./cycle";
+import { getCalendarMarks, getCycleExperience, getCycleSummary, phaseGuidance, type CyclePhase } from "./cycle";
 import * as db from "./db";
 import { foodAnalysisSchema, visionOutputSchema } from "./foodAnalysis";
 import { buildAskRedtentSystemPrompt } from "./askRedtent";
@@ -21,13 +21,15 @@ function ensureDateIsNormalised(date: Date) {
 
 async function getCurrentCycle(userId: number) {
   const [profile, logs] = await Promise.all([db.getOrCreateProfile(userId), db.listCycleLogs(userId)]);
+  const summary = getCycleSummary(logs, new Date(), {
+    cycleLength: profile.preferredCycleLength,
+    periodLength: profile.preferredPeriodLength,
+  });
   return {
     profile,
     logs,
-    summary: getCycleSummary(logs, new Date(), {
-      cycleLength: profile.preferredCycleLength,
-      periodLength: profile.preferredPeriodLength,
-    }),
+    summary,
+    experience: getCycleExperience(summary),
   };
 }
 
@@ -87,7 +89,7 @@ async function analyseFoodPhoto(imageUrl: string, phase: CyclePhase, foodCulture
 }
 
 async function answerAskRedtentQuestion(userId: number, input: { question: string; includeWellness: boolean; includeFood: boolean; includeJournal: boolean }, history: { role: "user" | "assistant"; content: string }[] = []) {
-  const [{ profile, logs, summary }, wellness, food, journal] = await Promise.all([getCurrentCycle(userId), db.listWellnessEntries(userId), db.listFoodEntries(userId), db.listJournalEntries(userId)]);
+  const [{ profile, logs, summary, experience }, wellness, food, journal] = await Promise.all([getCurrentCycle(userId), db.listWellnessEntries(userId), db.listFoodEntries(userId), db.listJournalEntries(userId)]);
   const selectedFood = input.includeFood ? food.slice(0, 7).map(entry => {
     try { return { phase: entry.phase, detectedFoods: foodAnalysisSchema.parse(JSON.parse(entry.analysisJson)).detectedFoods }; } catch { return { phase: entry.phase, detectedFoods: [] }; }
   }) : [];
@@ -99,7 +101,7 @@ async function answerAskRedtentQuestion(userId: number, input: { question: strin
     model,
     maxTokens: 700,
     messages: [
-      { role: "system", content: buildAskRedtentSystemPrompt({ phase: summary.phase, cycleDay: summary.cycleDay, foodCulture: profile.foodCulture, dietaryPreferences: profile.dietaryPreferences, dietaryRestrictions: profile.dietaryRestrictions, wellnessGoals: profile.wellnessGoals, wellness: selectedWellness, food: selectedFood, journal: selectedJournal }) },
+      { role: "system", content: buildAskRedtentSystemPrompt({ phase: summary.phase, cycleDay: summary.cycleDay, experience, foodCulture: profile.foodCulture, dietaryPreferences: profile.dietaryPreferences, dietaryRestrictions: profile.dietaryRestrictions, wellnessGoals: profile.wellnessGoals, wellness: selectedWellness, food: selectedFood, journal: selectedJournal }) },
       ...history.slice(-12).map(message => ({ role: message.role, content: message.content })),
       { role: "user", content: input.question },
     ],
@@ -122,7 +124,7 @@ export const appRouter = router({
   dashboard: router({
     overview: protectedProcedure.query(async ({ ctx }) => {
       const today = ensureDateIsNormalised(new Date());
-      const [{ profile, logs, summary }, todayWellness, wellness, journal, food] = await Promise.all([
+      const [{ profile, logs, summary, experience }, todayWellness, wellness, journal, food] = await Promise.all([
         getCurrentCycle(ctx.user.id),
         db.getWellnessEntry(ctx.user.id, today),
         db.listWellnessEntries(ctx.user.id),
@@ -134,7 +136,8 @@ export const appRouter = router({
         profile,
         cycleLogs: logs,
         summary,
-        guidance: phaseGuidance(summary.phase),
+        experience,
+        guidance: phaseGuidance(summary.phase, experience.id),
         todayWellness,
         recentJournal: journal.slice(0, 3),
         recentFood: food.slice(0, 3),

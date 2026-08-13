@@ -1,8 +1,9 @@
-import type { CyclePhase } from "./cycle";
+import type { CycleExperience, CyclePhase } from "./cycle";
 
 type AskContext = {
   phase: CyclePhase;
   cycleDay: number;
+  experience: CycleExperience;
   foodCulture: string;
   dietaryPreferences: string | null;
   dietaryRestrictions: string | null;
@@ -22,7 +23,7 @@ Offer general wellness education and practical everyday options. Use careful wor
 
 This is private user-provided context. Do not mention any context category that is absent. Never claim to have seen data not shown below. Keep the response practical, non-judgmental, culturally aware, and under 450 words.
 
-Current cycle context: estimated ${context.phase} phase, cycle day ${context.cycleDay}.
+Current cycle context: estimated ${context.phase} phase, cycle day ${context.cycleDay}. ${context.experience.label}: ${context.experience.detail} Optional check-in: ${context.experience.checkIn}. Possible areas the user may choose to notice: ${context.experience.signals.join(", ")}.
 Food context: ${context.foodCulture || "not set"}. Preferences: ${context.dietaryPreferences || "not provided"}. Restrictions: ${context.dietaryRestrictions || "not provided"}. Goals: ${context.wellnessGoals || "not provided"}.
 
 Recent wellness check-ins:

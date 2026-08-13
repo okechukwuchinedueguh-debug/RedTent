@@ -6,6 +6,7 @@ describe("Ask Redtent context prompt", () => {
     const prompt = buildAskRedtentSystemPrompt({
       phase: "luteal",
       cycleDay: 22,
+      experience: { id: "premenstrual", label: "Premenstrual context", title: "Your pre-period window", detail: "Your next period is estimated within about a week. Some people notice changes in energy.", checkIn: "What would make the days before your period feel more supported?", signals: ["Energy or mood", "Sleep"] },
       foodCulture: "Nigerian foods",
       dietaryPreferences: "Quick dinners",
       dietaryRestrictions: null,
@@ -19,5 +20,7 @@ describe("Ask Redtent context prompt", () => {
     expect(prompt).toContain("Do not diagnose");
     expect(prompt).toContain("No journal context was shared");
     expect(prompt).toContain("not provided");
+    expect(prompt).toContain("Premenstrual context");
+    expect(prompt).toContain("Some people notice");
   });
 });
