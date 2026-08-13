@@ -31,3 +31,15 @@
 - [x] Run and document a final copy audit for all routed and shared Redtent interface files.
 - [x] Run an exhaustive audit of all routed and shared Redtent interface copy, then document the exact covered scope and result.
 - [x] Commit the latest Redtent copy and UX update, push it to the Vercel-connected branch, and verify its deployment.
+- [x] Audit the live Redtent Vercel deployment for technical SEO, on-page SEO, indexability, and keyword-performance signals.
+- [x] Produce a prioritized SEO and keyword roadmap with clearly labeled data limitations and implementation actions.
+- [x] Reframe Redtent as an AI-powered cycle, wellness, food, and personal-patterns companion using the approved brand language.
+- [x] Rename core navigation and feature language to Cycle, Food Lens, Ask Redtent, Your Patterns, Nourish, Your Space, and Cycle Forecast.
+- [x] Add a personalized home experience with daily cycle context, wellness check-in, Redtent Today actions, food camera entry points, pattern observations, and Ask Redtent prompts.
+- [x] Build safe, user-scoped Your Patterns and Tomorrow experiences that present observations and suggestions without medical diagnoses or causal claims.
+- [x] Expand Food Lens framing for meals, groceries, menus, labels, recipes, and shelves while retaining visible-food uncertainty and user correction boundaries.
+- [x] Add a contextual Ask Redtent assistant surface and safe prompts without fabricating personal data or inferring private health information beyond user-provided records.
+- [x] Validate the complete reform with tests, responsive visual review, safety copy review, and updated documentation.
+- [x] Use the exact approved navigation labels Ask Redtent and Your Patterns consistently across responsive Redtent navigation.
+- [x] Add explicit Food Lens contexts for meals, groceries, menus, labels, recipes, and shelves with safe context-specific guidance and regression coverage.
+- [x] Diagnose and resolve the persistent mobile loading state observed after the Food Lens capture-context update.

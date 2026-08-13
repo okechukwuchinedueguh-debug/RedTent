@@ -61,6 +61,12 @@ export async function getOrCreateProfile(userId: number) {
   return profile[0]!;
 }
 
+export async function updateProfile(userId: number, values: { preferredCycleLength?: number; preferredPeriodLength?: number; foodCulture?: string; dietaryPreferences?: string | null; dietaryRestrictions?: string | null; wellnessGoals?: string | null }) {
+  const db = await requiredDb();
+  await db.insert(userProfiles).values({ userId, ...values }).onDuplicateKeyUpdate({ set: values });
+  return getOrCreateProfile(userId);
+}
+
 export async function listCycleLogs(userId: number) {
   const db = await requiredDb();
   return db.select().from(cycleLogs).where(eq(cycleLogs.userId, userId)).orderBy(desc(cycleLogs.startAt));
@@ -140,10 +146,16 @@ export async function listFoodEntries(userId: number) {
   return db.select().from(foodEntries).where(eq(foodEntries.userId, userId)).orderBy(desc(foodEntries.createdAt));
 }
 
-export async function createFoodEntry(userId: number, values: { imageKey: string; imageUrl: string; phase: "menstrual" | "follicular" | "ovulation" | "luteal"; analysisJson: string }) {
+export async function createFoodEntry(userId: number, values: { imageKey: string; imageUrl: string; phase: "menstrual" | "follicular" | "ovulation" | "luteal"; lensMode?: "before" | "after"; scanContext?: "meal" | "grocery" | "menu" | "label" | "recipe" | "shelf"; userNotes?: string | null; analysisJson: string }) {
   const db = await requiredDb();
   const result = await db.insert(foodEntries).values({ userId, ...values });
   return Number(result[0].insertId);
+}
+
+export async function updateFoodEntry(userId: number, id: number, values: { analysisJson?: string; userNotes?: string | null; lensMode?: "before" | "after"; scanContext?: "meal" | "grocery" | "menu" | "label" | "recipe" | "shelf" }) {
+  const db = await requiredDb();
+  const result = await db.update(foodEntries).set(values).where(and(eq(foodEntries.id, id), eq(foodEntries.userId, userId)));
+  return result[0].affectedRows > 0;
 }
 
 export async function deleteFoodEntry(userId: number, id: number) {

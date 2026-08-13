@@ -5,29 +5,32 @@ import { useEffect, useState } from "react";
 import {
   BookHeart,
   CalendarDays,
+  ChartNoAxesCombined,
   CircleUserRound,
-  Compass,
   House,
   Leaf,
   Loader2,
   LogOut,
+  MessageCircleHeart,
   Sparkles,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const mobileItems = [
-  { path: "/", label: "Home", icon: House },
+  { path: "/", label: "Today", icon: House },
   { path: "/cycle", label: "Cycle", icon: CalendarDays },
-  { path: "/food", label: "Food", icon: Sparkles },
-  { path: "/journal", label: "Journal", icon: BookHeart },
-  { path: "/profile", label: "Profile", icon: CircleUserRound },
+  { path: "/food", label: "Food Lens", icon: Sparkles },
+  { path: "/ask", label: "Ask Redtent", icon: MessageCircleHeart },
+  { path: "/patterns", label: "Your Patterns", icon: ChartNoAxesCombined },
 ];
 
 const desktopItems = [
   ...mobileItems.slice(0, 4),
-  { path: "/guidance", label: "Guidance", icon: Leaf },
   mobileItems[4],
+  { path: "/journal", label: "Your Space", icon: BookHeart },
+  { path: "/guidance", label: "Nourish", icon: Leaf },
+  { path: "/profile", label: "Profile", icon: CircleUserRound },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -54,10 +57,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="min-h-screen warm-canvas px-5 py-8 grid place-items-center">
         <section className="w-full max-w-md rounded-[2rem] bg-white/80 p-8 shadow-[0_24px_65px_rgba(89,55,46,0.14)] ring-1 ring-[#EBDCD4] backdrop-blur">
           <div className="mb-8 flex items-center gap-3"><div className="brand-mark">R</div><span className="font-display text-3xl text-[#3F2A25]">Redtent</span></div>
-          <p className="eyebrow">Your private cycle companion</p>
-          <h1 className="mt-3 font-display text-4xl leading-[1.05] text-[#3F2A25]">Your cycle tells a story. Start seeing the whole picture.</h1>
-          <p className="mt-5 text-sm leading-6 text-[#745E58]">Track periods, notice patterns, reflect on your wellbeing, and explore cycle-aware food insights in one calm, private space.</p>
-          <Button onClick={() => startLogin()} className="mt-8 w-full rounded-xl bg-[#A84D5F] py-6 text-base hover:bg-[#8F3F50]">Open your Redtent space</Button>
+          <p className="eyebrow">Your body. Your cycle. Your story.</p>
+          <h1 className="mt-3 font-display text-4xl leading-[1.05] text-[#3F2A25]">A more personal way to understand your everyday wellness.</h1>
+          <p className="mt-5 text-sm leading-6 text-[#745E58]">Notice your cycle, food, mood, symptoms, and personal patterns in one intelligent, private space that becomes more useful as you choose to log.</p>
+          <Button onClick={() => startLogin()} className="mt-8 w-full rounded-xl bg-[#A84D5F] py-6 text-base hover:bg-[#8F3F50]">Begin with Redtent</Button>
           <p className="mt-5 text-center text-xs leading-5 text-[#917B74]">Redtent shares general wellness information, not medical advice. Cycle timing and food insights are estimates.</p>
         </section>
       </div>
@@ -80,7 +83,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <button className="flex items-center gap-3 px-3 text-left" onClick={() => setLocation("/")}><div className="brand-mark">R</div><span className="font-display text-[27px]">Redtent</span></button>
         <nav className="mt-10 space-y-1">{nav(desktopItems)}</nav>
         <div className="mt-auto rounded-2xl bg-[#F8EEE8] p-3">
-          <div className="flex items-center gap-3"><div className="grid h-9 w-9 place-items-center rounded-full bg-[#D98890] font-semibold text-white">{user.name?.slice(0, 1).toUpperCase() || "R"}</div><div className="min-w-0"><p className="truncate text-sm font-semibold">{user.name || "Redtent member"}</p><p className="truncate text-xs text-[#8B756D]">Private wellness space</p></div></div>
+          <div className="flex items-center gap-3"><div className="grid h-9 w-9 place-items-center rounded-full bg-[#D98890] font-semibold text-white">{user.name?.slice(0, 1).toUpperCase() || "R"}</div><div className="min-w-0"><p className="truncate text-sm font-semibold">{user.name || "Redtent member"}</p><p className="truncate text-xs text-[#8B756D]">Your private space</p></div></div>
           <button onClick={logout} className="mt-3 flex w-full items-center gap-2 rounded-xl px-2 py-2 text-xs font-semibold text-[#8B4E52] transition hover:bg-white"><LogOut className="h-3.5 w-3.5" /> Sign out</button>
         </div>
       </aside>

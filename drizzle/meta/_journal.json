@@ -15,6 +15,20 @@
       "when": 1786628123675,
       "tag": "0001_glorious_slayback",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1786633189464,
+      "tag": "0002_marvelous_christian_walker",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1786634098665,
+      "tag": "0003_hesitant_squadron_supreme",
+      "breakpoints": true
     }
   ]
 }

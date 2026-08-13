@@ -9,8 +9,11 @@ Redtent is a mobile-first, authenticated wellbeing application for menstrual-cyc
 | Cycle tracking | Period start/end logging, average and median cycle-length calculations, variability, confidence labels, and an estimated phase calendar. |
 | Daily wellness | A single daily record for mood, energy, symptoms, sleep quality, and private notes. |
 | Journal | Create, update, and delete Markdown-enabled rich-text reflections, tagged with a cycle phase. |
-| Food observations | Camera or gallery upload, protected object storage, LLM vision analysis, structured macro estimates, micronutrient highlights, and phase-specific suggestions. |
-| Nutrition guidance | Non-prescriptive, phase-aware food ideas with prominent wellness and uncertainty language. |
+| Food Lens | Camera or gallery capture with Before You Eat and I Ate This framing, protected object storage, LLM vision analysis, user corrections, structured macro estimates, micronutrient highlights, and phase-specific suggestions. |
+| Nourish | Non-prescriptive, phase-aware food ideas with prominent wellness and uncertainty language. |
+| Your Patterns and Tomorrow | Deterministic observations and an on-demand next-day briefing derived only from the user’s saved records. They state uncertainty and do not diagnose or claim causation. |
+| Ask Redtent | A contextual AI surface where the user explicitly chooses whether recent wellness, Food Lens, and Your Space data is included for a single question. Conversation messages are kept in browser session state, not persisted as a new personal-data record. |
+| Personal preferences | Optional food-culture, preference, restriction, and wellness-goal fields that help Food Lens and Ask Redtent produce more relevant general guidance. |
 | Responsive experience | A bottom navigation bar for mobile and a persistent sidebar for desktop. |
 
 ## Technology architecture
@@ -19,11 +22,13 @@ The application uses a React 19 and TypeScript client with Tailwind CSS, an Expr
 
 | Layer | Responsibility |
 |---|---|
-| `client/src/pages` | Feature pages for dashboard, cycle calendar, daily log, journal, food, guidance, and profile. |
+| `client/src/pages` | Feature pages for the personalized dashboard, cycle calendar, daily log, Your Space, Food Lens, Nourish, Your Patterns, Ask Redtent, and profile. |
 | `client/src/components/DashboardLayout.tsx` | Authenticated shell that adapts from desktop sidebar to mobile bottom navigation. |
 | `server/routers.ts` | Typed tRPC procedures, input validation, authenticated access control, and the food-analysis orchestration. |
 | `server/db.ts` | Database helpers that always accept the authenticated numeric `userId`. |
 | `server/cycle.ts` | Pure cycle summary and calendar-marking calculations, covered by unit tests. |
+| `server/patterns.ts` | Deterministic, non-diagnostic observation and Tomorrow briefing helpers that work only with the current user’s saved records. |
+| `server/askRedtent.ts` | Safety-first, context-limited system-prompt builder for Ask Redtent. |
 | `server/foodAnalysis.ts` | Structured result contract for food-image analysis. |
 | `server/storage.ts` | Server-side object storage helper; database rows store only keys and URLs, never image bytes. |
 | `drizzle/schema.ts` | User-scoped tables and indexed relations for cycle logs, wellness entries, journal entries, food entries, and preferences. |
@@ -40,7 +45,11 @@ Redtent labels period timing, phase timing, and food observations as **estimates
 
 > If a symptom is severe, persistent, unusual for the user, or concerning, the interface encourages seeking advice from a qualified healthcare professional.
 
-Food analysis is specifically a vision-model observation of visible items. It always returns a macro estimate, micronutrient highlights, phase-specific dietary suggestions, confidence, limitations, and a safety note. Suggestions are optional wellness ideas; they are not medical nutrition therapy.
+Food Lens is specifically a vision-model observation of visible items. It always returns a macro estimate, micronutrient highlights, phase-specific dietary suggestions, confidence, limitations, and a safety note. The user can correct visible-food labels on a saved entry. Suggestions are optional wellness ideas; they are not medical nutrition therapy.
+
+Your Patterns is intentionally conservative. It only reflects explicitly logged, user-scoped records and never creates an observation until enough related entries exist. Tomorrow is an on-demand briefing, not an automatic notification service. Recurring notifications, background reports, and end-user schedule settings require a separately selected scheduling model and explicit product decisions before implementation.
+
+Ask Redtent accepts a one-off user question and lets the user decide whether wellness check-ins, Food Lens snapshots, and/or recent Your Space entries are included as context. It is instructed to avoid diagnosis, medical treatment, fertility or pregnancy claims, eating-disorder inference, and ungrounded personal-data claims.
 
 ## Local development
 
@@ -58,7 +67,7 @@ When changing the schema, generate the migration, inspect the resulting SQL, and
 
 ## Verification coverage
 
-The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, and strict validation of LLM nutrition-analysis output. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
+The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, strict validation of LLM nutrition-analysis output, safe deterministic pattern observations, Tomorrow safety language, and the Ask Redtent context prompt. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
 
 ## Deployment
 
