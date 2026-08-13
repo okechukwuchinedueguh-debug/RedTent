@@ -6,10 +6,10 @@ export const phaseLabels = {
 } as const;
 
 export const phaseDescriptions = {
-  menstrual: "A time for gentle replenishment and rest, if that is what your body needs.",
-  follicular: "A phase that can bring a gradual lift in energy for some people.",
-  ovulation: "A brief phase in which steady meals and hydration can be practical anchors.",
-  luteal: "A phase where regular, satisfying meals and self-kindness can feel supportive.",
+  menstrual: "Your reset window. Notice what helps you feel restored, supported, and ready for what comes next.",
+  follicular: "Your momentum may be building. Use this phase to spot the routines, meals, and moments that help you feel more like yourself.",
+  ovulation: "Your body is moving through a short, active phase. Keep your day grounded with the choices that make you feel steady.",
+  luteal: "Your cue to make room for comfort and consistency. Small supportive habits can carry you through a busy week.",
 } as const;
 
 export const phaseColors = {
@@ -28,5 +28,10 @@ export const localDateInput = (date = new Date()) => {
 
 export const parseInputDate = (value: string) => new Date(`${value}T12:00:00.000Z`);
 
-export const displayDate = (value: Date | string, options: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" }) =>
-  new Intl.DateTimeFormat(undefined, options).format(new Date(value));
+export const displayDate = (value: Date | string, options: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" }) => new Intl.DateTimeFormat(undefined, options).format(new Date(value));
+
+export const copy = {
+  appDescription: "Redtent is a private menstrual cycle tracker, daily wellness journal, and AI food insights app that helps you understand your rhythm with more clarity.",
+  safety: "Redtent shares general wellness information, not medical advice. Cycle timing and food insights are estimates. For symptoms that feel severe, persistent, unusual, or worrying, speak with a qualified healthcare professional.",
+  privateSpace: "Your reflections, cycle logs, and food insights stay inside your private Redtent space.",
+} as const;

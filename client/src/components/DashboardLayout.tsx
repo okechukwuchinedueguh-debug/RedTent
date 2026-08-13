@@ -54,11 +54,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="min-h-screen warm-canvas px-5 py-8 grid place-items-center">
         <section className="w-full max-w-md rounded-[2rem] bg-white/80 p-8 shadow-[0_24px_65px_rgba(89,55,46,0.14)] ring-1 ring-[#EBDCD4] backdrop-blur">
           <div className="mb-8 flex items-center gap-3"><div className="brand-mark">R</div><span className="font-display text-3xl text-[#3F2A25]">Redtent</span></div>
-          <p className="eyebrow">Your wellness space</p>
-          <h1 className="mt-3 font-display text-4xl leading-[1.05] text-[#3F2A25]">Cycle-aware care, on your terms.</h1>
-          <p className="mt-5 text-sm leading-6 text-[#745E58]">Track your cycle, hold space for daily reflections, and explore gentle nutrition observations—all in a private personal space.</p>
-          <Button onClick={() => startLogin()} className="mt-8 w-full rounded-xl bg-[#A84D5F] py-6 text-base hover:bg-[#8F3F50]">Sign in to Redtent</Button>
-          <p className="mt-5 text-center text-xs leading-5 text-[#917B74]">Redtent offers wellness information, not medical advice. Cycle estimates and food analysis are never certain.</p>
+          <p className="eyebrow">Your private cycle companion</p>
+          <h1 className="mt-3 font-display text-4xl leading-[1.05] text-[#3F2A25]">Your cycle tells a story. Start seeing the whole picture.</h1>
+          <p className="mt-5 text-sm leading-6 text-[#745E58]">Track periods, notice patterns, reflect on your wellbeing, and explore cycle-aware food insights in one calm, private space.</p>
+          <Button onClick={() => startLogin()} className="mt-8 w-full rounded-xl bg-[#A84D5F] py-6 text-base hover:bg-[#8F3F50]">Open your Redtent space</Button>
+          <p className="mt-5 text-center text-xs leading-5 text-[#917B74]">Redtent shares general wellness information, not medical advice. Cycle timing and food insights are estimates.</p>
         </section>
       </div>
     );

@@ -97,23 +97,23 @@ export function getCycleSummary(logs: CycleLog[], now = new Date(), defaults = {
 export function phaseGuidance(phase: CyclePhase) {
   const guidance = {
     menstrual: {
-      title: "Gentle replenishment",
-      description: "If it suits your usual way of eating, choose satisfying meals that include iron-containing foods, vitamin C sources, fluids, and protein.",
+      title: "Replenish with intention",
+      description: "Choose meals that feel steady and restoring. If they fit your usual way of eating, iron-containing foods, vitamin C sources, fluids, and protein can be supportive options.",
       foods: ["Beans or lentils", "Leafy greens", "Eggs", "Citrus or berries"],
     },
     follicular: {
-      title: "Fresh energy",
-      description: "As energy returns for some people, steady meals with protein, colourful plants, and satisfying carbohydrates can support a balanced routine.",
+      title: "Build your momentum",
+      description: "As your energy shifts, explore satisfying meals with protein, colourful plants, and carbohydrates that help you feel ready for the day.",
       foods: ["Yogurt or fortified alternatives", "Whole grains", "Colourful vegetables", "Nuts and seeds"],
     },
     ovulation: {
-      title: "Nourish and hydrate",
-      description: "Choose regular meals and fluids. Fibre-rich plants and protein can be practical building blocks if they fit your preferences.",
+      title: "Stay nourished and steady",
+      description: "Keep your routine simple. Regular meals, fluids, fibre-rich plants, and protein can be flexible anchors when life gets full.",
       foods: ["Tomatoes", "Chickpeas", "Fish or tofu", "Melon or cucumber"],
     },
     luteal: {
-      title: "Steady comfort",
-      description: "Regular, satisfying meals may feel supportive. Foods with fibre, magnesium, protein, and healthy fats can be options to explore.",
+      title: "Choose comfort that lasts",
+      description: "Make room for satisfying meals that help you feel grounded. Foods with fibre, magnesium, protein, and healthy fats are options to explore, never rules to follow.",
       foods: ["Oats", "Avocado", "Pumpkin seeds", "Dark leafy greens"],
     },
   } as const;
