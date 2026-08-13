@@ -149,4 +149,4 @@
 - [x] Validate and repair the routed Nourish guidance view at /guidance as part of the app-wide dark-mode audit.
 - [x] Define non-diagnostic post-menstrual and premenstrual experience states from the existing private cycle context.
 - [x] Add supportive post-menstrual and premenstrual signs, check-ins, and practical context across Cycle, Wellness, Nourish, and Ask Redtent.
-- [ ] Add focused user-scoped regression coverage, mobile validation, and GitHub/Vercel synchronization for the phase-context update.
+- [x] Add focused user-scoped regression coverage, mobile validation, and GitHub/Vercel synchronization for the phase-context update.
