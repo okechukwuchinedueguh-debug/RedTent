@@ -1,0 +1,26 @@
+# Project TODO
+
+- [x] Confirm the Redtent product name, application metadata, and warm earthy-rose visual direction throughout the interface.
+- [x] Add privacy-first database tables for per-user cycle logs, daily wellness entries, journal entries, food logs, and user profile settings.
+- [x] Build authenticated server procedures that scope every read and mutation to the current user.
+- [x] Implement cycle calculations for current cycle day, predicted phases, next-period estimate, calendar markings, and historical cycle statistics.
+- [x] Add date-level cycle calendar predictions and expose them through a user-scoped procedure.
+- [x] Build the responsive application shell with a mobile bottom navigation bar and desktop sidebar.
+- [x] Build the dashboard with cycle status, phase badge, countdown, wellness snapshot, and quick-log actions.
+- [x] Build the interactive cycle calendar and period start/end logging flow.
+- [x] Build daily wellness logging for mood, energy, symptoms, sleep quality, and custom notes.
+- [x] Build create, edit, and delete workflows for phase-linked rich-text journal entries.
+- [x] Build the nutrition guidance hub with phase-specific, non-prescriptive food guidance and safety language.
+- [x] Add the Food page and route so all primary navigation and food quick-log actions lead to a working experience.
+- [x] Normalize day-boundary wellness retrieval so a saved daily entry reliably reloads for the selected date.
+- [x] Add regression tests for day-based wellness retrieval and primary navigation destinations.
+- [x] Distinguish calendar days with insufficient cycle data from predicted cycle-phase markings.
+- [x] Add secure S3-backed food photo uploads and persist only image metadata and references.
+- [x] Build LLM vision-based food analysis with structured macro estimates, micronutrient highlights, phase-specific suggestions, uncertainty, and wellness safety language.
+- [x] Add loading, empty, error, offline, and camera-permission states to key flows.
+- [x] Add unit tests for cycle logic, user scoping, and nutrition analysis validation.
+- [x] Update the README with local setup, architecture, privacy boundaries, and deployment guidance.
+- [x] Verify responsive views and key user workflows, then create a delivery checkpoint.
+- [x] Implement explicit camera unavailable or permission-denied recovery with a clear gallery fallback.
+- [x] Run and document period, wellness, journal, and food workflow checks before delivery.
+- [ ] Create and document the final Redtent delivery checkpoint.

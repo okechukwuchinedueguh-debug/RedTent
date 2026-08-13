@@ -1,11 +1,18 @@
-import { eq } from "drizzle-orm";
+import { and, desc, eq, gte, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
-import { ENV } from './_core/env';
+import {
+  cycleLogs,
+  foodEntries,
+  type InsertUser,
+  journalEntries,
+  userProfiles,
+  users,
+  wellnessEntries,
+} from "../drizzle/schema";
+import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
-// Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
@@ -18,75 +25,129 @@ export async function getDb() {
   return _db;
 }
 
-export async function upsertUser(user: InsertUser): Promise<void> {
-  if (!user.openId) {
-    throw new Error("User openId is required for upsert");
-  }
-
+async function requiredDb() {
   const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot upsert user: database not available");
-    return;
-  }
+  if (!db) throw new Error("Database is not available");
+  return db;
+}
 
-  try {
-    const values: InsertUser = {
-      openId: user.openId,
-    };
-    const updateSet: Record<string, unknown> = {};
-
-    const textFields = ["name", "email", "loginMethod"] as const;
-    type TextField = (typeof textFields)[number];
-
-    const assignNullable = (field: TextField) => {
-      const value = user[field];
-      if (value === undefined) return;
-      const normalized = value ?? null;
-      values[field] = normalized;
-      updateSet[field] = normalized;
-    };
-
-    textFields.forEach(assignNullable);
-
-    if (user.lastSignedIn !== undefined) {
-      values.lastSignedIn = user.lastSignedIn;
-      updateSet.lastSignedIn = user.lastSignedIn;
+export async function upsertUser(user: InsertUser): Promise<void> {
+  if (!user.openId) throw new Error("User openId is required for upsert");
+  const db = await requiredDb();
+  const values: InsertUser = { openId: user.openId, lastSignedIn: user.lastSignedIn ?? new Date() };
+  const updateSet: Record<string, unknown> = { lastSignedIn: values.lastSignedIn };
+  (["name", "email", "loginMethod"] as const).forEach(field => {
+    if (user[field] !== undefined) {
+      values[field] = user[field] ?? null;
+      updateSet[field] = user[field] ?? null;
     }
-    if (user.role !== undefined) {
-      values.role = user.role;
-      updateSet.role = user.role;
-    } else if (user.openId === ENV.ownerOpenId) {
-      values.role = 'admin';
-      updateSet.role = 'admin';
-    }
-
-    if (!values.lastSignedIn) {
-      values.lastSignedIn = new Date();
-    }
-
-    if (Object.keys(updateSet).length === 0) {
-      updateSet.lastSignedIn = new Date();
-    }
-
-    await db.insert(users).values(values).onDuplicateKeyUpdate({
-      set: updateSet,
-    });
-  } catch (error) {
-    console.error("[Database] Failed to upsert user:", error);
-    throw error;
-  }
+  });
+  values.role = user.role ?? (user.openId === ENV.ownerOpenId ? "admin" : "user");
+  updateSet.role = values.role;
+  await db.insert(users).values(values).onDuplicateKeyUpdate({ set: updateSet });
 }
 
 export async function getUserByOpenId(openId: string) {
   const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot get user: database not available");
-    return undefined;
-  }
-
+  if (!db) return undefined;
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-
-  return result.length > 0 ? result[0] : undefined;
+  return result[0];
 }
 
-// TODO: add feature queries here as your schema grows.
+export async function getOrCreateProfile(userId: number) {
+  const db = await requiredDb();
+  await db.insert(userProfiles).values({ userId }).onDuplicateKeyUpdate({ set: { userId } });
+  const profile = await db.select().from(userProfiles).where(eq(userProfiles.userId, userId)).limit(1);
+  return profile[0]!;
+}
+
+export async function listCycleLogs(userId: number) {
+  const db = await requiredDb();
+  return db.select().from(cycleLogs).where(eq(cycleLogs.userId, userId)).orderBy(desc(cycleLogs.startAt));
+}
+
+export async function createCycleLog(userId: number, values: { startAt: Date; endAt?: Date | null; flow?: "spotting" | "light" | "medium" | "heavy" | null; notes?: string | null }) {
+  const db = await requiredDb();
+  const result = await db.insert(cycleLogs).values({ userId, ...values });
+  return Number(result[0].insertId);
+}
+
+export async function updateCycleLog(userId: number, id: number, values: { startAt?: Date; endAt?: Date | null; flow?: "spotting" | "light" | "medium" | "heavy" | null; notes?: string | null }) {
+  const db = await requiredDb();
+  const result = await db.update(cycleLogs).set(values).where(and(eq(cycleLogs.id, id), eq(cycleLogs.userId, userId)));
+  return result[0].affectedRows > 0;
+}
+
+export async function deleteCycleLog(userId: number, id: number) {
+  const db = await requiredDb();
+  const result = await db.delete(cycleLogs).where(and(eq(cycleLogs.id, id), eq(cycleLogs.userId, userId)));
+  return result[0].affectedRows > 0;
+}
+
+export async function getWellnessEntry(userId: number, entryAt: Date) {
+  const db = await requiredDb();
+  const result = await db.select().from(wellnessEntries).where(and(eq(wellnessEntries.userId, userId), eq(wellnessEntries.entryAt, entryAt))).limit(1);
+  return result[0];
+}
+
+export async function upsertWellnessEntry(userId: number, values: { entryAt: Date; mood?: "great" | "good" | "okay" | "low" | "difficult" | null; energy?: "low" | "medium" | "high" | null; symptoms: string; sleepQuality?: "poor" | "fair" | "good" | "restful" | null; notes?: string | null }) {
+  const db = await requiredDb();
+  await db.insert(wellnessEntries).values({ userId, ...values }).onDuplicateKeyUpdate({
+    set: {
+      mood: values.mood,
+      energy: values.energy,
+      symptoms: values.symptoms,
+      sleepQuality: values.sleepQuality,
+      notes: values.notes,
+    },
+  });
+  return getWellnessEntry(userId, values.entryAt);
+}
+
+export async function listWellnessEntries(userId: number, from?: Date, to?: Date) {
+  const db = await requiredDb();
+  const conditions = [eq(wellnessEntries.userId, userId)];
+  if (from) conditions.push(gte(wellnessEntries.entryAt, from));
+  if (to) conditions.push(lte(wellnessEntries.entryAt, to));
+  return db.select().from(wellnessEntries).where(and(...conditions)).orderBy(desc(wellnessEntries.entryAt));
+}
+
+export async function listJournalEntries(userId: number) {
+  const db = await requiredDb();
+  return db.select().from(journalEntries).where(eq(journalEntries.userId, userId)).orderBy(desc(journalEntries.entryAt));
+}
+
+export async function createJournalEntry(userId: number, values: { title: string; body: string; phase: "menstrual" | "follicular" | "ovulation" | "luteal"; entryAt: Date }) {
+  const db = await requiredDb();
+  const result = await db.insert(journalEntries).values({ userId, ...values });
+  return Number(result[0].insertId);
+}
+
+export async function updateJournalEntry(userId: number, id: number, values: { title: string; body: string; phase: "menstrual" | "follicular" | "ovulation" | "luteal"; entryAt: Date }) {
+  const db = await requiredDb();
+  const result = await db.update(journalEntries).set(values).where(and(eq(journalEntries.id, id), eq(journalEntries.userId, userId)));
+  return result[0].affectedRows > 0;
+}
+
+export async function deleteJournalEntry(userId: number, id: number) {
+  const db = await requiredDb();
+  const result = await db.delete(journalEntries).where(and(eq(journalEntries.id, id), eq(journalEntries.userId, userId)));
+  return result[0].affectedRows > 0;
+}
+
+export async function listFoodEntries(userId: number) {
+  const db = await requiredDb();
+  return db.select().from(foodEntries).where(eq(foodEntries.userId, userId)).orderBy(desc(foodEntries.createdAt));
+}
+
+export async function createFoodEntry(userId: number, values: { imageKey: string; imageUrl: string; phase: "menstrual" | "follicular" | "ovulation" | "luteal"; analysisJson: string }) {
+  const db = await requiredDb();
+  const result = await db.insert(foodEntries).values({ userId, ...values });
+  return Number(result[0].insertId);
+}
+
+export async function deleteFoodEntry(userId: number, id: number) {
+  const db = await requiredDb();
+  const result = await db.delete(foodEntries).where(and(eq(foodEntries.id, id), eq(foodEntries.userId, userId)));
+  return result[0].affectedRows > 0;
+}

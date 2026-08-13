@@ -1,17 +1,16 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  index,
+  int,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
-/**
- * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
- */
 export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
@@ -22,7 +21,86 @@ export const users = mysqlTable("users", {
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
 });
 
+export const userProfiles = mysqlTable(
+  "user_profiles",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    preferredCycleLength: int("preferredCycleLength").default(28).notNull(),
+    preferredPeriodLength: int("preferredPeriodLength").default(5).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({ userUnique: uniqueIndex("profile_user_unique").on(table.userId) })
+);
+
+export const cycleLogs = mysqlTable(
+  "cycle_logs",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    startAt: timestamp("startAt").notNull(),
+    endAt: timestamp("endAt"),
+    flow: mysqlEnum("flow", ["spotting", "light", "medium", "heavy"]),
+    notes: text("notes"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({ userStartIndex: index("cycle_user_start_idx").on(table.userId, table.startAt) })
+);
+
+export const wellnessEntries = mysqlTable(
+  "wellness_entries",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    entryAt: timestamp("entryAt").notNull(),
+    mood: mysqlEnum("mood", ["great", "good", "okay", "low", "difficult"]),
+    energy: mysqlEnum("energy", ["low", "medium", "high"]),
+    symptoms: text("symptoms").notNull(),
+    sleepQuality: mysqlEnum("sleepQuality", ["poor", "fair", "good", "restful"]),
+    notes: text("notes"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({
+    userDayUnique: uniqueIndex("wellness_user_day_unique").on(table.userId, table.entryAt),
+    userDateIndex: index("wellness_user_date_idx").on(table.userId, table.entryAt),
+  })
+);
+
+export const journalEntries = mysqlTable(
+  "journal_entries",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    title: varchar("title", { length: 180 }).notNull(),
+    body: text("body").notNull(),
+    phase: mysqlEnum("phase", ["menstrual", "follicular", "ovulation", "luteal"]).notNull(),
+    entryAt: timestamp("entryAt").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({ userDateIndex: index("journal_user_date_idx").on(table.userId, table.entryAt) })
+);
+
+export const foodEntries = mysqlTable(
+  "food_entries",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    imageKey: varchar("imageKey", { length: 500 }).notNull(),
+    imageUrl: varchar("imageUrl", { length: 700 }).notNull(),
+    phase: mysqlEnum("phase", ["menstrual", "follicular", "ovulation", "luteal"]).notNull(),
+    analysisJson: text("analysisJson").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({ userCreatedIndex: index("food_user_created_idx").on(table.userId, table.createdAt) })
+);
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
-
-// TODO: Add your tables here
+export type CycleLog = typeof cycleLogs.$inferSelect;
+export type WellnessEntry = typeof wellnessEntries.$inferSelect;
+export type JournalEntry = typeof journalEntries.$inferSelect;
+export type FoodEntry = typeof foodEntries.$inferSelect;
