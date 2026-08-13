@@ -111,7 +111,7 @@
 - [x] Add a prominent center mobile navigation action that opens the period-entry flow.
 - [x] Preserve access to all mobile navigation destinations while adding the center period-log action.
 - [x] Add regression coverage and mobile visual validation for the central period-log action.
-- [ ] Save and publish the mobile period-log action update.
+- [x] Save and publish the mobile period-log action update.
 - [x] Add a rendered CyclePage interaction test that opens the period-entry sheet from the deep link and verifies the route replacement.
 - [x] Add a rendered DashboardLayout interaction test that activates the central mobile Log period control.
 - [x] Add a CyclePage integration regression that opens the period-entry sheet from the deep link and replaces the route with the clean Cycle path.
@@ -120,3 +120,5 @@
 - [x] Capture and review the mobile Log period action with the period-entry flow open.
 - [x] Mount CyclePage with mocked route and tRPC state to verify the period-entry sheet opens from the deep link and replaces the route with /cycle.
 - [x] Mount DashboardLayout with mocked authenticated state to verify its central mobile Log period control navigates into the period-entry flow.
+- [x] Push the mobile period-log update to the Vercel-connected GitHub branch and record the release commit SHA: 9af88ec2.
+- [x] Verify the resulting Vercel deployment for the mobile period-log update reaches READY and record its URL: https://red-tent-f952crmea-okechukwuchinedueguh-7181s-projects.vercel.app.
