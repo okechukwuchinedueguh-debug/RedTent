@@ -32,10 +32,13 @@ export const userProfiles = mysqlTable(
     dietaryPreferences: text("dietaryPreferences"),
     dietaryRestrictions: text("dietaryRestrictions"),
     wellnessGoals: text("wellnessGoals"),
+    username: varchar("username", { length: 32 }),
+    profilePhotoKey: varchar("profilePhotoKey", { length: 500 }),
+    profilePhotoUrl: varchar("profilePhotoUrl", { length: 700 }),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   },
-  table => ({ userUnique: uniqueIndex("profile_user_unique").on(table.userId) })
+  table => ({ userUnique: uniqueIndex("profile_user_unique").on(table.userId), usernameUnique: uniqueIndex("profile_username_unique").on(table.username) })
 );
 
 export const cycleLogs = mysqlTable(

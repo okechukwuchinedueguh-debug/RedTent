@@ -43,6 +43,14 @@ function parseImageDataUrl(dataUrl: string) {
   return { buffer, contentType: match[1], extension: match[1].split("/")[1] };
 }
 
+function parseProfilePhotoDataUrl(dataUrl: string) {
+  const match = dataUrl.match(/^data:(image\/(?:jpeg|png|webp));base64,([a-zA-Z0-9+/=]+)$/);
+  if (!match) throw new TRPCError({ code: "BAD_REQUEST", message: "Choose a JPEG, PNG, or WebP profile photo." });
+  const buffer = Buffer.from(match[2], "base64");
+  if (!buffer.length || buffer.length > 2 * 1024 * 1024) throw new TRPCError({ code: "PAYLOAD_TOO_LARGE", message: "Choose a profile photo smaller than 2 MB." });
+  return { buffer, contentType: match[1], extension: match[1].split("/")[1] };
+}
+
 async function analyseFoodPhoto(imageUrl: string, phase: CyclePhase, foodCulture: string, dietaryPreferences: string | null, lensMode: "before" | "after", scanContext: FoodLensContext) {
   const models = await listLLMModels();
   const model = models.data.find(candidate => /(gemini|gpt-4o|gpt-5|claude)/i.test(candidate.id))?.id;
@@ -116,6 +124,21 @@ export const appRouter = router({
   profile: router({
     get: protectedProcedure.query(({ ctx }) => db.getOrCreateProfile(ctx.user.id)),
     save: protectedProcedure.input(z.object({ preferredCycleLength: z.number().int().min(18).max(60).optional(), preferredPeriodLength: z.number().int().min(1).max(14).optional(), foodCulture: z.string().trim().min(2).max(120).optional(), dietaryPreferences: z.string().trim().max(500).nullable().optional(), dietaryRestrictions: z.string().trim().max(500).nullable().optional(), wellnessGoals: z.string().trim().max(500).nullable().optional() })).mutation(({ ctx, input }) => db.updateProfile(ctx.user.id, input)),
+    updateIdentity: protectedProcedure.input(z.object({ username: z.string().trim().toLowerCase().regex(/^[a-z0-9_]{3,24}$/, "Use 3 to 24 lowercase letters, numbers, or underscores.").optional(), photoDataUrl: z.string().max(2_900_000).optional() })).mutation(async ({ ctx, input }) => {
+      const current = await db.getOrCreateProfile(ctx.user.id);
+      if (!input.username && !input.photoDataUrl) throw new TRPCError({ code: "BAD_REQUEST", message: "Add a username or choose a profile photo first." });
+      if (input.username && input.username !== current.username) {
+        const existing = await db.getProfileByUsername(input.username);
+        if (existing && existing.userId !== ctx.user.id) throw new TRPCError({ code: "CONFLICT", message: "That username is already in use. Please choose another." });
+      }
+      let photoValues: { profilePhotoKey?: string; profilePhotoUrl?: string } = {};
+      if (input.photoDataUrl) {
+        const photo = parseProfilePhotoDataUrl(input.photoDataUrl);
+        const stored = await storagePut(`redtent/${ctx.user.id}/profile/profile-photo.${photo.extension}`, photo.buffer, photo.contentType);
+        photoValues = { profilePhotoKey: stored.key, profilePhotoUrl: stored.url };
+      }
+      return db.updateProfileIdentity(ctx.user.id, { ...(input.username ? { username: input.username } : {}), ...photoValues });
+    }),
   }),
   cycles: router({
     summary: protectedProcedure.query(async ({ ctx }) => getCurrentCycle(ctx.user.id)),

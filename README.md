@@ -14,6 +14,7 @@ Redtent is a mobile-first, authenticated wellbeing application for menstrual-cyc
 | Your Patterns and Tomorrow | Deterministic observations and an on-demand next-day briefing derived only from the user’s saved records. They state uncertainty and do not diagnose or claim causation. |
 | Ask Redtent | A contextual AI surface where the user explicitly chooses whether recent wellness, Food Lens, and Your Space data is included for a single question. Conversation messages are kept in browser session state, not persisted as a new personal-data record. |
 | Personal preferences | Optional food-culture, preference, restriction, and wellness-goal fields that help Food Lens and Ask Redtent produce more relevant general guidance. |
+| Account identity | An optional unique Redtent username and replaceable profile photo, with a private fallback avatar when no image is chosen. |
 | Responsive experience | A bottom navigation bar for mobile and a persistent sidebar for desktop. |
 
 ## Technology architecture
@@ -38,6 +39,8 @@ The application uses a React 19 and TypeScript client with Tailwind CSS, an Expr
 All personal feature procedures use the authenticated user from the server context. Read queries include `userId` conditions, and edits/deletes include both the record identifier and `userId` condition. This double condition prevents a user from reading, altering, or deleting another user’s records by guessing an identifier.
 
 Food image files are uploaded under a user-specific object-storage path. Only the storage key, serving URL, phase, and structured analysis JSON are saved in the database. The server obtains a short-lived signed image URL only for the LLM vision request; the LLM call itself is server-side.
+
+Profile photos follow the same user-specific storage approach. Redtent accepts only JPEG, PNG, or WebP files up to 2 MB, stores only the generated object key and serving URL in the user’s own profile row, and scopes every identity mutation to the authenticated user. Usernames are normalized to lowercase characters, numbers, and underscores, then protected by a unique database index.
 
 ## Cycle and health-safety boundaries
 
@@ -67,7 +70,7 @@ When changing the schema, generate the migration, inspect the resulting SQL, and
 
 ## Verification coverage
 
-The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, strict validation of LLM nutrition-analysis output, safe deterministic pattern observations, Tomorrow safety language, and the Ask Redtent context prompt. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
+The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, strict validation of LLM nutrition-analysis output, safe deterministic pattern observations, Tomorrow safety language, the Ask Redtent context prompt, unique username handling, and user-scoped profile-photo storage. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
 
 ## Deployment
 

@@ -43,6 +43,14 @@
 - [x] Use the exact approved navigation labels Ask Redtent and Your Patterns consistently across responsive Redtent navigation.
 - [x] Add explicit Food Lens contexts for meals, groceries, menus, labels, recipes, and shelves with safe context-specific guidance and regression coverage.
 - [x] Diagnose and resolve the persistent mobile loading state observed after the Food Lens capture-context update.
+- [x] Add an editable username with clear validation and authenticated user scoping.
+- [x] Add secure, user-scoped profile-photo upload, preview, replacement, and fallback-avatar behavior.
+- [x] Update the profile page and shared navigation identity display to use the saved username and profile photo.
+- [x] Add regression coverage for profile updates and user scoping.
+- [x] Validate the profile experience, publish the release, and synchronize it to GitHub and Vercel.
+- [ ] Save and automatically publish the validated username and profile-photo release checkpoint.
+- [ ] Commit the latest identity-feature changes to the Vercel-connected Git branch and record the commit SHA.
+- [ ] Verify Vercel reaches READY for the latest Redtent identity-feature deployment and record its URL.
 - [x] Commit the latest Redtent product reform to the Vercel-connected Git branch and verify the resulting Vercel deployment.
 - [x] Commit every latest Redtent reform file to the Vercel-connected Git branch and record the resulting commit SHA.
 - [x] Verify that Vercel reaches READY for the latest Redtent commit and record the deployment URL.

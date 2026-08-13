@@ -67,6 +67,18 @@ export async function updateProfile(userId: number, values: { preferredCycleLeng
   return getOrCreateProfile(userId);
 }
 
+export async function getProfileByUsername(username: string) {
+  const db = await requiredDb();
+  const result = await db.select().from(userProfiles).where(eq(userProfiles.username, username)).limit(1);
+  return result[0];
+}
+
+export async function updateProfileIdentity(userId: number, values: { username?: string; profilePhotoKey?: string; profilePhotoUrl?: string }) {
+  const db = await requiredDb();
+  await db.insert(userProfiles).values({ userId, ...values }).onDuplicateKeyUpdate({ set: values });
+  return getOrCreateProfile(userId);
+}
+
 export async function listCycleLogs(userId: number) {
   const db = await requiredDb();
   return db.select().from(cycleLogs).where(eq(cycleLogs.userId, userId)).orderBy(desc(cycleLogs.startAt));

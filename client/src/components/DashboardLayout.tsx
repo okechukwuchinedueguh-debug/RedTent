@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { trpc } from "@/lib/trpc";
 
 const mobileItems = [
   { path: "/", label: "Today", icon: House },
@@ -35,6 +36,7 @@ const desktopItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { loading, user, logout } = useAuth();
+  const profile = trpc.profile.get.useQuery(undefined, { enabled: Boolean(user) });
   const [location, setLocation] = useLocation();
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== "undefined" && !navigator.onLine);
 
@@ -83,7 +85,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <button className="flex items-center gap-3 px-3 text-left" onClick={() => setLocation("/")}><div className="brand-mark">R</div><span className="font-display text-[27px]">Redtent</span></button>
         <nav className="mt-10 space-y-1">{nav(desktopItems)}</nav>
         <div className="mt-auto rounded-2xl bg-[#F8EEE8] p-3">
-          <div className="flex items-center gap-3"><div className="grid h-9 w-9 place-items-center rounded-full bg-[#D98890] font-semibold text-white">{user.name?.slice(0, 1).toUpperCase() || "R"}</div><div className="min-w-0"><p className="truncate text-sm font-semibold">{user.name || "Redtent member"}</p><p className="truncate text-xs text-[#8B756D]">Your private space</p></div></div>
+          <div className="flex items-center gap-3"><div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-[#D98890] font-semibold text-white">{profile.data?.profilePhotoUrl ? <img src={profile.data.profilePhotoUrl} alt="Your Redtent profile" className="h-full w-full object-cover" /> : (profile.data?.username || user.name)?.slice(0, 1).toUpperCase() || "R"}</div><div className="min-w-0"><p className="truncate text-sm font-semibold">{profile.data?.username || user.name || "Redtent member"}</p><p className="truncate text-xs text-[#8B756D]">Your private space</p></div></div>
           <button onClick={logout} className="mt-3 flex w-full items-center gap-2 rounded-xl px-2 py-2 text-xs font-semibold text-[#8B4E52] transition hover:bg-white"><LogOut className="h-3.5 w-3.5" /> Sign out</button>
         </div>
       </aside>

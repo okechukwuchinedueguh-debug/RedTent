@@ -11,6 +11,8 @@ const mocks = vi.hoisted(() => ({
   updateJournalEntry: vi.fn(),
   deleteJournalEntry: vi.fn(),
   createFoodEntry: vi.fn(),
+  getProfileByUsername: vi.fn(),
+  updateProfileIdentity: vi.fn(),
   storagePut: vi.fn(),
   storageGetSignedUrl: vi.fn(),
   listLLMModels: vi.fn(),
@@ -94,5 +96,23 @@ describe("core Redtent workflows", () => {
     expect(mocks.storagePut).toHaveBeenCalledWith(expect.stringContaining("redtent/77/food/"), expect.any(Buffer), "image/jpeg");
     expect(mocks.invokeLLM).toHaveBeenCalledWith(expect.objectContaining({ model: "gpt-5-vision" }));
     expect(mocks.createFoodEntry).toHaveBeenCalledWith(77, expect.objectContaining({ phase: "menstrual", imageKey: "redtent/77/food/meal.jpg" }));
+  });
+
+  it("saves a unique username and profile photo only in the authenticated user profile", async () => {
+    mocks.getProfileByUsername.mockResolvedValue(undefined);
+    mocks.storagePut.mockResolvedValue({ key: "redtent/77/profile/profile-photo_a1b2c3d4.png", url: "/manus-storage/redtent/77/profile/profile-photo_a1b2c3d4.png" });
+    mocks.updateProfileIdentity.mockResolvedValue({ userId: 77, username: "redtent_user" });
+    const caller = appRouter.createCaller(contextFor(77));
+    await caller.profile.updateIdentity({ username: "redtent_user", photoDataUrl: "data:image/png;base64,aGVsbG8=" });
+    expect(mocks.getProfileByUsername).toHaveBeenCalledWith("redtent_user");
+    expect(mocks.storagePut).toHaveBeenCalledWith(expect.stringContaining("redtent/77/profile/profile-photo.png"), expect.any(Buffer), "image/png");
+    expect(mocks.updateProfileIdentity).toHaveBeenCalledWith(77, expect.objectContaining({ username: "redtent_user", profilePhotoUrl: expect.stringContaining("redtent/77/profile/") }));
+  });
+
+  it("rejects a username held by another Redtent account", async () => {
+    mocks.getProfileByUsername.mockResolvedValue({ userId: 88, username: "taken_name" });
+    const caller = appRouter.createCaller(contextFor(77));
+    await expect(caller.profile.updateIdentity({ username: "taken_name" })).rejects.toMatchObject({ code: "CONFLICT" });
+    expect(mocks.updateProfileIdentity).not.toHaveBeenCalled();
   });
 });
