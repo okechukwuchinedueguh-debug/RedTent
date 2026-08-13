@@ -16,3 +16,5 @@ The final workflow regression suite exercised period creation, wellness save nor
 | Responsive preview review | Passed | Dashboard reviewed at 1280×720 and 375×812 viewport sizes. |
 
 The interactive workflow assertions are executed at the authenticated server-procedure boundary. They intentionally mock external object storage and the LLM provider so that the test suite verifies Redtent’s own data scoping, validation, and persistence orchestration without making billable external requests or storing test records.
+
+The delivery checkpoint was created successfully as **`47c4aea6`**.
