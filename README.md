@@ -16,7 +16,7 @@ Redtent is a mobile-first, authenticated wellbeing application for menstrual-cyc
 | Personal preferences | Optional food-culture, preference, restriction, and wellness-goal fields that help Food Lens and Ask Redtent produce more relevant general guidance. |
 | Account identity | An optional unique Redtent username and replaceable or removable profile photo, with a private fallback avatar when no image is chosen. |
 | First-time setup | A three-step, dismissible onboarding flow for optional identity details, cycle context, and a clear privacy reminder. Completion is saved only to the signed-in user profile. |
-| Appearance and sharing | Light, dark, and automatic local day-night themes, plus an Invite a friend action that shares only Redtent’s public app link and a general invitation. |
+| Appearance and sharing | Light, dark, and automatic local day-night themes with a reduced-motion-aware crossfade. Invite a friend displays a clean public Redtent link, supports one-tap copying with clear feedback, and can open the device share sheet. |
 | Responsive experience | A bottom navigation bar for mobile and a persistent sidebar for desktop. |
 
 ## Technology architecture
@@ -72,11 +72,11 @@ When changing the schema, generate the migration, inspect the resulting SQL, and
 
 ## Verification coverage
 
-The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, strict validation of LLM nutrition-analysis output, safe deterministic pattern observations, Tomorrow safety language, the Ask Redtent context prompt, unique username handling, and user-scoped profile-photo storage. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
+The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, strict validation of LLM nutrition-analysis output, safe deterministic pattern observations, Tomorrow safety language, the Ask Redtent context prompt, unique username handling, user-scoped profile-photo storage, theme-control states, reduced-motion-safe theme transitions, public invitation-link generation, and copy-link success and failure feedback. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
 
 ## Deployment
 
-Create a project checkpoint after validation. From the project management interface, use the **Publish** button to deploy the checkpoint. The managed platform handles runtime configuration and injected credentials; no external hosting configuration is required for the default deployment path.
+Create a project checkpoint after validation. This Redtent project has automatic publishing enabled, so each successful checkpoint is deployed to the managed Manus Space URL. The managed platform handles runtime configuration and injected credentials; no external hosting configuration is required for the default deployment path.
 
 ### Custom production domain
 
@@ -86,6 +86,6 @@ The domain owner must provide the exact domain or subdomain and have access to i
 
 ### Appearance and invitations
 
-Appearance preferences are stored in the browser. **Auto** is a deterministic local-time setting rather than a server job: it uses the light theme between 07:00 and 18:59, then dark theme between 19:00 and 06:59. The preference is re-evaluated at the next local transition while Redtent is open, so it does not create a background process or collect location data.
+Appearance preferences are stored in the browser. **Auto** is a deterministic local-time setting rather than a server job: it uses the light theme between 07:00 and 18:59, then dark theme between 19:00 and 06:59. The preference is re-evaluated at the next local transition while Redtent is open, so it does not create a background process or collect location data. When the resolved theme changes, Redtent uses a brief 260 ms color crossfade. The transition is skipped for users who choose reduced motion.
 
-Invite a friend invokes the device’s native sharing option when available and otherwise copies a shareable message. The invitation contains only a general Redtent description and the current public app URL. It never includes a user’s profile, entries, cycle information, or any other private account data.
+Invite a friend displays a generated public Redtent URL, provides a dedicated **Copy link** action, and invokes the device’s native sharing option when available. The generated link is normalized to the public Manus Space address when the application is running in local development, so no local host, private path, query parameter, profile, entry, cycle information, or other account data is shared. Copy feedback tells the user whether the link is ready to send or needs to be selected manually.

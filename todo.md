@@ -65,7 +65,7 @@
 - [x] Add an end-to-end server workflow regression for onboarding identity, cycle settings, an optional period start, and completion persistence.
 - [x] Verify the Profile photo-removal control restores the fallback avatar without exposing a user photo reference.
 - [x] Re-run final validation after the additional onboarding and photo-removal checks.
-- [ ] Connect the exact Redtent custom domain after the domain owner supplies the chosen hostname and DNS access.
+- [x] Defer custom-domain connection to the user’s later Vercel workflow, as requested.
 - [x] Add a privacy-respecting Invite a friend option with a shareable Redtent invitation message.
 - [x] Add explicit light, dark, and automatic day-and-night theme preferences.
 - [x] Implement deterministic local-time theme switching without a server-side scheduled task.
@@ -86,6 +86,10 @@
 - [x] Add an explicit copy-link action and clear feedback to the Invite a friend experience.
 - [x] Add regression coverage and responsive validation for invitation-link generation and copying.
 - [x] Ensure generated invitation links use Redtent’s public published URL rather than a local development host.
-- [ ] Save and publish the Redtent shareable invitation-link update.
+- [x] Save and publish the Redtent shareable invitation-link update.
 - [x] Add focused coverage for the invitation copy-link success and clipboard-failure feedback states.
 - [x] Validate the new invitation-link row and Copy link action on a mobile Profile layout.
+- [x] Update the README with the public invitation-link, copy-action, and light-dark transition behavior.
+- [x] Validate the updated documentation and full Redtent regression suite.
+- [ ] Commit and push all current Redtent updates to the Vercel-connected Git branch.
+- [ ] Verify the resulting Vercel deployment reaches READY and record its URL.
