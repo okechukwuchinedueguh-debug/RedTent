@@ -79,30 +79,30 @@
 }
 
 .dark {
-  --background: oklch(0.32 0.052 18);
+  --background: oklch(0.4 0.066 18);
   --foreground: oklch(0.95 0.014 48);
-  --card: oklch(0.38 0.054 18);
+  --card: oklch(0.46 0.07 18);
   --card-foreground: oklch(0.95 0.014 48);
-  --popover: oklch(0.38 0.054 18);
+  --popover: oklch(0.46 0.07 18);
   --popover-foreground: oklch(0.95 0.014 48);
   --primary: oklch(0.75 0.12 18);
   --primary-foreground: oklch(0.29 0.045 18);
-  --secondary: oklch(0.45 0.06 18);
+  --secondary: oklch(0.52 0.078 18);
   --secondary-foreground: oklch(0.92 0.014 48);
-  --muted: oklch(0.42 0.044 18);
+  --muted: oklch(0.49 0.062 18);
   --muted-foreground: oklch(0.78 0.025 48);
-  --accent: oklch(0.5 0.078 18);
+  --accent: oklch(0.57 0.096 18);
   --accent-foreground: oklch(0.96 0.014 48);
   --destructive: oklch(0.7 0.17 20);
   --destructive-foreground: oklch(0.27 0.04 18);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.72 0.11 18);
-  --sidebar: oklch(0.35 0.052 18);
+  --sidebar: oklch(0.43 0.068 18);
   --sidebar-foreground: oklch(0.95 0.014 48);
   --sidebar-primary: oklch(0.75 0.12 18);
   --sidebar-primary-foreground: oklch(0.29 0.045 18);
-  --sidebar-accent: oklch(0.5 0.078 18);
+  --sidebar-accent: oklch(0.57 0.096 18);
   --sidebar-accent-foreground: oklch(0.96 0.014 48);
   --sidebar-border: oklch(1 0 0 / 12%);
   --sidebar-ring: oklch(0.72 0.11 18);
@@ -111,7 +111,7 @@
 @layer base {
   * { @apply border-border outline-ring/50; }
   html { font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif; background: #fcf8f4; }
-  html.dark { background: #3d2630; }
+  html.dark { background: #593641; }
   body { @apply bg-background text-foreground; min-width: 320px; }
   button, input, textarea, select { font: inherit; }
   button:not(:disabled), [role="button"]:not([aria-disabled="true"]), [type="button"]:not(:disabled), [type="submit"]:not(:disabled), [type="reset"]:not(:disabled), a[href], select:not(:disabled), input[type="checkbox"]:not(:disabled), input[type="radio"]:not(:disabled) { @apply cursor-pointer; }
@@ -139,6 +139,14 @@
   .app-mobile-navigation { bottom: max(4.75rem, calc(env(safe-area-inset-bottom) + 4rem)); }
   .mobile-period-log-action { min-height: 4.25rem; }
   .calendar-card-ornament { display: block; height: 2.7rem; width: 2.7rem; border: 1px solid rgba(183, 79, 100, 0.16); border-radius: 1.1rem 1.1rem 1.1rem 0.3rem; background: radial-gradient(circle at 50% 50%, transparent 0 0.42rem, rgba(183, 79, 100, 0.7) 0.44rem 0.54rem, transparent 0.56rem), #f8e7e3; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7); }
+  .redtent-loader { position: relative; display: grid; min-height: 100dvh; place-items: center; overflow: hidden; padding: 1.5rem; isolation: isolate; }
+  .redtent-loader__glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 46%, rgba(204, 108, 126, 0.25), transparent 17rem); }
+  .redtent-loader__content { display: grid; justify-items: center; gap: 0.9rem; }
+  .redtent-loader__word { display: inline-flex; align-items: baseline; font-family: "DM Serif Display", Georgia, serif; font-size: clamp(3.4rem, 15vw, 5.75rem); letter-spacing: -0.08em; color: #48282d; text-shadow: 0 18px 46px rgba(119, 57, 75, 0.16); }
+  .redtent-loader__lead { display: inline-grid; height: 0.92em; width: 0.72em; place-items: center; border-radius: 0.25em 0.25em 0.25em 0.06em; background: linear-gradient(145deg, #cb6e7d, #894153); color: #fffaf7; font-size: 0.82em; line-height: 1; box-shadow: 0 0.18em 0.4em rgba(136, 56, 76, 0.26); }
+  .redtent-loader__tail { display: inline-flex; margin-left: 0.03em; }
+  .redtent-loader__letter { display: inline-block; }
+  .redtent-loader__caption { margin: 0; color: #8f6971; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
   @media (min-width: 640px) { .container { padding-left: 1.5rem; padding-right: 1.5rem; } }
   @media (min-width: 1024px) { .container { padding-left: 2rem; padding-right: 2rem; max-width: 1280px; } }
 }
@@ -148,47 +156,54 @@
   button:active:not(:disabled) { transform: scale(0.97); }
 }
 
-.dark .warm-canvas { background: radial-gradient(circle at 83% 4%, rgba(234, 142, 156, 0.36), transparent 25rem), radial-gradient(circle at 5% 36%, rgba(181, 93, 113, 0.28), transparent 30rem), linear-gradient(150deg, #593641 0%, #462d38 58%, #2d2027 100%); }
-.dark .rose-card { border-color: rgba(255, 226, 222, 0.2); background: rgba(79, 48, 60, 0.94); box-shadow: 0 12px 34px rgba(37, 20, 27, 0.22); }
+.dark .warm-canvas { background: radial-gradient(circle at 83% 4%, rgba(248, 173, 185, 0.4), transparent 25rem), radial-gradient(circle at 5% 36%, rgba(214, 116, 136, 0.34), transparent 30rem), linear-gradient(152deg, #7b4655 0%, #6d4050 54%, #5a3945 90%, #30242a 100%); }
+.dark .rose-card { border-color: rgba(255, 229, 225, 0.24); background: rgba(103, 59, 73, 0.94); box-shadow: 0 12px 34px rgba(54, 29, 38, 0.2); }
 .dark .eyebrow { color: #e5a3ae; }
 .dark .nav-side-item { color: #d8c1ba; }
-.dark .nav-side-item:hover { background: #613946; color: #ffe1e5; }
-.dark .nav-side-item.active { background: #774354; color: #fff0f0; box-shadow: inset 0 0 0 1px #a35c6e; }
+.dark .nav-side-item:hover { background: #824958; color: #fff1f1; }
+.dark .nav-side-item.active { background: #955263; color: #fff5f4; box-shadow: inset 0 0 0 1px #bd6d7e; }
 .dark .nav-mobile-item { color: #d4bdb7; }
-.dark .nav-mobile-item.active { background: #754251; color: #fff0f0; }
-.dark .field-input { border-color: #805462; background: #4a303a; color: #fff0ec; }
+.dark .nav-mobile-item.active { background: #925060; color: #fff5f4; }
+.dark .field-input { border-color: #9a5e6c; background: #643b48; color: #fff4ef; }
 .dark .field-input::placeholder { color: #b69a94; }
 .dark .field-input:focus { border-color: #d78292; box-shadow: 0 0 0 4px rgba(215, 130, 146, 0.20); }
-.dark .theme-choice { border-color: #805462; background: #4a303a; color: #f5dfda; }
-.dark .theme-choice.active { border-color: #e294a2; background: #754251; color: #fff0f0; box-shadow: inset 0 0 0 1px #a86374; }
+.dark .theme-choice { border-color: #9a5e6c; background: #643b48; color: #f9e6e1; }
+.dark .theme-choice.active { border-color: #ed9dac; background: #925060; color: #fff5f4; box-shadow: inset 0 0 0 1px #c87587; }
 .dark [class*="text-[#"] { color: #f7e9e5 !important; }
-.dark [class*="bg-[#F3ECEE]"], .dark [class*="bg-[#F4E5E0]"], .dark [class*="bg-[#F8EEE8]"], .dark [class*="bg-[#F7EAE6]"], .dark [class*="bg-[#F7E7E3]"], .dark [class*="bg-[#F7E8E4]"], .dark [class*="bg-[#F8EEE9]"] { background-color: #593640 !important; }
-.dark [class*="bg-[#FFFDFB]"], .dark [class*="bg-[#FFFCFA]"] { background-color: #4a3039 !important; }
-.dark [class*="bg-[#FFF3F3]"] { background-color: #693b49 !important; }
-.dark [class*="bg-[#FFF2F2]"] { background-color: #673943 !important; }
+.dark [class*="bg-[#F3ECEE]"], .dark [class*="bg-[#F4E5E0]"], .dark [class*="bg-[#F8EEE8]"], .dark [class*="bg-[#F7EAE6]"], .dark [class*="bg-[#F7E7E3]"], .dark [class*="bg-[#F7E8E4]"], .dark [class*="bg-[#F8EEE9]"] { background-color: #764452 !important; }
+.dark [class*="bg-[#FFFDFB]"], .dark [class*="bg-[#FFFCFA]"] { background-color: #653b49 !important; }
+.dark [class*="bg-[#FFF3F3]"] { background-color: #824755 !important; }
+.dark [class*="bg-[#FFF2F2]"] { background-color: #7f4651 !important; }
 .dark [class*="bg-[#FFF9EA]"] { background-color: #44371f !important; }
 .dark [class*="bg-[#F8E1B3]"] { background-color: #4d3b20 !important; }
 .dark [class*="bg-[#DCE9D9]"] { background-color: #294538 !important; }
 .dark [class*="bg-[#DED0DF]"] { background-color: #403448 !important; }
 .dark [class*="bg-[#F8E8E5]"] { background-color: #4a3037 !important; }
-.dark .app-sidebar, .dark .app-mobile-navigation { border-color: #754957 !important; background-color: rgba(67, 42, 52, 0.97) !important; }
-.dark .mobile-period-log-action { background: #d0677c !important; box-shadow: 0 10px 24px rgba(53, 23, 33, 0.36); }
-.dark .onboarding-surface { border-color: #81525f; background: #4a3039 !important; }
-.dark .onboarding-choice { background: #593640 !important; color: #fff0ec !important; }
+.dark .app-sidebar, .dark .app-mobile-navigation { border-color: #955765 !important; background-color: rgba(91, 51, 65, 0.97) !important; }
+.dark .mobile-period-log-action { background: #dd7288 !important; box-shadow: 0 10px 24px rgba(73, 34, 46, 0.32); }
+.dark .onboarding-surface { border-color: #9d5d6c; background: #653b48 !important; }
+.dark .onboarding-choice { background: #764451 !important; color: #fff4ef !important; }
 .dark .onboarding-choice--selected { background: #bf5368 !important; color: #fff7f4 !important; box-shadow: 0 0 0 1px #e48999 inset; }
-.dark .calendar-status { border-color: #895966 !important; background: #5b3743 !important; color: #fff0ec !important; }
-.dark .calendar-status--late { border-color: #d8798b !important; background: #6c3c49 !important; }
+.dark .calendar-status { border-color: #a66372 !important; background: #784452 !important; color: #fff4ef !important; }
+.dark .calendar-status--late { border-color: #e48699 !important; background: #874957 !important; }
 .dark .calendar-status--upcoming, .dark .calendar-status--today { border-color: #b7954a !important; background: #46371e !important; }
-.dark .calendar-day { border-color: #815361 !important; background: #51313b !important; color: #fff0ec !important; }
+.dark .calendar-day { border-color: #9a5b6a !important; background: #6a3d4a !important; color: #fff4ef !important; }
 .dark .calendar-day--logged { border-color: #d67c8b !important; background: #b95267 !important; color: #fff8f6 !important; }
 .dark .calendar-day--estimated { border-color: #d98b99 !important; background: #4d3039 !important; color: #ffe7eb !important; }
 .dark .calendar-day--follicular { border-color: #9f8243 !important; background: #4b391f !important; color: #ffedbd !important; }
 .dark .calendar-day--ovulation { border-color: #669a76 !important; background: #294535 !important; color: #e2f6df !important; }
 .dark .calendar-day--luteal { border-color: #9477a6 !important; background: #413248 !important; color: #f2e7ff !important; }
 .dark .calendar-day--menstrual, .dark .calendar-day--past { border-color: #c36f7c !important; background: #4b2e37 !important; color: #ffe8eb !important; }
-.dark .calendar-card-ornament { border-color: rgba(255, 223, 225, 0.28); background: radial-gradient(circle at 50% 50%, transparent 0 0.42rem, rgba(255, 222, 226, 0.9) 0.44rem 0.54rem, transparent 0.56rem), #754251; box-shadow: inset 0 1px 0 rgba(255, 239, 239, 0.15); }
+.dark .calendar-card-ornament { border-color: rgba(255, 231, 232, 0.34); background: radial-gradient(circle at 50% 50%, transparent 0 0.42rem, rgba(255, 235, 235, 0.92) 0.44rem 0.54rem, transparent 0.56rem), #955263; box-shadow: inset 0 1px 0 rgba(255, 244, 244, 0.18); }
+.dark .redtent-loader { background: radial-gradient(circle at 50% 46%, rgba(249, 176, 188, 0.34), transparent 17rem), linear-gradient(152deg, #815061 0%, #744656 72%, #623e4b 90%, #34262d 100%); }
+.dark .redtent-loader__glow { background: radial-gradient(circle at 50% 46%, rgba(255, 207, 214, 0.18), transparent 17rem); }
+.dark .redtent-loader__word { color: #fff3ee; text-shadow: 0 18px 46px rgba(56, 26, 36, 0.26); }
+.dark .redtent-loader__lead { background: linear-gradient(145deg, #ed95a5, #b35469); color: #fff8f6; box-shadow: 0 0.18em 0.4em rgba(80, 31, 46, 0.26); }
+.dark .redtent-loader__caption { color: #f2c2ca; }
 
 @media (prefers-reduced-motion: no-preference) {
+  .redtent-loader__lead { animation: redtent-loader-mark 560ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+  .redtent-loader__letter { opacity: 0; transform: translateX(-0.22em) scale(0.92); animation: redtent-loader-reveal 420ms cubic-bezier(0.23, 1, 0.32, 1) both; animation-delay: calc(180ms + (var(--loader-letter-index) * 75ms)); }
   html.theme-transitioning,
   html.theme-transitioning *,
   html.theme-transitioning *::before,
@@ -197,4 +212,14 @@
     transition-duration: 260ms !important;
     transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1) !important;
   }
+}
+
+@keyframes redtent-loader-mark {
+  from { opacity: 0; transform: translateY(0.14em) scale(0.86); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes redtent-loader-reveal {
+  from { opacity: 0; transform: translateX(-0.22em) scale(0.92); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
 }

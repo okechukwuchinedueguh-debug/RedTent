@@ -11,8 +11,9 @@ describe("Redtent dark-theme contrast contract", () => {
     expect(stylesheet).toContain(".dark .onboarding-choice");
     expect(stylesheet).toContain(".dark .app-mobile-navigation");
     expect(stylesheet).toContain("bg-[#F7E7E3]");
-    expect(stylesheet).toContain("background: #5b3743 !important");
-    expect(stylesheet).toContain("background: #51313b !important");
-    expect(stylesheet).toContain("linear-gradient(150deg, #593641 0%, #462d38 58%, #2d2027 100%)");
+    expect(stylesheet).toContain("background: #784452 !important");
+    expect(stylesheet).toContain("background: #6a3d4a !important");
+    expect(stylesheet).toContain("linear-gradient(152deg, #7b4655 0%, #6d4050 54%, #5a3945 90%, #30242a 100%)");
+    expect(stylesheet).toContain(".dark .redtent-loader");
   });
 });

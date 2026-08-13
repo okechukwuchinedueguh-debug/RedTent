@@ -9,7 +9,6 @@ import {
   CircleUserRound,
   House,
   Leaf,
-  Loader2,
   LogOut,
   MessageCircleHeart,
   Sparkles,
@@ -19,6 +18,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { trpc } from "@/lib/trpc";
 import OnboardingFlow from "./OnboardingFlow";
 import { MobilePeriodLogButton } from "./MobilePeriodLogButton";
+import { RedtentLoading } from "./RedtentLoading";
 
 const mobileItems = [
   { path: "/", label: "Today", icon: House },
@@ -54,7 +54,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, []);
 
   if (loading) {
-    return <div className="min-h-screen bg-[#FCF8F4] grid place-items-center"><Loader2 className="h-7 w-7 animate-spin text-[#B85C6B]" /></div>;
+    return <RedtentLoading />;
   }
 
   if (!user) {

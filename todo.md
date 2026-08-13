@@ -125,3 +125,6 @@
 - [x] Remove the redundant Add period date control from the calendar-first mobile dashboard while retaining the central Log period action.
 - [x] Rework the mobile calendar-first dashboard so the calendar begins above secondary check-in menus and remains the dominant first view.
 - [x] Rebalance dark mode toward a roughly 70:30 dusty-rose to near-black ambience without reducing text, calendar, navigation, or control contrast.
+- [x] Add a brief branded loading animation that begins with R and completes the Redtent name from R through T.
+- [x] Rebalance dark mode toward a roughly 90:10 dusty-rose to near-black ambience while preserving readable text, calendar, navigation, and controls.
+- [ ] Validate, publish, and synchronize the branded-loading and rose-dominant dark-theme release to GitHub and Vercel.
