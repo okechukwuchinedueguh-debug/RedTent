@@ -200,6 +200,14 @@
 .dark .redtent-loader__word { color: #fff3ee; text-shadow: 0 18px 46px rgba(56, 26, 36, 0.26); }
 .dark .redtent-loader__lead { background: linear-gradient(145deg, #ed95a5, #b35469); color: #fff8f6; box-shadow: 0 0.18em 0.4em rgba(80, 31, 46, 0.26); }
 .dark .redtent-loader__caption { color: #f2c2ca; }
+.dark .ask-redtent-chat { border-color: #a96675 !important; background: #6b3e4b !important; box-shadow: 0 14px 36px rgba(63, 30, 42, 0.24); }
+.dark .ask-redtent-chat-header { border-color: #b76f7e !important; background: #90505f !important; color: #fff5f1 !important; }
+.dark .ask-redtent-chat .bg-card { background-color: #6b3e4b !important; }
+.dark .ask-redtent-chat .bg-background\/50 { background-color: rgba(95, 53, 66, 0.82) !important; }
+.dark .ask-redtent-chat .bg-muted { background-color: #764553 !important; }
+.dark .ask-redtent-chat .border-border { border-color: #a96675 !important; }
+.dark .ask-redtent-context label { border-color: #a96675; background: #6a3d4a; }
+.dark .ask-redtent-context label:hover { background: #794653 !important; }
 
 @media (prefers-reduced-motion: no-preference) {
   .redtent-loader__lead { animation: redtent-loader-mark 560ms cubic-bezier(0.23, 1, 0.32, 1) both; }

@@ -15,5 +15,8 @@ describe("Redtent dark-theme contrast contract", () => {
     expect(stylesheet).toContain("background: #6a3d4a !important");
     expect(stylesheet).toContain("linear-gradient(152deg, #7b4655 0%, #6d4050 54%, #5a3945 90%, #30242a 100%)");
     expect(stylesheet).toContain(".dark .redtent-loader");
+    expect(stylesheet).toContain(".dark .ask-redtent-chat-header");
+    expect(stylesheet).toContain("background: #90505f !important");
+    expect(stylesheet).toContain(".dark .ask-redtent-context label");
   });
 });

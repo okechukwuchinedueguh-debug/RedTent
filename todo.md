@@ -128,3 +128,6 @@
 - [x] Add a brief branded loading animation that begins with R and completes the Redtent name from R through T.
 - [x] Rebalance dark mode toward a roughly 90:10 dusty-rose to near-black ambience while preserving readable text, calendar, navigation, and controls.
 - [x] Validate, publish, and synchronize the branded-loading and rose-dominant dark-theme release to GitHub and Vercel: commit 5233a68c, Vercel READY at https://red-tent-4miz84sqi-okechukwuchinedueguh-7181s-projects.vercel.app.
+- [x] Repair Ask Redtent’s mobile dark-theme header and content contrast so all copy and surfaces remain legible.
+- [x] Ensure Ask Redtent’s mobile content clears the fixed bottom navigation and central Log period action.
+- [ ] Add focused regression coverage, validate the mobile dark Ask Redtent screen, and synchronize the fix to GitHub and Vercel.
