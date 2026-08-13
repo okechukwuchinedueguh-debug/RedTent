@@ -91,5 +91,5 @@
 - [x] Validate the new invitation-link row and Copy link action on a mobile Profile layout.
 - [x] Update the README with the public invitation-link, copy-action, and light-dark transition behavior.
 - [x] Validate the updated documentation and full Redtent regression suite.
-- [ ] Commit and push all current Redtent updates to the Vercel-connected Git branch.
-- [ ] Verify the resulting Vercel deployment reaches READY and record its URL.
+- [x] Commit and push all current Redtent updates to the Vercel-connected Git branch.
+- [x] Verify the resulting Vercel deployment reaches READY and record its URL.
