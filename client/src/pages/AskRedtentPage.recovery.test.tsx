@@ -7,12 +7,13 @@ const navigate = vi.fn();
 
 vi.mock("@/lib/trpc", () => ({
   trpc: {
-    useUtils: () => ({ ask: { conversations: { list: { invalidate: vi.fn() } } } }),
+    useUtils: () => ({ ask: { conversations: { list: { invalidate: vi.fn() }, get: { invalidate: vi.fn() } } } }),
     ask: {
       redtent: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
       conversations: {
         get: { useQuery: () => ({ data: undefined, isLoading: false, error: new Error("missing") }) },
         create: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
+        continue: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
       },
     },
   },

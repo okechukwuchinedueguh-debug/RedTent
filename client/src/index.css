@@ -167,11 +167,18 @@
 .dark .field-input { border-color: #9a5e6c; background: #643b48; color: #fff4ef; }
 .dark .field-input::placeholder { color: #b69a94; }
 .dark .field-input:focus { border-color: #d78292; box-shadow: 0 0 0 4px rgba(215, 130, 146, 0.20); }
+.dark .warm-canvas input:not(.field-input):not([type="checkbox"]):not([type="radio"]), .dark .warm-canvas textarea:not(.field-input), .dark .warm-canvas select:not(.field-input) { border-color: #a96675; background-color: #6b3e4b; color: #fff4ef; }
 .dark .theme-choice { border-color: #9a5e6c; background: #643b48; color: #f9e6e1; }
 .dark .theme-choice.active { border-color: #ed9dac; background: #925060; color: #fff5f4; box-shadow: inset 0 0 0 1px #c87587; }
 .dark [class*="text-[#"] { color: #f7e9e5 !important; }
 .dark [class*="bg-[#F3ECEE]"], .dark [class*="bg-[#F4E5E0]"], .dark [class*="bg-[#F8EEE8]"], .dark [class*="bg-[#F7EAE6]"], .dark [class*="bg-[#F7E7E3]"], .dark [class*="bg-[#F7E8E4]"], .dark [class*="bg-[#F8EEE9]"] { background-color: #764452 !important; }
 .dark [class*="bg-[#FFFDFB]"], .dark [class*="bg-[#FFFCFA]"] { background-color: #653b49 !important; }
+.dark [class*="bg-[#F8E9E5]"], .dark [class*="bg-[#FDEDEE]"], .dark [class*="bg-[#FCF4F1]"], .dark [class*="bg-[#F0D9D3]"] { background-color: #754552 !important; }
+.dark [class*="bg-[#E9D8DD]"] { background-color: #764552 !important; }
+.dark [class*="bg-[#F8ECE8]"] { background-color: #7b4856 !important; }
+.dark [class*="bg-[#F6F0EA]"] { background-color: #6b3e4b !important; }
+.dark [class*="bg-white/70"] { background-color: #7d4957 !important; }
+.dark .bg-white { border-color: #a96675 !important; background-color: #6b3e4b !important; color: #fff4ef !important; }
 .dark [class*="bg-[#FFF3F3]"] { background-color: #824755 !important; }
 .dark [class*="bg-[#FFF2F2]"] { background-color: #7f4651 !important; }
 .dark [class*="bg-[#FFF9EA]"] { background-color: #44371f !important; }
@@ -187,13 +194,13 @@
 .dark .calendar-status { border-color: #a66372 !important; background: #784452 !important; color: #fff4ef !important; }
 .dark .calendar-status--late { border-color: #e48699 !important; background: #874957 !important; }
 .dark .calendar-status--upcoming, .dark .calendar-status--today { border-color: #b7954a !important; background: #46371e !important; }
-.dark .calendar-day { border-color: #9a5b6a !important; background: #6a3d4a !important; color: #fff4ef !important; }
-.dark .calendar-day--logged { border-color: #d67c8b !important; background: #b95267 !important; color: #fff8f6 !important; }
-.dark .calendar-day--estimated { border-color: #d98b99 !important; background: #4d3039 !important; color: #ffe7eb !important; }
-.dark .calendar-day--follicular { border-color: #9f8243 !important; background: #4b391f !important; color: #ffedbd !important; }
-.dark .calendar-day--ovulation { border-color: #669a76 !important; background: #294535 !important; color: #e2f6df !important; }
-.dark .calendar-day--luteal { border-color: #9477a6 !important; background: #413248 !important; color: #f2e7ff !important; }
-.dark .calendar-day--menstrual, .dark .calendar-day--past { border-color: #c36f7c !important; background: #4b2e37 !important; color: #ffe8eb !important; }
+.dark .calendar-day { border-color: #e5aab5 !important; background: #d88897 !important; color: #3b242c !important; }
+.dark .calendar-day--logged { border-color: #ffd0d6 !important; background: #bd586d !important; color: #fff8f6 !important; }
+.dark .calendar-day--estimated { border-color: #f1b5be !important; background: #dca0aa !important; color: #43252e !important; }
+.dark .calendar-day--follicular { border-color: #f0d58c !important; background: #d3b96f !important; color: #3d3019 !important; }
+.dark .calendar-day--ovulation { border-color: #a9d8b4 !important; background: #a0c49e !important; color: #1f3e2a !important; }
+.dark .calendar-day--luteal { border-color: #dcc2ed !important; background: #c6a7cf !important; color: #35273f !important; }
+.dark .calendar-day--menstrual, .dark .calendar-day--past { border-color: #f1b3bc !important; background: #dca0aa !important; color: #43252e !important; }
 .dark .calendar-card-ornament { border-color: rgba(255, 231, 232, 0.34); background: radial-gradient(circle at 50% 50%, transparent 0 0.42rem, rgba(255, 235, 235, 0.92) 0.44rem 0.54rem, transparent 0.56rem), #955263; box-shadow: inset 0 1px 0 rgba(255, 244, 244, 0.18); }
 .dark .redtent-loader { background: radial-gradient(circle at 50% 46%, rgba(249, 176, 188, 0.34), transparent 17rem), linear-gradient(152deg, #815061 0%, #744656 72%, #623e4b 90%, #34262d 100%); }
 .dark .redtent-loader__glow { background: radial-gradient(circle at 50% 46%, rgba(255, 207, 214, 0.18), transparent 17rem); }
@@ -208,6 +215,14 @@
 .dark .ask-redtent-chat .border-border { border-color: #a96675 !important; }
 .dark .ask-redtent-context label { border-color: #a96675; background: #6a3d4a; }
 .dark .ask-redtent-context label:hover { background: #794653 !important; }
+.dark .wellness-date-control { border: 1px solid #c97c8c; background: #764552 !important; color: #fff4ef !important; }
+.dark .wellness-date-control input { color: #fff4ef; color-scheme: dark; }
+.dark .wellness-option { border-color: #b97584 !important; background: #6b3e4b !important; color: #fff4ef !important; }
+.dark .wellness-option:hover { background: #7b4856 !important; }
+.dark .wellness-option--selected { border-color: #ffbdc8 !important; background: #bd586d !important; color: #fffaf8 !important; box-shadow: inset 0 0 0 1px rgba(255, 227, 231, 0.32); }
+.dark .wellness-chip { background: #764552 !important; color: #fff4ef !important; }
+.dark .wellness-chip--selected { background: #c45c72 !important; color: #fffaf8 !important; }
+.dark .wellness-safety { border: 1px solid #a96675; background: #6b3e4b !important; color: #fff4ef !important; }
 
 @media (prefers-reduced-motion: no-preference) {
   .redtent-loader__lead { animation: redtent-loader-mark 560ms cubic-bezier(0.23, 1, 0.32, 1) both; }

@@ -6,6 +6,8 @@ const mocks = vi.hoisted(() => ({
   listCycleLogs: vi.fn(),
   createCycleLog: vi.fn(),
   listWellnessEntries: vi.fn(),
+  listFoodEntries: vi.fn(),
+  listJournalEntries: vi.fn(),
   upsertWellnessEntry: vi.fn(),
   createJournalEntry: vi.fn(),
   updateJournalEntry: vi.fn(),
@@ -20,6 +22,8 @@ const mocks = vi.hoisted(() => ({
   listAskConversations: vi.fn(),
   getAskConversation: vi.fn(),
   deleteAskConversation: vi.fn(),
+  updateAskConversationTitle: vi.fn(),
+  appendAskConversationMessages: vi.fn(),
   storagePut: vi.fn(),
   storageGetSignedUrl: vi.fn(),
   listLLMModels: vi.fn(),
@@ -29,7 +33,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock("./db", () => ({
   ...mocks,
   updateCycleLog: vi.fn(), deleteCycleLog: vi.fn(), getWellnessEntry: vi.fn(),
-  listJournalEntries: vi.fn(), listFoodEntries: vi.fn(), deleteFoodEntry: vi.fn(),
+  deleteFoodEntry: vi.fn(),
   upsertUser: vi.fn(), getUserByOpenId: vi.fn(), getDb: vi.fn(),
 }));
 vi.mock("./storage", () => ({ storagePut: mocks.storagePut, storageGetSignedUrl: mocks.storageGetSignedUrl }));
@@ -167,16 +171,27 @@ describe("core Redtent workflows", () => {
     mocks.listAskConversations.mockResolvedValue([savedConversation]);
     mocks.getAskConversation.mockResolvedValue(savedConversation);
     mocks.deleteAskConversation.mockResolvedValue(true);
+    mocks.updateAskConversationTitle.mockResolvedValue(true);
+    mocks.appendAskConversationMessages.mockResolvedValue(true);
+    mocks.listWellnessEntries.mockResolvedValue([]);
+    mocks.listFoodEntries.mockResolvedValue([]);
+    mocks.listJournalEntries.mockResolvedValue([]);
+    mocks.listLLMModels.mockResolvedValue({ data: [{ id: "gpt-5" }] });
+    mocks.invokeLLM.mockResolvedValue({ choices: [{ message: { content: "A gentle continued answer." } }] });
     const caller = appRouter.createCaller(contextFor(77));
 
     await expect(caller.ask.conversations.create({ title: savedConversation.title, includeWellness: true, includeFood: true, includeJournal: false, messages })).resolves.toEqual({ id: 701 });
     await expect(caller.ask.conversations.list()).resolves.toEqual([savedConversation]);
     await expect(caller.ask.conversations.get({ id: 701 })).resolves.toEqual(savedConversation);
+    await expect(caller.ask.conversations.updateTitle({ id: 701, title: "Meals to return to" })).resolves.toEqual({ success: true });
+    await expect(caller.ask.conversations.continue({ id: 701, question: "Could you share one more option?", includeWellness: true, includeFood: false, includeJournal: false })).resolves.toEqual({ answer: "A gentle continued answer.", usedContext: { wellness: true, food: false, journal: false } });
     await expect(caller.ask.conversations.delete({ id: 701 })).resolves.toEqual({ success: true });
 
     expect(mocks.createAskConversation).toHaveBeenCalledWith(77, expect.objectContaining({ title: savedConversation.title, messages }));
     expect(mocks.listAskConversations).toHaveBeenCalledWith(77);
     expect(mocks.getAskConversation).toHaveBeenCalledWith(77, 701);
+    expect(mocks.updateAskConversationTitle).toHaveBeenCalledWith(77, 701, "Meals to return to");
+    expect(mocks.appendAskConversationMessages).toHaveBeenCalledWith(77, 701, [{ role: "user", content: "Could you share one more option?" }, { role: "assistant", content: "A gentle continued answer." }], { includeWellness: true, includeFood: false, includeJournal: false });
     expect(mocks.deleteAskConversation).toHaveBeenCalledWith(77, 701);
   });
 });

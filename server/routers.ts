@@ -86,6 +86,29 @@ async function analyseFoodPhoto(imageUrl: string, phase: CyclePhase, foodCulture
   }
 }
 
+async function answerAskRedtentQuestion(userId: number, input: { question: string; includeWellness: boolean; includeFood: boolean; includeJournal: boolean }, history: { role: "user" | "assistant"; content: string }[] = []) {
+  const [{ profile, logs, summary }, wellness, food, journal] = await Promise.all([getCurrentCycle(userId), db.listWellnessEntries(userId), db.listFoodEntries(userId), db.listJournalEntries(userId)]);
+  const selectedFood = input.includeFood ? food.slice(0, 7).map(entry => {
+    try { return { phase: entry.phase, detectedFoods: foodAnalysisSchema.parse(JSON.parse(entry.analysisJson)).detectedFoods }; } catch { return { phase: entry.phase, detectedFoods: [] }; }
+  }) : [];
+  const selectedJournal = input.includeJournal ? journal.slice(0, 3).map(entry => ({ title: entry.title, body: entry.body })) : [];
+  const selectedWellness = input.includeWellness ? wellness.slice(0, 7).map(entry => ({ mood: entry.mood, energy: entry.energy, sleepQuality: entry.sleepQuality, symptoms: entry.symptoms })) : [];
+  const models = await listLLMModels();
+  const model = models.data.find(candidate => /(gemini|gpt-4o|gpt-5|claude)/i.test(candidate.id))?.id;
+  const response = await invokeLLM({
+    model,
+    maxTokens: 700,
+    messages: [
+      { role: "system", content: buildAskRedtentSystemPrompt({ phase: summary.phase, cycleDay: summary.cycleDay, foodCulture: profile.foodCulture, dietaryPreferences: profile.dietaryPreferences, dietaryRestrictions: profile.dietaryRestrictions, wellnessGoals: profile.wellnessGoals, wellness: selectedWellness, food: selectedFood, journal: selectedJournal }) },
+      ...history.slice(-12).map(message => ({ role: message.role, content: message.content })),
+      { role: "user", content: input.question },
+    ],
+  });
+  const answer = response.choices[0]?.message.content;
+  if (typeof answer !== "string") throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Ask Redtent needs a moment. Please try again." });
+  return { answer, usedContext: { wellness: input.includeWellness, food: input.includeFood, journal: input.includeJournal } };
+}
+
 export const appRouter = router({
   system: systemRouter,
   auth: router({
@@ -209,18 +232,7 @@ export const appRouter = router({
   }),
   ask: router({
     redtent: protectedProcedure.input(z.object({ question: z.string().trim().min(3).max(1200), includeWellness: z.boolean().default(true), includeFood: z.boolean().default(true), includeJournal: z.boolean().default(false) })).mutation(async ({ ctx, input }) => {
-      const [{ profile, logs, summary }, wellness, food, journal] = await Promise.all([getCurrentCycle(ctx.user.id), db.listWellnessEntries(ctx.user.id), db.listFoodEntries(ctx.user.id), db.listJournalEntries(ctx.user.id)]);
-      const selectedFood = input.includeFood ? food.slice(0, 7).map(entry => {
-        try { return { phase: entry.phase, detectedFoods: foodAnalysisSchema.parse(JSON.parse(entry.analysisJson)).detectedFoods }; } catch { return { phase: entry.phase, detectedFoods: [] }; }
-      }) : [];
-      const selectedJournal = input.includeJournal ? journal.slice(0, 3).map(entry => ({ title: entry.title, body: entry.body })) : [];
-      const selectedWellness = input.includeWellness ? wellness.slice(0, 7).map(entry => ({ mood: entry.mood, energy: entry.energy, sleepQuality: entry.sleepQuality, symptoms: entry.symptoms })) : [];
-      const models = await listLLMModels();
-      const model = models.data.find(candidate => /(gemini|gpt-4o|gpt-5|claude)/i.test(candidate.id))?.id;
-      const response = await invokeLLM({ model, maxTokens: 700, messages: [{ role: "system", content: buildAskRedtentSystemPrompt({ phase: summary.phase, cycleDay: summary.cycleDay, foodCulture: profile.foodCulture, dietaryPreferences: profile.dietaryPreferences, dietaryRestrictions: profile.dietaryRestrictions, wellnessGoals: profile.wellnessGoals, wellness: selectedWellness, food: selectedFood, journal: selectedJournal }) }, { role: "user", content: input.question }] });
-      const answer = response.choices[0]?.message.content;
-      if (typeof answer !== "string") throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Ask Redtent needs a moment. Please try again." });
-      return { answer, usedContext: { wellness: input.includeWellness, food: input.includeFood, journal: input.includeJournal } };
+      return answerAskRedtentQuestion(ctx.user.id, input);
     }),
     conversations: router({
       list: protectedProcedure.query(({ ctx }) => db.listAskConversations(ctx.user.id)),
@@ -236,6 +248,24 @@ export const appRouter = router({
         includeJournal: z.boolean(),
         messages: z.array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().trim().min(1).max(8000) })).min(2).max(24),
       })).mutation(async ({ ctx, input }) => ({ id: await db.createAskConversation(ctx.user.id, input) })),
+      updateTitle: protectedProcedure.input(z.object({ id: z.number().int().positive(), title: z.string().trim().min(1).max(180) })).mutation(async ({ ctx, input }) => {
+        const updated = await db.updateAskConversationTitle(ctx.user.id, input.id, input.title);
+        if (!updated) throw new TRPCError({ code: "NOT_FOUND", message: "That saved Ask Redtent conversation was not found." });
+        return { success: true };
+      }),
+      continue: protectedProcedure.input(z.object({ id: z.number().int().positive(), question: z.string().trim().min(3).max(1200), includeWellness: z.boolean(), includeFood: z.boolean(), includeJournal: z.boolean() })).mutation(async ({ ctx, input }) => {
+        const conversation = await db.getAskConversation(ctx.user.id, input.id);
+        if (!conversation) throw new TRPCError({ code: "NOT_FOUND", message: "That saved Ask Redtent conversation was not found." });
+        const result = await answerAskRedtentQuestion(ctx.user.id, {
+          question: input.question,
+          includeWellness: input.includeWellness,
+          includeFood: input.includeFood,
+          includeJournal: input.includeJournal,
+        }, conversation.messages.map(message => ({ role: message.role, content: message.content })));
+        const appended = await db.appendAskConversationMessages(ctx.user.id, input.id, [{ role: "user", content: input.question }, { role: "assistant", content: result.answer }], { includeWellness: input.includeWellness, includeFood: input.includeFood, includeJournal: input.includeJournal });
+        if (!appended) throw new TRPCError({ code: "NOT_FOUND", message: "That saved Ask Redtent conversation was not found." });
+        return result;
+      }),
       delete: protectedProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => ({ success: await db.deleteAskConversation(ctx.user.id, input.id) })),
     }),
   }),

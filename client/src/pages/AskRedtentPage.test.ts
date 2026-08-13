@@ -17,5 +17,7 @@ describe("AskRedtentPage mobile layout contract", () => {
     expect(source).toContain("savedConversation.data.messages");
     expect(source).toContain("savedConversation.error");
     expect(source).toContain("We could not open it just now.");
+    expect(source).toContain("ask.conversations.continue");
+    expect(source).toContain("Continue your conversation.");
   });
 });

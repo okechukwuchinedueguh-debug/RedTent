@@ -137,3 +137,13 @@
 - [x] Add a visible recovery state when a saved Ask Redtent conversation cannot be loaded in the Ask Redtent screen.
 - [x] Add a visible recovery state when the saved-conversation library cannot be retrieved in Your Space.
 - [x] Add focused regression coverage for saved-conversation retrieval failure states.
+- [x] Darken calendar date numbers and strengthen all dark-mode text, form-control, option, and selected-state contrast without losing the dusty-rose ambience.
+- [x] Add custom titles, full-text search, and practical filters for private saved Ask Redtent conversations in Your Space.
+- [x] Implement a user-scoped continue-conversation flow that appends new Ask Redtent messages to the selected saved thread.
+- [ ] Add focused contrast, conversation update, search/filter, and continuation regression coverage, validate mobile dark-mode flows, and synchronize the completed release to GitHub and Vercel.
+- [x] Audit and repair remaining dark-mode contrast across every routed Redtent page and shared control, then add broader app-wide readability coverage.
+- [x] Extend private saved-conversation search to match user and assistant message content as well as custom titles.
+- [x] Add explicit dark-mode contract coverage for Home, Food Lens, Nourish, Ask Redtent, Your Patterns, Your Space, Profile, and shared interactive controls.
+- [x] Complete and document a final mobile dark-mode audit of every routed Redtent screen and shared control before claiming app-wide contrast completion.
+- [x] Capture an initial mobile dark-mode audit across Today, Cycle, Food Lens, Ask Redtent, Your Patterns, Your Space, and Profile; each reviewed route now has readable primary text and controls.
+- [x] Validate and repair the routed Nourish guidance view at /guidance as part of the app-wide dark-mode audit.

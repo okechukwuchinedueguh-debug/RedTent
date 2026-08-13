@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   askConversationMessages,
@@ -213,7 +213,12 @@ export async function createAskConversation(userId: number, values: { title: str
 
 export async function listAskConversations(userId: number) {
   const db = await requiredDb();
-  return db.select().from(askConversations).where(eq(askConversations.userId, userId)).orderBy(desc(askConversations.updatedAt));
+  const conversations = await db.select().from(askConversations).where(eq(askConversations.userId, userId)).orderBy(desc(askConversations.updatedAt));
+  if (!conversations.length) return conversations;
+  const messages = await db.select({ conversationId: askConversationMessages.conversationId, content: askConversationMessages.content }).from(askConversationMessages).where(and(eq(askConversationMessages.userId, userId), inArray(askConversationMessages.conversationId, conversations.map(conversation => conversation.id))));
+  const searchTextByConversation = new Map<number, string>();
+  for (const message of messages) searchTextByConversation.set(message.conversationId, `${searchTextByConversation.get(message.conversationId) || ""} ${message.content}`.trim());
+  return conversations.map(conversation => ({ ...conversation, searchText: `${conversation.title} ${searchTextByConversation.get(conversation.id) || ""}`.trim() }));
 }
 
 export async function getAskConversation(userId: number, id: number) {
@@ -230,5 +235,21 @@ export async function deleteAskConversation(userId: number, id: number) {
     await tx.delete(askConversationMessages).where(and(eq(askConversationMessages.conversationId, id), eq(askConversationMessages.userId, userId)));
     const result = await tx.delete(askConversations).where(and(eq(askConversations.id, id), eq(askConversations.userId, userId)));
     return result[0].affectedRows > 0;
+  });
+}
+
+export async function updateAskConversationTitle(userId: number, id: number, title: string) {
+  const db = await requiredDb();
+  const result = await db.update(askConversations).set({ title, updatedAt: new Date() }).where(and(eq(askConversations.id, id), eq(askConversations.userId, userId)));
+  return result[0].affectedRows > 0;
+}
+
+export async function appendAskConversationMessages(userId: number, id: number, messages: SavedAskMessage[], context: { includeWellness: boolean; includeFood: boolean; includeJournal: boolean }) {
+  const db = await requiredDb();
+  return db.transaction(async tx => {
+    const updated = await tx.update(askConversations).set({ updatedAt: new Date(), includeWellness: context.includeWellness ? 1 : 0, includeFood: context.includeFood ? 1 : 0, includeJournal: context.includeJournal ? 1 : 0 }).where(and(eq(askConversations.id, id), eq(askConversations.userId, userId)));
+    if (updated[0].affectedRows === 0) return false;
+    await tx.insert(askConversationMessages).values(messages.map(message => ({ conversationId: id, userId, role: message.role, content: message.content })));
+    return true;
   });
 }

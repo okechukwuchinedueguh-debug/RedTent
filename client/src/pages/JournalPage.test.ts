@@ -11,5 +11,8 @@ describe("Your Space saved conversation library contract", () => {
     expect(source).toContain("ask.conversations.delete");
     expect(source).toContain("conversations.error");
     expect(source).toContain("Your saved conversations are not loading right now.");
+    expect(source).toContain("Search saved conversations");
+    expect(source).toContain("Edit title");
+    expect(source).toContain("Continue");
   });
 });
