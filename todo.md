@@ -52,8 +52,9 @@
 - [x] Verify the published Redtent identity-feature release serves the new username and profile-photo experience.
 - [x] Commit the latest identity-feature changes to the Vercel-connected Git branch and record the commit SHA.
 - [x] Verify Vercel reaches READY for the latest Redtent identity-feature deployment and record its URL.
-- [ ] Push the latest Redtent identity release to the Vercel-connected Git branch and record its commit SHA.
-- [ ] Confirm the Vercel-connected Git branch is clean and points to the pushed identity release.
+- [x] Push the latest Redtent identity release to the Vercel-connected Git branch and record its commit SHA.
+- [x] Push the latest Redtent identity release to the Vercel-connected Git branch and record its commit SHA.
+- [x] Confirm the Vercel-connected Git branch is clean and points to the pushed identity release.
 - [x] Commit the latest Redtent product reform to the Vercel-connected Git branch and verify the resulting Vercel deployment.
 - [x] Commit every latest Redtent reform file to the Vercel-connected Git branch and record the resulting commit SHA.
 - [x] Verify that Vercel reaches READY for the latest Redtent commit and record the deployment URL.
