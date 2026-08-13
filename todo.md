@@ -66,5 +66,12 @@
 - [x] Verify the Profile photo-removal control restores the fallback avatar without exposing a user photo reference.
 - [x] Re-run final validation after the additional onboarding and photo-removal checks.
 - [ ] Connect the exact Redtent custom domain after the domain owner supplies the chosen hostname and DNS access.
+- [x] Add a privacy-respecting Invite a friend option with a shareable Redtent invitation message.
+- [x] Add explicit light, dark, and automatic day-and-night theme preferences.
+- [x] Implement deterministic local-time theme switching without a server-side scheduled task.
+- [x] Add regression coverage and responsive visual validation for invitation and theme controls.
+- [x] Add focused component-level coverage for the light, dark, and automatic theme-control selection states.
+- [x] Visually verify a rendered dark-theme Redtent Profile route and rerun final invitation/theme validation.
+- [ ] Commit the completed invitation and theme release to the Vercel-connected Git branch and verify its Vercel deployment.
 - [x] Add focused presentation-state coverage for the Profile remove-photo control and fallback avatar transition.
 - [x] Re-run final onboarding and photo-removal validation after the focused control-state coverage is complete.

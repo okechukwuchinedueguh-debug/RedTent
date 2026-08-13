@@ -1,55 +1,48 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-type Theme = "light" | "dark";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { nextThemeTransition, resolveThemePreference, type ResolvedTheme, type ThemePreference } from "@/lib/themePreference";
 
 interface ThemeContextType {
-  theme: Theme;
-  toggleTheme?: () => void;
-  switchable: boolean;
+  theme: ResolvedTheme;
+  preference: ThemePreference;
+  setThemePreference: (preference: ThemePreference) => void;
+  toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-interface ThemeProviderProps {
-  children: React.ReactNode;
-  defaultTheme?: Theme;
-  switchable?: boolean;
+function readInitialPreference(): ThemePreference {
+  if (typeof window === "undefined") return "auto";
+  const requested = new URLSearchParams(window.location.search).get("appearance");
+  if (requested === "light" || requested === "dark" || requested === "auto") return requested;
+  const stored = window.localStorage.getItem("redtent-theme-preference");
+  return stored === "light" || stored === "dark" || stored === "auto" ? stored : "auto";
 }
 
-export function ThemeProvider({
-  children,
-  defaultTheme = "light",
-  switchable = false,
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (switchable) {
-      const stored = localStorage.getItem("theme");
-      return (stored as Theme) || defaultTheme;
-    }
-    return defaultTheme;
-  });
+interface ThemeProviderProps {
+  children: React.ReactNode;
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  const [preference, setPreference] = useState<ThemePreference>(readInitialPreference);
+  const [now, setNow] = useState(() => new Date());
+  const theme = useMemo(() => resolveThemePreference(preference, now), [preference, now]);
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+    root.classList.toggle("dark", theme === "dark");
+    root.style.colorScheme = theme;
+    window.localStorage.setItem("redtent-theme-preference", preference);
+  }, [preference, theme]);
 
-    if (switchable) {
-      localStorage.setItem("theme", theme);
-    }
-  }, [theme, switchable]);
-
-  const toggleTheme = switchable
-    ? () => {
-        setTheme(prev => (prev === "light" ? "dark" : "light"));
-      }
-    : undefined;
+  useEffect(() => {
+    const next = nextThemeTransition(preference, now);
+    if (!next) return;
+    const timeout = window.setTimeout(() => setNow(new Date()), Math.max(1_000, next.getTime() - Date.now() + 500));
+    return () => window.clearTimeout(timeout);
+  }, [now, preference]);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, switchable }}>
+    <ThemeContext.Provider value={{ theme, preference, setThemePreference: setPreference, toggleTheme: () => setPreference(theme === "light" ? "dark" : "light") }}>
       {children}
     </ThemeContext.Provider>
   );

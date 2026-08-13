@@ -16,6 +16,7 @@ Redtent is a mobile-first, authenticated wellbeing application for menstrual-cyc
 | Personal preferences | Optional food-culture, preference, restriction, and wellness-goal fields that help Food Lens and Ask Redtent produce more relevant general guidance. |
 | Account identity | An optional unique Redtent username and replaceable or removable profile photo, with a private fallback avatar when no image is chosen. |
 | First-time setup | A three-step, dismissible onboarding flow for optional identity details, cycle context, and a clear privacy reminder. Completion is saved only to the signed-in user profile. |
+| Appearance and sharing | Light, dark, and automatic local day-night themes, plus an Invite a friend action that shares only Redtent’s public app link and a general invitation. |
 | Responsive experience | A bottom navigation bar for mobile and a persistent sidebar for desktop. |
 
 ## Technology architecture
@@ -82,3 +83,9 @@ Create a project checkpoint after validation. From the project management interf
 Redtent can use a branded custom domain through the managed project’s **Settings → Domains** panel. First choose the exact hostname, such as `app.example.com` or `redtent.example.com`. Add that hostname in the panel, then create the DNS record shown by the platform at the domain registrar. Keep the current managed `manus.space` address active until DNS validation reports success, test sign-in and each application route on the new hostname, then set the new hostname as the primary public address.
 
 The domain owner must provide the exact domain or subdomain and have access to its DNS settings. No application code or secret needs to change for the connection. If Redtent continues to use the separate Vercel deployment, configure the domain against one hosting provider only to avoid conflicting DNS records; the managed Redtent deployment already supports custom domains.
+
+### Appearance and invitations
+
+Appearance preferences are stored in the browser. **Auto** is a deterministic local-time setting rather than a server job: it uses the light theme between 07:00 and 18:59, then dark theme between 19:00 and 06:59. The preference is re-evaluated at the next local transition while Redtent is open, so it does not create a background process or collect location data.
+
+Invite a friend invokes the device’s native sharing option when available and otherwise copies a shareable message. The invitation contains only a general Redtent description and the current public app URL. It never includes a user’s profile, entries, cycle information, or any other private account data.

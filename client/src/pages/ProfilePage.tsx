@@ -3,12 +3,16 @@ import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { copy } from "@/lib/redtent";
 import { getProfilePhotoPresentation } from "@/lib/profilePhoto";
-import { Camera, ImagePlus, Loader2, LockKeyhole, LogOut, ShieldCheck, Sparkles, Trash2, UserRound } from "lucide-react";
+import { createRedtentInvitation } from "@/lib/invitation";
+import { useTheme } from "@/contexts/ThemeContext";
+import ThemeChoiceGroup from "@/components/ThemeChoiceGroup";
+import { Camera, Copy, ImagePlus, Loader2, LockKeyhole, LogOut, Share2, ShieldCheck, Sparkles, Trash2, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
+  const { preference, setThemePreference, theme } = useTheme();
   const utils = trpc.useUtils();
   const profile = trpc.profile.get.useQuery();
   const photoInput = useRef<HTMLInputElement>(null);
@@ -66,6 +70,22 @@ export default function ProfilePage() {
   const displayName = username || profile.data?.username || user?.name || "Redtent member";
   const usernameValid = !username || /^[a-z0-9_]{3,24}$/.test(username);
 
+  const inviteFriend = async () => {
+    const invitation = createRedtentInvitation(window.location.origin);
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Try Redtent", text: invitation, url: window.location.origin });
+        toast.success("Your Redtent invitation is ready to send.");
+        return;
+      }
+      await navigator.clipboard.writeText(invitation);
+      toast.success("Your Redtent invitation has been copied.");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      toast.error("Your invitation could not be shared. Please try again.");
+    }
+  };
+
   return <div className="mx-auto max-w-3xl px-4 pb-8 pt-5 sm:px-7 lg:px-10 lg:pt-9">
     <header><p className="eyebrow">Your Redtent account</p><h1 className="mt-1 font-display text-3xl sm:text-4xl">Your story stays yours.</h1><p className="mt-2 text-sm text-[#806A63]">Choose how you appear in your private Redtent space, then set the context that helps your food and wellness suggestions feel relevant.</p></header>
 
@@ -86,6 +106,8 @@ export default function ProfilePage() {
     </section>
 
     <section className="rose-card mt-6 p-5 sm:p-6"><p className="eyebrow">Your Food Lens context</p><h2 className="mt-1 font-display text-2xl">Set only what you want Redtent to consider.</h2><p className="mt-2 text-sm leading-6 text-[#806A63]">These details are optional and stay in your private Redtent account. They help you keep suggestions culturally relevant and practical.</p><div className="mt-5 grid gap-4"><label><span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-[#7E655D]">Food culture and familiar meals</span><input value={foodCulture} onChange={event => setFoodCulture(event.target.value)} maxLength={120} className="field-input" placeholder="e.g. Nigerian and global foods" /></label><label><span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-[#7E655D]">Preferences</span><textarea value={preferences} onChange={event => setPreferences(event.target.value)} maxLength={500} className="field-input min-h-24 resize-y" placeholder="e.g. Meals I enjoy, cooking time, budget priorities" /></label><label><span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-[#7E655D]">Restrictions or foods to avoid</span><textarea value={restrictions} onChange={event => setRestrictions(event.target.value)} maxLength={500} className="field-input min-h-24 resize-y" placeholder="Only share what you are comfortable sharing" /></label><label><span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-[#7E655D]">Wellness goals</span><textarea value={goals} onChange={event => setGoals(event.target.value)} maxLength={500} className="field-input min-h-24 resize-y" placeholder="e.g. More meal variety, easier weekly planning, steady check-ins" /></label></div><button onClick={() => save.mutate({ foodCulture: foodCulture.trim() || "Nigerian and global foods", dietaryPreferences: preferences.trim() || null, dietaryRestrictions: restrictions.trim() || null, wellnessGoals: goals.trim() || null })} disabled={save.isPending || profile.isLoading} className="mt-5 rounded-xl bg-[#F4E5E0] px-5 py-3 text-sm font-semibold text-[#8E4B57] disabled:opacity-60">{save.isPending ? "Saving your preferences..." : "Save my preferences"}</button></section>
+
+    <section className="mt-6 grid gap-4 lg:grid-cols-2"><article className="rose-card p-5"><p className="eyebrow">Appearance</p><h2 className="mt-1 font-display text-2xl">Make Redtent comfortable to read.</h2><p className="mt-2 text-sm leading-6 text-[#806A63]">Choose a light or dark view, or let Redtent follow your local day and night. Automatic mode uses light from 7:00 to 18:59 and dark from 19:00 to 6:59.</p><ThemeChoiceGroup preference={preference} resolvedTheme={theme} onPreferenceChange={setThemePreference} /></article><article className="rose-card p-5"><p className="eyebrow">Share Redtent</p><h2 className="mt-1 font-display text-2xl">Invite a friend with care.</h2><p className="mt-2 text-sm leading-6 text-[#806A63]">Share Redtent’s public app link and a simple invitation. Your cycle, food, journal, and account details are never included.</p><button type="button" onClick={inviteFriend} className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#A84D5F] px-5 py-3 text-sm font-semibold text-white hover:bg-[#8F3F50]"><Share2 className="h-4 w-4" /> Invite a friend</button><p className="mt-3 flex items-center gap-1.5 text-xs text-[#8B7069]"><Copy className="h-3.5 w-3.5" /> Opens your device share sheet or copies the invitation.</p></article></section>
 
     <section className="mt-6 grid gap-4 sm:grid-cols-2"><article className="rose-card p-5"><LockKeyhole className="h-6 w-6 text-[#A94F60]" /><h2 className="mt-4 font-display text-xl">Private by design</h2><p className="mt-2 text-sm leading-6 text-[#806A63]">{copy.privateSpace}</p></article><article className="rose-card p-5"><ShieldCheck className="h-6 w-6 text-[#7A9677]" /><h2 className="mt-4 font-display text-xl">Clear, careful insights</h2><p className="mt-2 text-sm leading-6 text-[#806A63]">We make uncertainty visible. Cycle forecasts, food observations, and patterns are helpful estimates, not diagnoses or medical advice.</p></article></section>
     <section className="mt-6 rounded-2xl bg-[#F3ECEE] p-5"><div className="flex gap-3"><Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-[#9A5A68]" /><div><h2 className="font-semibold">How Food Lens works</h2><p className="mt-1 text-sm leading-6 text-[#725E68]">When you choose a food photo, an AI vision model offers a structured observation. It cannot see every ingredient, portion, preparation method, or personal need with certainty. Your correction overrides the visible-food label for that saved entry.</p></div></div></section>
