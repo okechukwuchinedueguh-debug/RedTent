@@ -130,4 +130,4 @@
 - [x] Validate, publish, and synchronize the branded-loading and rose-dominant dark-theme release to GitHub and Vercel: commit 5233a68c, Vercel READY at https://red-tent-4miz84sqi-okechukwuchinedueguh-7181s-projects.vercel.app.
 - [x] Repair Ask Redtent’s mobile dark-theme header and content contrast so all copy and surfaces remain legible.
 - [x] Ensure Ask Redtent’s mobile content clears the fixed bottom navigation and central Log period action.
-- [ ] Add focused regression coverage, validate the mobile dark Ask Redtent screen, and synchronize the fix to GitHub and Vercel.
+- [x] Add focused regression coverage, validate the mobile dark Ask Redtent screen, and synchronize the fix to GitHub and Vercel: commit 5e3de6a3, Vercel READY at https://red-tent-57jz0ykad-okechukwuchinedueguh-7181s-projects.vercel.app.
