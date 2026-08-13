@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { nextThemeTransition, resolveThemePreference, type ResolvedTheme, type ThemePreference } from "@/lib/themePreference";
+import { DEFAULT_THEME_PREFERENCE, nextThemeTransition, resolveThemePreference, type ResolvedTheme, type ThemePreference } from "@/lib/themePreference";
 import { runThemeTransition } from "@/lib/themeTransition";
 
 interface ThemeContextType {
@@ -12,11 +12,11 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 function readInitialPreference(): ThemePreference {
-  if (typeof window === "undefined") return "auto";
+  if (typeof window === "undefined") return DEFAULT_THEME_PREFERENCE;
   const requested = new URLSearchParams(window.location.search).get("appearance");
   if (requested === "light" || requested === "dark" || requested === "auto") return requested;
   const stored = window.localStorage.getItem("redtent-theme-preference");
-  return stored === "light" || stored === "dark" || stored === "auto" ? stored : "auto";
+  return stored === "light" || stored === "dark" || stored === "auto" ? stored : DEFAULT_THEME_PREFERENCE;
 }
 
 interface ThemeProviderProps {

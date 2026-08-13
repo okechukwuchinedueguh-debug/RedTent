@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { nextThemeTransition, resolveThemePreference } from "./themePreference";
+import { DEFAULT_THEME_PREFERENCE, nextThemeTransition, resolveThemePreference } from "./themePreference";
 
 describe("Redtent theme preferences", () => {
+  it("defaults first-time Redtent users to the light appearance", () => {
+    expect(DEFAULT_THEME_PREFERENCE).toBe("light");
+  });
+
   it("honors explicit light and dark choices", () => {
     const night = new Date("2026-08-13T22:00:00");
     expect(resolveThemePreference("light", night)).toBe("light");

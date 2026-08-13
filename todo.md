@@ -93,3 +93,8 @@
 - [x] Validate the updated documentation and full Redtent regression suite.
 - [x] Commit and push all current Redtent updates to the Vercel-connected Git branch.
 - [x] Verify the resulting Vercel deployment reaches READY and record its URL.
+- [x] Make Light the default appearance for first-time Redtent users instead of Automatic mode.
+- [x] Make a minimalist cycle calendar the first meaningful signed-in experience on the dashboard.
+- [x] Add careful, non-diagnostic calendar states for a period expected in a few days and a late expected period.
+- [x] Add regression coverage and responsive validation for the new theme default and calendar-first dashboard.
+- [ ] Save and publish the revised Redtent login and cycle-calendar experience.
