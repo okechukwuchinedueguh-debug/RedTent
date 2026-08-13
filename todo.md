@@ -122,3 +122,6 @@
 - [x] Mount DashboardLayout with mocked authenticated state to verify its central mobile Log period control navigates into the period-entry flow.
 - [x] Push the mobile period-log update to the Vercel-connected GitHub branch and record the release commit SHA: 9af88ec2.
 - [x] Verify the resulting Vercel deployment for the mobile period-log update reaches READY and record its URL: https://red-tent-f952crmea-okechukwuchinedueguh-7181s-projects.vercel.app.
+- [x] Remove the redundant Add period date control from the calendar-first mobile dashboard while retaining the central Log period action.
+- [x] Rework the mobile calendar-first dashboard so the calendar begins above secondary check-in menus and remains the dominant first view.
+- [x] Rebalance dark mode toward a roughly 70:30 dusty-rose to near-black ambience without reducing text, calendar, navigation, or control contrast.

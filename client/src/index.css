@@ -79,31 +79,31 @@
 }
 
 .dark {
-  --background: oklch(0.22 0.025 25);
-  --foreground: oklch(0.93 0.012 45);
-  --card: oklch(0.28 0.025 25);
-  --card-foreground: oklch(0.93 0.012 45);
-  --popover: oklch(0.28 0.025 25);
-  --popover-foreground: oklch(0.93 0.012 45);
-  --primary: oklch(0.72 0.11 18);
-  --primary-foreground: oklch(0.22 0.025 25);
-  --secondary: oklch(0.34 0.03 25);
-  --secondary-foreground: oklch(0.88 0.012 45);
-  --muted: oklch(0.32 0.02 25);
-  --muted-foreground: oklch(0.72 0.02 45);
-  --accent: oklch(0.36 0.05 20);
-  --accent-foreground: oklch(0.92 0.012 45);
-  --destructive: oklch(0.68 0.17 20);
-  --destructive-foreground: oklch(0.22 0.025 25);
+  --background: oklch(0.32 0.052 18);
+  --foreground: oklch(0.95 0.014 48);
+  --card: oklch(0.38 0.054 18);
+  --card-foreground: oklch(0.95 0.014 48);
+  --popover: oklch(0.38 0.054 18);
+  --popover-foreground: oklch(0.95 0.014 48);
+  --primary: oklch(0.75 0.12 18);
+  --primary-foreground: oklch(0.29 0.045 18);
+  --secondary: oklch(0.45 0.06 18);
+  --secondary-foreground: oklch(0.92 0.014 48);
+  --muted: oklch(0.42 0.044 18);
+  --muted-foreground: oklch(0.78 0.025 48);
+  --accent: oklch(0.5 0.078 18);
+  --accent-foreground: oklch(0.96 0.014 48);
+  --destructive: oklch(0.7 0.17 20);
+  --destructive-foreground: oklch(0.27 0.04 18);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.72 0.11 18);
-  --sidebar: oklch(0.25 0.025 25);
-  --sidebar-foreground: oklch(0.93 0.012 45);
-  --sidebar-primary: oklch(0.72 0.11 18);
-  --sidebar-primary-foreground: oklch(0.22 0.025 25);
-  --sidebar-accent: oklch(0.36 0.05 20);
-  --sidebar-accent-foreground: oklch(0.92 0.012 45);
+  --sidebar: oklch(0.35 0.052 18);
+  --sidebar-foreground: oklch(0.95 0.014 48);
+  --sidebar-primary: oklch(0.75 0.12 18);
+  --sidebar-primary-foreground: oklch(0.29 0.045 18);
+  --sidebar-accent: oklch(0.5 0.078 18);
+  --sidebar-accent-foreground: oklch(0.96 0.014 48);
   --sidebar-border: oklch(1 0 0 / 12%);
   --sidebar-ring: oklch(0.72 0.11 18);
 }
@@ -111,7 +111,7 @@
 @layer base {
   * { @apply border-border outline-ring/50; }
   html { font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif; background: #fcf8f4; }
-  html.dark { background: #241a20; }
+  html.dark { background: #3d2630; }
   body { @apply bg-background text-foreground; min-width: 320px; }
   button, input, textarea, select { font: inherit; }
   button:not(:disabled), [role="button"]:not([aria-disabled="true"]), [type="button"]:not(:disabled), [type="submit"]:not(:disabled), [type="reset"]:not(:disabled), a[href], select:not(:disabled), input[type="checkbox"]:not(:disabled), input[type="radio"]:not(:disabled) { @apply cursor-pointer; }
@@ -138,6 +138,7 @@
   .theme-choice.active { border-color: #b65b69; background: #f8e4e5; color: #963e50; box-shadow: inset 0 0 0 1px #efd0ca; }
   .app-mobile-navigation { bottom: max(4.75rem, calc(env(safe-area-inset-bottom) + 4rem)); }
   .mobile-period-log-action { min-height: 4.25rem; }
+  .calendar-card-ornament { display: block; height: 2.7rem; width: 2.7rem; border: 1px solid rgba(183, 79, 100, 0.16); border-radius: 1.1rem 1.1rem 1.1rem 0.3rem; background: radial-gradient(circle at 50% 50%, transparent 0 0.42rem, rgba(183, 79, 100, 0.7) 0.44rem 0.54rem, transparent 0.56rem), #f8e7e3; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7); }
   @media (min-width: 640px) { .container { padding-left: 1.5rem; padding-right: 1.5rem; } }
   @media (min-width: 1024px) { .container { padding-left: 2rem; padding-right: 2rem; max-width: 1280px; } }
 }
@@ -147,44 +148,45 @@
   button:active:not(:disabled) { transform: scale(0.97); }
 }
 
-.dark .warm-canvas { background: radial-gradient(circle at 83% 4%, rgba(143, 69, 86, 0.22), transparent 25rem), radial-gradient(circle at 5% 36%, rgba(108, 72, 76, 0.24), transparent 30rem), #241a20; }
-.dark .rose-card { border-color: rgba(255, 235, 230, 0.12); background: rgba(48, 35, 42, 0.92); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16); }
+.dark .warm-canvas { background: radial-gradient(circle at 83% 4%, rgba(234, 142, 156, 0.36), transparent 25rem), radial-gradient(circle at 5% 36%, rgba(181, 93, 113, 0.28), transparent 30rem), linear-gradient(150deg, #593641 0%, #462d38 58%, #2d2027 100%); }
+.dark .rose-card { border-color: rgba(255, 226, 222, 0.2); background: rgba(79, 48, 60, 0.94); box-shadow: 0 12px 34px rgba(37, 20, 27, 0.22); }
 .dark .eyebrow { color: #e5a3ae; }
 .dark .nav-side-item { color: #d8c1ba; }
-.dark .nav-side-item:hover { background: #422d36; color: #f2b9c2; }
-.dark .nav-side-item.active { background: #59333f; color: #ffd7dc; box-shadow: inset 0 0 0 1px #754653; }
+.dark .nav-side-item:hover { background: #613946; color: #ffe1e5; }
+.dark .nav-side-item.active { background: #774354; color: #fff0f0; box-shadow: inset 0 0 0 1px #a35c6e; }
 .dark .nav-mobile-item { color: #d4bdb7; }
-.dark .nav-mobile-item.active { background: #583440; color: #ffd7dc; }
-.dark .field-input { border-color: #624852; background: #2e2229; color: #f5e7e3; }
+.dark .nav-mobile-item.active { background: #754251; color: #fff0f0; }
+.dark .field-input { border-color: #805462; background: #4a303a; color: #fff0ec; }
 .dark .field-input::placeholder { color: #b69a94; }
 .dark .field-input:focus { border-color: #d78292; box-shadow: 0 0 0 4px rgba(215, 130, 146, 0.20); }
-.dark .theme-choice { border-color: #624852; background: #2e2229; color: #e5d2ce; }
-.dark .theme-choice.active { border-color: #d78292; background: #593440; color: #ffe2e6; box-shadow: inset 0 0 0 1px #875260; }
+.dark .theme-choice { border-color: #805462; background: #4a303a; color: #f5dfda; }
+.dark .theme-choice.active { border-color: #e294a2; background: #754251; color: #fff0f0; box-shadow: inset 0 0 0 1px #a86374; }
 .dark [class*="text-[#"] { color: #f7e9e5 !important; }
-.dark [class*="bg-[#F3ECEE]"], .dark [class*="bg-[#F4E5E0]"], .dark [class*="bg-[#F8EEE8]"], .dark [class*="bg-[#F7EAE6]"], .dark [class*="bg-[#F7E7E3]"], .dark [class*="bg-[#F7E8E4]"], .dark [class*="bg-[#F8EEE9]"] { background-color: #3a2b33 !important; }
-.dark [class*="bg-[#FFFDFB]"], .dark [class*="bg-[#FFFCFA]"] { background-color: #2c2027 !important; }
-.dark [class*="bg-[#FFF3F3]"] { background-color: #4b303a !important; }
-.dark [class*="bg-[#FFF2F2]"] { background-color: #4b2f38 !important; }
+.dark [class*="bg-[#F3ECEE]"], .dark [class*="bg-[#F4E5E0]"], .dark [class*="bg-[#F8EEE8]"], .dark [class*="bg-[#F7EAE6]"], .dark [class*="bg-[#F7E7E3]"], .dark [class*="bg-[#F7E8E4]"], .dark [class*="bg-[#F8EEE9]"] { background-color: #593640 !important; }
+.dark [class*="bg-[#FFFDFB]"], .dark [class*="bg-[#FFFCFA]"] { background-color: #4a3039 !important; }
+.dark [class*="bg-[#FFF3F3]"] { background-color: #693b49 !important; }
+.dark [class*="bg-[#FFF2F2]"] { background-color: #673943 !important; }
 .dark [class*="bg-[#FFF9EA]"] { background-color: #44371f !important; }
 .dark [class*="bg-[#F8E1B3]"] { background-color: #4d3b20 !important; }
 .dark [class*="bg-[#DCE9D9]"] { background-color: #294538 !important; }
 .dark [class*="bg-[#DED0DF]"] { background-color: #403448 !important; }
 .dark [class*="bg-[#F8E8E5]"] { background-color: #4a3037 !important; }
-.dark .app-sidebar, .dark .app-mobile-navigation { border-color: #513943 !important; background-color: rgba(39, 28, 34, 0.96) !important; }
-.dark .mobile-period-log-action { background: #c45c71 !important; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34); }
-.dark .onboarding-surface { border-color: #694955; background: #2c2027 !important; }
-.dark .onboarding-choice { background: #3c2d35 !important; color: #f8e9e5 !important; }
+.dark .app-sidebar, .dark .app-mobile-navigation { border-color: #754957 !important; background-color: rgba(67, 42, 52, 0.97) !important; }
+.dark .mobile-period-log-action { background: #d0677c !important; box-shadow: 0 10px 24px rgba(53, 23, 33, 0.36); }
+.dark .onboarding-surface { border-color: #81525f; background: #4a3039 !important; }
+.dark .onboarding-choice { background: #593640 !important; color: #fff0ec !important; }
 .dark .onboarding-choice--selected { background: #bf5368 !important; color: #fff7f4 !important; box-shadow: 0 0 0 1px #e48999 inset; }
-.dark .calendar-status { border-color: #60454d !important; background: #35262e !important; color: #faeae6 !important; }
-.dark .calendar-status--late { border-color: #bf6576 !important; background: #4a2b35 !important; }
+.dark .calendar-status { border-color: #895966 !important; background: #5b3743 !important; color: #fff0ec !important; }
+.dark .calendar-status--late { border-color: #d8798b !important; background: #6c3c49 !important; }
 .dark .calendar-status--upcoming, .dark .calendar-status--today { border-color: #b7954a !important; background: #46371e !important; }
-.dark .calendar-day { border-color: #624851 !important; background: #34262d !important; color: #fae9e4 !important; }
+.dark .calendar-day { border-color: #815361 !important; background: #51313b !important; color: #fff0ec !important; }
 .dark .calendar-day--logged { border-color: #d67c8b !important; background: #b95267 !important; color: #fff8f6 !important; }
 .dark .calendar-day--estimated { border-color: #d98b99 !important; background: #4d3039 !important; color: #ffe7eb !important; }
 .dark .calendar-day--follicular { border-color: #9f8243 !important; background: #4b391f !important; color: #ffedbd !important; }
 .dark .calendar-day--ovulation { border-color: #669a76 !important; background: #294535 !important; color: #e2f6df !important; }
 .dark .calendar-day--luteal { border-color: #9477a6 !important; background: #413248 !important; color: #f2e7ff !important; }
 .dark .calendar-day--menstrual, .dark .calendar-day--past { border-color: #c36f7c !important; background: #4b2e37 !important; color: #ffe8eb !important; }
+.dark .calendar-card-ornament { border-color: rgba(255, 223, 225, 0.28); background: radial-gradient(circle at 50% 50%, transparent 0 0.42rem, rgba(255, 222, 226, 0.9) 0.44rem 0.54rem, transparent 0.56rem), #754251; box-shadow: inset 0 1px 0 rgba(255, 239, 239, 0.15); }
 
 @media (prefers-reduced-motion: no-preference) {
   html.theme-transitioning,

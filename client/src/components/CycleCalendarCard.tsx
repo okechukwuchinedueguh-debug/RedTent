@@ -17,7 +17,6 @@ type CycleCalendarCardProps = {
   status: PeriodForecastStatus;
   onPrevious: () => void;
   onNext: () => void;
-  onAddPeriod: () => void;
   onOpenCycle: () => void;
 };
 
@@ -33,22 +32,19 @@ function statusStyles(kind: PeriodForecastStatus["kind"]) {
   return "border-[#E5D5D0] bg-[#FFFDFB] text-[#714B4A]";
 }
 
-export default function CycleCalendarCard({ month, marks, isLoading, status, onPrevious, onNext, onAddPeriod, onOpenCycle }: CycleCalendarCardProps) {
+export default function CycleCalendarCard({ month, marks, isLoading, status, onPrevious, onNext, onOpenCycle }: CycleCalendarCardProps) {
   const monthTitle = new Intl.DateTimeFormat(undefined, { month: "long", year: "numeric" }).format(month);
   const leadingDays = (month.getDay() + 6) % 7;
   const expectedDay = status.expectedAt;
 
-  return <section className="rose-card overflow-hidden p-4 sm:p-6">
-    <div className="flex flex-wrap items-start justify-between gap-4">
-      <div><p className="eyebrow">Cycle calendar</p><h2 className="mt-1 font-display text-2xl sm:text-3xl">Your cycle, at a glance.</h2></div>
-      <button onClick={onAddPeriod} className="rounded-xl bg-[#A84D5F] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#8F3F50]">Add period date</button>
-    </div>
-    <div className={`calendar-status calendar-status--${status.kind} mt-5 rounded-2xl border p-4 ${statusStyles(status.kind)}`}><p className="text-xs font-bold uppercase tracking-[0.16em]">Next period estimate</p><p className="mt-1 font-display text-xl sm:text-2xl">{status.title}</p><p className="mt-1 max-w-2xl text-sm leading-6 opacity-90">{status.detail}</p></div>
-    <div className="mt-6 flex items-center justify-between gap-3"><button onClick={onPrevious} className="grid h-9 w-9 place-items-center rounded-full text-[#7A5A53] transition hover:bg-[#F5E8E3]" aria-label="View previous month"><ChevronLeft className="h-5 w-5" /></button><h3 className="font-display text-xl sm:text-2xl">{monthTitle}</h3><button onClick={onNext} className="grid h-9 w-9 place-items-center rounded-full text-[#7A5A53] transition hover:bg-[#F5E8E3]" aria-label="View next month"><ChevronRight className="h-5 w-5" /></button></div>
-    <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[10px] font-bold uppercase tracking-wide text-[#9B827A] sm:text-[11px]">{weekdayLabels.map(day => <span key={day} className="py-1">{day}</span>)}</div>
+  return <section className="rose-card calendar-card overflow-hidden p-4 sm:p-6">
+    <div className="flex items-start justify-between gap-4"><div><p className="eyebrow">Cycle calendar</p><h2 className="mt-1 font-display text-2xl leading-[1.04] sm:text-3xl">Your cycle, at a glance.</h2></div><span className="calendar-card-ornament" aria-hidden="true" /></div>
+    <div className={`calendar-status calendar-status--${status.kind} mt-4 rounded-2xl border px-4 py-3 ${statusStyles(status.kind)}`}><div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1"><p className="text-[0.65rem] font-bold uppercase tracking-[0.16em]">Next period estimate</p><p className="font-display text-xl leading-none sm:text-2xl">{status.title}</p></div><p className="mt-1 max-w-2xl text-xs leading-5 opacity-90 sm:text-sm">{status.detail}</p></div>
+    <div className="mt-4 flex items-center justify-between gap-3"><button onClick={onPrevious} className="grid h-9 w-9 place-items-center rounded-full text-[#7A5A53] transition hover:bg-[#F5E8E3]" aria-label="View previous month"><ChevronLeft className="h-5 w-5" /></button><h3 className="font-display text-xl sm:text-2xl">{monthTitle}</h3><button onClick={onNext} className="grid h-9 w-9 place-items-center rounded-full text-[#7A5A53] transition hover:bg-[#F5E8E3]" aria-label="View next month"><ChevronRight className="h-5 w-5" /></button></div>
+    <div className="mt-3 grid grid-cols-7 gap-1 text-center text-[10px] font-bold uppercase tracking-wide text-[#9B827A] sm:text-[11px]">{weekdayLabels.map(day => <span key={day} className="py-1">{day}</span>)}</div>
     {isLoading ? <div className="grid min-h-72 place-items-center"><Loader2 className="h-6 w-6 animate-spin text-[#B45263]" /></div> : <div className="grid grid-cols-7 gap-1">{Array.from({ length: leadingDays }).map((_, index) => <div key={`empty-${index}`} className="aspect-square" />)}{marks?.map(mark => <CalendarDay key={mark.date.toString()} mark={mark} isExpectedPastDate={status.kind === "late" && expectedDay ? sameCalendarDay(mark.date, expectedDay) : false} />)}</div>}
-    <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-xs text-[#806A63]"><Legend className="bg-[#C66E78]" text="Logged period" /><Legend className="border border-dashed border-[#C66E78] bg-[#FFF3F3]" text="Estimated period" />{status.kind === "late" ? <Legend className="border-2 border-[#B85262] bg-[#FFF2F2]" text="Past estimate" /> : null}</div>
-    <div className="mt-5 flex justify-end"><button onClick={onOpenCycle} className="text-sm font-semibold text-[#A84D5F] underline decoration-[#E2B8BA] underline-offset-4">Open full Cycle Forecast</button></div>
+    <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-[#806A63]"><Legend className="bg-[#C66E78]" text="Logged period" /><Legend className="border border-dashed border-[#C66E78] bg-[#FFF3F3]" text="Estimated period" />{status.kind === "late" ? <Legend className="border-2 border-[#B85262] bg-[#FFF2F2]" text="Past estimate" /> : null}</div>
+    <div className="mt-4 flex justify-end"><button onClick={onOpenCycle} className="text-sm font-semibold text-[#A84D5F] underline decoration-[#E2B8BA] underline-offset-4">Open full Cycle Forecast</button></div>
   </section>;
 }
 
