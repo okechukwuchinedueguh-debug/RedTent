@@ -18,3 +18,7 @@ The final workflow regression suite exercised period creation, wellness save nor
 The interactive workflow assertions are executed at the authenticated server-procedure boundary. They intentionally mock external object storage and the LLM provider so that the test suite verifies Redtent’s own data scoping, validation, and persistence orchestration without making billable external requests or storing test records.
 
 The delivery checkpoint was created successfully as **`47c4aea6`**.
+
+Vercel synchronization discovery identified the available team scope as **`team_nNJmWD3MqpH1iuFMdgrnrrqq`** (`okechukwuchinedueguh-7181s-projects`).
+
+The connected Vercel project is **`red-tent`** (`prj_aKoAvBvKlqy81qYy4DKeblkEKQXy`). Its latest deployment is ready at `red-tent-muptrzbse-okechukwuchinedueguh-7181s-projects.vercel.app`; the available Vercel domains include a `git-main` deployment domain, indicating that the main branch is the relevant Git deployment target to verify.
