@@ -72,6 +72,6 @@
 - [x] Add regression coverage and responsive visual validation for invitation and theme controls.
 - [x] Add focused component-level coverage for the light, dark, and automatic theme-control selection states.
 - [x] Visually verify a rendered dark-theme Redtent Profile route and rerun final invitation/theme validation.
-- [ ] Commit the completed invitation and theme release to the Vercel-connected Git branch and verify its Vercel deployment.
+- [x] Commit the completed invitation and theme release to the Vercel-connected Git branch and verify its Vercel deployment.
 - [x] Add focused presentation-state coverage for the Profile remove-photo control and fallback avatar transition.
 - [x] Re-run final onboarding and photo-removal validation after the focused control-state coverage is complete.
