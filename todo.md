@@ -140,7 +140,7 @@
 - [x] Darken calendar date numbers and strengthen all dark-mode text, form-control, option, and selected-state contrast without losing the dusty-rose ambience.
 - [x] Add custom titles, full-text search, and practical filters for private saved Ask Redtent conversations in Your Space.
 - [x] Implement a user-scoped continue-conversation flow that appends new Ask Redtent messages to the selected saved thread.
-- [ ] Add focused contrast, conversation update, search/filter, and continuation regression coverage, validate mobile dark-mode flows, and synchronize the completed release to GitHub and Vercel.
+- [x] Add focused contrast, conversation update, search/filter, and continuation regression coverage, validate mobile dark-mode flows, and synchronize the completed release to GitHub and Vercel: commit b9386e86, Vercel READY at https://red-tent-oz6yvzfww-okechukwuchinedueguh-7181s-projects.vercel.app.
 - [x] Audit and repair remaining dark-mode contrast across every routed Redtent page and shared control, then add broader app-wide readability coverage.
 - [x] Extend private saved-conversation search to match user and assistant message content as well as custom titles.
 - [x] Add explicit dark-mode contract coverage for Home, Food Lens, Nourish, Ask Redtent, Your Patterns, Your Space, Profile, and shared interactive controls.
