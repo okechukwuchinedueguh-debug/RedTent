@@ -72,6 +72,13 @@
 - [x] Add regression coverage and responsive visual validation for invitation and theme controls.
 - [x] Add focused component-level coverage for the light, dark, and automatic theme-control selection states.
 - [x] Visually verify a rendered dark-theme Redtent Profile route and rerun final invitation/theme validation.
+- [x] Add a smooth light-to-dark and dark-to-light theme transition that respects reduced-motion preferences.
+- [x] Validate the theme transition behavior and publish the updated Redtent release.
+- [x] Exercise the Profile theme controls and confirm smooth light-to-dark and dark-to-light transitions in the rendered app.
+- [ ] Save and publish the Redtent theme-transition checkpoint.
+- [ ] Push the theme-transition release to the Vercel-connected branch and verify its Vercel deployment reaches READY.
+- [x] Add focused transition-state coverage for live theme application and the reduced-motion fallback.
+- [x] Reconfirm the rendered Redtent theme transition after the live transition-state validation.
 - [x] Commit the completed invitation and theme release to the Vercel-connected Git branch and verify its Vercel deployment.
 - [x] Add focused presentation-state coverage for the Profile remove-photo control and fallback avatar transition.
 - [x] Re-run final onboarding and photo-removal validation after the focused control-state coverage is complete.

@@ -160,3 +160,14 @@
 .dark .theme-choice.active { border-color: #d78292; background: #593440; color: #ffe2e6; box-shadow: inset 0 0 0 1px #875260; }
 .dark [class*="text-[#"] { color: #f1dfda !important; }
 .dark [class*="bg-[#F3ECEE]"], .dark [class*="bg-[#F4E5E0]"], .dark [class*="bg-[#F8EEE8]"], .dark [class*="bg-[#F7EAE6]"] { background-color: #352730 !important; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transitioning,
+  html.theme-transitioning *,
+  html.theme-transitioning *::before,
+  html.theme-transitioning *::after {
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow !important;
+    transition-duration: 260ms !important;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1) !important;
+  }
+}
