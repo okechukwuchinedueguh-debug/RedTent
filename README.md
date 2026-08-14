@@ -1,6 +1,6 @@
 # Redtent
 
-Redtent is a mobile-first, authenticated wellbeing application for menstrual-cycle tracking, daily wellness logging, private journal reflections, and LLM vision-based food observations. The product is designed as a **personal wellness record**, rather than a diagnostic or treatment tool. Every personal record is queried and mutated through the authenticated user context, ensuring that one user’s data is never returned in another user’s workspace.
+Redtent is a mobile-first, authenticated women’s health and care-navigation platform for Africa. Its first product wedge is a private cycle and wellbeing record, covering menstrual-cycle tracking, daily wellness logging, private journal reflections, and LLM vision-based food observations. Redtent is designed to help a person understand her own context and choose a thoughtful next step, not to diagnose conditions, prescribe treatment, or replace a healthcare professional. Every personal record is queried and mutated through the authenticated user context, ensuring that one user’s data is never returned in another user’s workspace.
 
 ## Product capabilities
 
@@ -12,6 +12,8 @@ Redtent is a mobile-first, authenticated wellbeing application for menstrual-cyc
 | Food Lens | Camera or gallery capture with Before You Eat and I Ate This framing, protected object storage, LLM vision analysis, user corrections, structured macro estimates, micronutrient highlights, and phase-specific suggestions. |
 | Nourish | Non-prescriptive, phase-aware food ideas with prominent wellness and uncertainty language. |
 | Your Patterns and Tomorrow | Deterministic observations and an on-demand next-day briefing derived only from the user’s saved records. The expanded personal trend dashboard compares recent logged cycles, timing ranges, check-in coverage, mood, energy, signals, and what-helped notes without diagnosing or claiming causation. |
+| Redtent Care | A private care-navigation foundation that lets a user move from personal context to care categories. It intentionally displays no unverified providers, availability, pricing, booking, or payment data in the current release. |
+| Health journey | A respectful lifecycle framework spanning menstruation, fertility, pregnancy, postpartum, perimenopause, and menopause. Current functionality remains centered on the user’s cycle and wellbeing records; future pathways are clearly marked as planned. |
 | Preparation and reflection | A private, editable pre-period preparation checklist plus one optional “what helped” reflection for each current cycle moment. Both are scoped to the signed-in user and are never required. |
 | Ask Redtent | A contextual AI surface where the user explicitly chooses whether recent wellness, Food Lens, and Your Space data is included for a single question. Conversation messages are kept in browser session state, not persisted as a new personal-data record. |
 | Personal preferences | Optional food-culture, preference, restriction, and wellness-goal fields that help Food Lens and Ask Redtent produce more relevant general guidance. |
@@ -26,7 +28,7 @@ The application uses a React 19 and TypeScript client with Tailwind CSS, an Expr
 
 | Layer | Responsibility |
 |---|---|
-| `client/src/pages` | Feature pages for the personalized dashboard, cycle calendar, daily log, Your Space, Food Lens, Nourish, Your Patterns, Ask Redtent, and profile. |
+| `client/src/pages` | Feature pages for the personalized dashboard, cycle calendar, daily log, Redtent Care, Your Space, Food Lens, Nourish, Your Patterns, Ask Redtent, and profile. |
 | `client/src/components/DashboardLayout.tsx` | Authenticated shell that adapts from desktop sidebar to mobile bottom navigation. |
 | `server/routers.ts` | Typed tRPC procedures, input validation, authenticated access control, and the food-analysis orchestration. |
 | `server/db.ts` | Database helpers that always accept the authenticated numeric `userId`. |
@@ -59,6 +61,14 @@ Your Patterns is intentionally conservative. It only reflects explicitly logged,
 
 Ask Redtent accepts a one-off user question and lets the user decide whether wellness check-ins, Food Lens snapshots, and/or recent Your Space entries are included as context. It is instructed to avoid diagnosis, medical treatment, fertility or pregnancy claims, eating-disorder inference, and ungrounded personal-data claims.
 
+## Redtent Care and deferred integrations
+
+Redtent Care is a **care-navigation foundation**, not a clinic directory or booking marketplace yet. The interface deliberately requires locally verified partners before showing a clinician, clinic, pharmacy, laboratory, telehealth service, availability, price, review, booking, or payment option. This avoids presenting invented or stale healthcare information as actionable care.
+
+The following capabilities are planned behind verified integrations and their own privacy, security, validation, and operational reviews: provider verification and local discovery, appointments, payment processing, WhatsApp Business communication, pharmacy and laboratory connections, clinician tooling, consented health sharing, employer and university offerings, and aggregated research infrastructure. No external healthcare partner, payment, WhatsApp, maps, or messaging integration is active in this release.
+
+The country configuration should remain explicit as Redtent expands. Healthcare access, languages, pricing, regulation, and partner verification must be set per market rather than assumed to be uniform across Africa.
+
 ## Local development
 
 The managed project environment injects the database, authentication, object-storage, and LLM credentials. Do not commit an `.env` file or place secrets in client-side code.
@@ -75,7 +85,7 @@ When changing the schema, generate the migration, inspect the resulting SQL, and
 
 ## Verification coverage
 
-The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, strict validation of LLM nutrition-analysis output, safe deterministic pattern observations, expanded multi-cycle trend summaries, companion-route and shared-device removal, Tomorrow safety language, the Ask Redtent context prompt, unique username handling, user-scoped profile-photo storage, theme-control states, reduced-motion-safe theme transitions, public invitation-link generation, and copy-link success and failure feedback. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
+The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, strict validation of LLM nutrition-analysis output, safe deterministic pattern observations, expanded multi-cycle trend summaries, companion-route and shared-device removal, Tomorrow safety language, the Ask Redtent context prompt, unique username handling, user-scoped profile-photo storage, theme-control states, reduced-motion-safe theme transitions, private care-navigation boundaries, lifecycle health-journey framing, public invitation-link generation, and copy-link success and failure feedback. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
 
 ## Deployment
 
@@ -89,6 +99,6 @@ The domain owner must provide the exact domain or subdomain and have access to i
 
 ### Appearance and invitations
 
-Appearance preferences are stored in the browser. **Auto** is a deterministic local-time setting rather than a server job: it uses the light theme between 07:00 and 18:59, then dark theme between 19:00 and 06:59. The preference is re-evaluated at the next local transition while Redtent is open, so it does not create a background process or collect location data. When the resolved theme changes, Redtent uses a brief 260 ms color crossfade. The transition is skipped for users who choose reduced motion.
+Appearance preferences are stored in the browser. **Auto** is a deterministic local-time setting rather than a server job: it uses the light theme between 07:00 and 18:59, then dark theme between 19:00 and 06:59. The preference is re-evaluated at the next local transition while Redtent is open, so it does not create a background process or collect location data. When a theme, accent, or high-contrast preference changes, Redtent uses a brief 320 ms opacity crossfade. The transition is skipped for users who choose reduced motion.
 
 Invite a friend displays a generated public Redtent URL, provides a dedicated **Copy link** action, and invokes the device’s native sharing option when available. The generated link is normalized to the public Manus Space address when the application is running in local development, so no local host, private path, query parameter, profile, entry, cycle information, or other account data is shared. Copy feedback tells the user whether the link is ready to send or needs to be selected manually.

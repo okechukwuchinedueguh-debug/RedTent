@@ -180,3 +180,11 @@
 - [x] Remove the intrusive floating Appearance and accessibility settings popup from the compact global theme control.
 - [x] Preserve the clean label-free Light and Dark selector after removing the popup trigger.
 - [x] Validate the corrected mobile theme control and synchronize the release to GitHub and Vercel.
+- [x] Establish Redtent’s refreshed burgundy, deep-wine, blush, cream, and restrained-gold visual system with premium editorial and accessible UI tokens.
+- [x] Update the consumer-facing product language to position Redtent as an Africa-first women’s health and care-navigation platform while retaining non-diagnostic wellness boundaries.
+- [x] Rework the cycle-first Today experience around current cycle state, next period, daily logging, insight, and a clear care next step.
+- [x] Add a private Care navigation route with category-led local-care discovery and clearly labeled demonstration content only.
+- [x] Add an elegant lifecycle health-journey surface covering menstruation, fertility, pregnancy, postpartum, perimenopause, and menopause without health claims.
+- [x] Extend the responsive navigation, profile, and supporting product framing for the Redtent Health ecosystem without removing existing private wellness tools.
+- [x] Update README product positioning, architecture boundaries, and deferred integration plan for verified clinicians, payments, WhatsApp, pharmacies, and laboratories.
+- [x] Add focused regression coverage, validate responsive light and dark layouts, and synchronize the complete Redtent update to GitHub and Vercel.

@@ -5,6 +5,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import DashboardLayout from "./components/DashboardLayout";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import CyclePage from "./pages/CyclePage";
+import CarePage from "./pages/CarePage";
 import AskRedtentPage from "./pages/AskRedtentPage";
 import FoodPage from "./pages/FoodPage";
 import GuidancePage from "./pages/GuidancePage";
@@ -19,6 +20,7 @@ function DashboardRoutes() {
   return <DashboardLayout><Switch>
     <Route path="/" component={Home} />
     <Route path="/cycle" component={CyclePage} />
+    <Route path="/care" component={CarePage} />
     <Route path="/food" component={FoodPage} />
     <Route path="/ask" component={AskRedtentPage} />
     <Route path="/patterns" component={PatternsPage} />

@@ -28,6 +28,8 @@ describe("Redtent dark-theme contrast contract", () => {
     expect(stylesheet).toContain("bg-[#E9D8DD]");
     expect(stylesheet).toContain(".dark .global-theme-toggle");
     expect(stylesheet).toContain(".dark .global-theme-toggle__option.active");
+    expect(stylesheet).toContain(".dark .care-category");
+    expect(stylesheet).toContain(".dark .care-safety");
     expect(stylesheet).toContain(".dark .phase-pill, .dark .signal-badge, .dark .trend-badge, .dark .confidence-badge");
     expect(stylesheet).toContain("html.high-contrast");
     expect(stylesheet).toContain("html.dark.high-contrast");

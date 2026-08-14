@@ -7,6 +7,7 @@ import {
   CalendarDays,
   ChartNoAxesCombined,
   CircleUserRound,
+  HeartPulse,
   House,
   Leaf,
   LogOut,
@@ -30,7 +31,9 @@ const mobileItems = [
 ];
 
 const desktopItems = [
-  ...mobileItems.slice(0, 4),
+  ...mobileItems.slice(0, 2),
+  { path: "/care", label: "Care", icon: HeartPulse },
+  ...mobileItems.slice(2, 4),
   mobileItems[4],
   { path: "/journal", label: "Your Space", icon: BookHeart },
   { path: "/guidance", label: "Nourish", icon: Leaf },
@@ -64,9 +67,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="global-theme-control"><GlobalThemeToggle /></div>
         <section className="w-full max-w-md rounded-[2rem] bg-white/80 p-8 shadow-[0_24px_65px_rgba(89,55,46,0.14)] ring-1 ring-[#EBDCD4] backdrop-blur">
           <div className="mb-8 flex items-center gap-3"><div className="brand-mark">R</div><span className="font-display text-3xl text-[#3F2A25]">Redtent</span></div>
-          <p className="eyebrow">Your body. Your cycle. Your story.</p>
-          <h1 className="mt-3 font-display text-4xl leading-[1.05] text-[#3F2A25]">A more personal way to understand your everyday wellness.</h1>
-          <p className="mt-5 text-sm leading-6 text-[#745E58]">Notice your cycle, food, mood, symptoms, and personal patterns in one intelligent, private space that becomes more useful as you choose to log.</p>
+          <p className="eyebrow">Your Cycle. Your Care. Your Power.</p>
+          <h1 className="mt-3 font-display text-4xl leading-[1.05] text-[#3F2A25]">A private women’s health space that can lead to a thoughtful next step.</h1>
+          <p className="mt-5 text-sm leading-6 text-[#745E58]">Notice your cycle, food, mood, symptoms, and personal patterns in one private space. Redtent helps you understand your context and, when useful, prepare to find care.</p>
           <Button onClick={() => startLogin()} className="mt-8 w-full rounded-xl bg-[#A84D5F] py-6 text-base hover:bg-[#8F3F50]">Begin with Redtent</Button>
           <p className="mt-5 text-center text-xs leading-5 text-[#917B74]">Redtent shares general wellness information, not medical advice. Cycle timing and food insights are estimates.</p>
         </section>

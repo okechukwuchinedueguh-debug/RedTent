@@ -31,9 +31,9 @@ export const parseInputDate = (value: string) => new Date(`${value}T12:00:00.000
 export const displayDate = (value: Date | string, options: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" }) => new Intl.DateTimeFormat(undefined, options).format(new Date(value));
 
 export const copy = {
-  tagline: "Your body. Your cycle. Your story.",
-  appDescription: "Redtent is an AI-powered women’s wellness companion for understanding your cycle, food, symptoms, mood, habits, and personal patterns with more clarity.",
+  tagline: "Your Cycle. Your Care. Your Power.",
+  appDescription: "Redtent is a private women’s health and care-navigation platform for Africa. Understand your cycle, food, symptoms, and personal patterns, then choose a thoughtful next step.",
   safety: "Redtent shares general wellness information, not medical advice. Cycle forecasts, food observations, and personal patterns are estimates based on what you choose to log. For symptoms that feel severe, persistent, unusual, or worrying, speak with a qualified healthcare professional.",
-  privateSpace: "Your cycle, reflections, check-ins, and Food Lens snapshots stay inside your private Redtent space.",
+  privateSpace: "Your cycle, reflections, check-ins, Food Lens snapshots, and care preferences stay inside your private Redtent space.",
   foodLens: "Snap it. Ask it. Understand it.",
 } as const;
