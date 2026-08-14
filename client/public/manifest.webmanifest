@@ -1,0 +1,9 @@
+{
+  "name": "Redtent Companion",
+  "short_name": "Redtent",
+  "start_url": "/companion",
+  "display": "standalone",
+  "background_color": "#241C22",
+  "theme_color": "#6D3D4A",
+  "description": "A private, consented partner-support companion from Redtent."
+}

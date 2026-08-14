@@ -1,5 +1,5 @@
 import { getCycleSummary } from "./cycle";
-import type { CycleLog, FoodEntry, WellnessEntry } from "../drizzle/schema";
+import type { CycleLog, CycleMomentReflection, FoodEntry, WellnessEntry } from "../drizzle/schema";
 
 export type PatternObservation = {
   id: string;
@@ -58,5 +58,29 @@ export function buildTomorrowBriefing({ phase, nextPhase, daysUntilNextPhase, to
     journalPrompt: "What would make tomorrow feel a little easier?",
     pattern,
     safety: "These are gentle, general suggestions based on what you have logged. They are not medical predictions or advice.",
+  };
+}
+
+export function buildCycleTrendDashboard({ logs, wellness, reflections, cycleLength }: { logs: CycleLog[]; wellness: WellnessEntry[]; reflections: CycleMomentReflection[]; cycleLength: number }) {
+  const dated = wellness.map(entry => ({ entry, cycleDay: dayOfCycle(logs, entry.entryAt, cycleLength) })).filter((item): item is { entry: WellnessEntry; cycleDay: number } => item.cycleDay !== null);
+  const moodCounts = ["great", "good", "okay", "low", "difficult"].map(label => ({ label, count: dated.filter(item => item.entry.mood === label).length }));
+  const energyCounts = ["low", "medium", "high"].map(label => ({ label, count: dated.filter(item => item.entry.energy === label).length }));
+  const symptomCounts = new Map<string, number>();
+  dated.forEach(({ entry }) => {
+    try { (JSON.parse(entry.symptoms) as string[]).forEach(symptom => symptomCounts.set(symptom, (symptomCounts.get(symptom) || 0) + 1)); } catch { /* Preserve the existing legacy-data guard. */ }
+  });
+  const cycleStarts = [...logs].sort((a, b) => b.startAt.getTime() - a.startAt.getTime()).slice(0, 4);
+  const recentCycles = cycleStarts.map((log, index) => {
+    const prior = cycleStarts[index + 1];
+    return { startAt: log.startAt, length: prior ? Math.round((log.startAt.getTime() - prior.startAt.getTime()) / 86_400_000) : null };
+  });
+  return {
+    sample: { cyclesTracked: logs.length, checkIns: wellness.length, reflections: reflections.length },
+    moodCounts,
+    energyCounts,
+    topSignals: Array.from(symptomCounts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([label, count]) => ({ label, count })),
+    recentCycles,
+    recentReflections: reflections.slice(0, 3).map(reflection => ({ moment: reflection.moment, whatHelped: reflection.whatHelped, entryAt: reflection.entryAt })),
+    note: "This view reflects only the cycle dates, check-ins, and reflections you chose to log. It is not a diagnosis, prediction, or measure of what you should feel.",
   };
 }

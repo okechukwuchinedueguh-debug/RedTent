@@ -140,6 +140,98 @@ export const askConversationMessages = mysqlTable(
   })
 );
 
+export const preparationChecklistItems = mysqlTable(
+  "preparation_checklist_items",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    title: varchar("title", { length: 180 }).notNull(),
+    isActive: int("isActive").default(1).notNull(),
+    sortOrder: int("sortOrder").default(0).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({ userOrderIndex: index("prep_item_user_order_idx").on(table.userId, table.isActive, table.sortOrder) })
+);
+
+export const preparationChecklistCompletions = mysqlTable(
+  "preparation_checklist_completions",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    itemId: int("itemId").notNull(),
+    cycleStartAt: timestamp("cycleStartAt").notNull(),
+    completedAt: timestamp("completedAt").defaultNow().notNull(),
+  },
+  table => ({ userItemCycleUnique: uniqueIndex("prep_completion_user_item_cycle_unique").on(table.userId, table.itemId, table.cycleStartAt), userCycleIndex: index("prep_completion_user_cycle_idx").on(table.userId, table.cycleStartAt) })
+);
+
+export const cycleMomentReflections = mysqlTable(
+  "cycle_moment_reflections",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    moment: mysqlEnum("moment", ["menstrual", "post-menstrual", "follicular", "ovulation", "premenstrual", "luteal"]).notNull(),
+    cycleStartAt: timestamp("cycleStartAt").notNull(),
+    whatHelped: text("whatHelped").notNull(),
+    entryAt: timestamp("entryAt").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({ userMomentCycleUnique: uniqueIndex("reflection_user_moment_cycle_unique").on(table.userId, table.moment, table.cycleStartAt), userCreatedIndex: index("reflection_user_created_idx").on(table.userId, table.entryAt) })
+);
+
+export const partnerConnections = mysqlTable(
+  "partner_connections",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    ownerUserId: int("ownerUserId").notNull(),
+    partnerEmail: varchar("partnerEmail", { length: 320 }).notNull(),
+    partnerName: varchar("partnerName", { length: 80 }),
+    tokenHash: varchar("tokenHash", { length: 128 }).notNull(),
+    consentedAt: timestamp("consentedAt").notNull(),
+    acceptedAt: timestamp("acceptedAt"),
+    revokedAt: timestamp("revokedAt"),
+    emailAlertsEnabled: int("emailAlertsEnabled").default(0).notNull(),
+    browserAlertsEnabled: int("browserAlertsEnabled").default(0).notNull(),
+    lastPartnerReminderAt: timestamp("lastPartnerReminderAt"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({ tokenUnique: uniqueIndex("partner_connection_token_unique").on(table.tokenHash), ownerActiveIndex: index("partner_connection_owner_active_idx").on(table.ownerUserId, table.revokedAt) })
+);
+
+export const notificationPreferences = mysqlTable(
+  "notification_preferences",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    ownerBrowserAlertsEnabled: int("ownerBrowserAlertsEnabled").default(0).notNull(),
+    reminderTime: varchar("reminderTime", { length: 5 }).default("09:00").notNull(),
+    scheduleCronTaskUid: varchar("scheduleCronTaskUid", { length: 65 }),
+    consentedAt: timestamp("consentedAt"),
+    lastOwnerReminderAt: timestamp("lastOwnerReminderAt"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({ userUnique: uniqueIndex("notification_preference_user_unique").on(table.userId), scheduleIndex: index("notification_preference_schedule_idx").on(table.scheduleCronTaskUid) })
+);
+
+export const browserPushSubscriptions = mysqlTable(
+  "browser_push_subscriptions",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull(),
+    partnerConnectionId: int("partnerConnectionId"),
+    endpoint: varchar("endpoint", { length: 1200 }).notNull(),
+    p256dh: varchar("p256dh", { length: 300 }).notNull(),
+    authSecret: varchar("authSecret", { length: 300 }).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({ endpointUnique: uniqueIndex("push_subscription_endpoint_unique").on(table.endpoint), userPartnerIndex: index("push_subscription_user_partner_idx").on(table.userId, table.partnerConnectionId) })
+);
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 export type CycleLog = typeof cycleLogs.$inferSelect;
@@ -148,3 +240,9 @@ export type JournalEntry = typeof journalEntries.$inferSelect;
 export type FoodEntry = typeof foodEntries.$inferSelect;
 export type AskConversation = typeof askConversations.$inferSelect;
 export type AskConversationMessage = typeof askConversationMessages.$inferSelect;
+export type PreparationChecklistItem = typeof preparationChecklistItems.$inferSelect;
+export type PreparationChecklistCompletion = typeof preparationChecklistCompletions.$inferSelect;
+export type CycleMomentReflection = typeof cycleMomentReflections.$inferSelect;
+export type PartnerConnection = typeof partnerConnections.$inferSelect;
+export type NotificationPreference = typeof notificationPreferences.$inferSelect;
+export type BrowserPushSubscription = typeof browserPushSubscriptions.$inferSelect;

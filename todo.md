@@ -150,3 +150,9 @@
 - [x] Define non-diagnostic post-menstrual and premenstrual experience states from the existing private cycle context.
 - [x] Add supportive post-menstrual and premenstrual signs, check-ins, and practical context across Cycle, Wellness, Nourish, and Ask Redtent.
 - [x] Add focused user-scoped regression coverage, mobile validation, and GitHub/Vercel synchronization for the phase-context update.
+- [x] Define consent-first sharing boundaries, partner-only visibility, and a safe notification delivery path for Redtent support updates.
+- [x] Add editable private pre-period preparation items and optional personal what-helped reflections for each cycle moment.
+- [x] Add a user-scoped multi-cycle trend dashboard that summarizes only logged wellness, cycle, reflection, and preparation data without diagnostic claims.
+- [x] Build an opt-in partner support invitation, revocation control, and restricted companion page that never exposes the owner’s full Redtent dashboard or private logs.
+- [x] Add a shared-device companion mode that lets the owner select a partner’s phone after signing into their own Redtent account, while keeping the full dashboard and private logs hidden.
+- [x] Keep Resend-powered opt-in email delivery as a saved future integration and complete safety copy, focused regression coverage, mobile validation, and release synchronization for the current companion release.

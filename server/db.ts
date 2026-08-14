@@ -1,12 +1,18 @@
 import { and, asc, desc, eq, gte, inArray, lte } from "drizzle-orm";
+import { isNull } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   askConversationMessages,
   askConversations,
   cycleLogs,
+  cycleMomentReflections,
   foodEntries,
   type InsertUser,
   journalEntries,
+  notificationPreferences,
+  partnerConnections,
+  preparationChecklistCompletions,
+  preparationChecklistItems,
   userProfiles,
   users,
   wellnessEntries,
@@ -89,6 +95,109 @@ export async function completeProfileOnboarding(userId: number) {
   const db = await requiredDb();
   await db.insert(userProfiles).values({ userId, onboardingCompletedAt: new Date() }).onDuplicateKeyUpdate({ set: { onboardingCompletedAt: new Date() } });
   return getOrCreateProfile(userId);
+}
+
+export async function listPreparationChecklist(userId: number, cycleStartAt: Date | null) {
+  const db = await requiredDb();
+  const items = await db.select().from(preparationChecklistItems).where(and(eq(preparationChecklistItems.userId, userId), eq(preparationChecklistItems.isActive, 1))).orderBy(asc(preparationChecklistItems.sortOrder), asc(preparationChecklistItems.id));
+  if (!cycleStartAt || !items.length) return items.map(item => ({ ...item, completed: false }));
+  const completions = await db.select().from(preparationChecklistCompletions).where(and(eq(preparationChecklistCompletions.userId, userId), eq(preparationChecklistCompletions.cycleStartAt, cycleStartAt)));
+  const completedIds = new Set(completions.map(completion => completion.itemId));
+  return items.map(item => ({ ...item, completed: completedIds.has(item.id) }));
+}
+
+export async function createPreparationChecklistItem(userId: number, title: string) {
+  const db = await requiredDb();
+  const existing = await db.select().from(preparationChecklistItems).where(eq(preparationChecklistItems.userId, userId));
+  const sortOrder = existing.reduce((current, item) => Math.max(current, item.sortOrder), -1) + 1;
+  const result = await db.insert(preparationChecklistItems).values({ userId, title, sortOrder });
+  return Number(result[0].insertId);
+}
+
+export async function updatePreparationChecklistItem(userId: number, id: number, title: string) {
+  const db = await requiredDb();
+  const result = await db.update(preparationChecklistItems).set({ title }).where(and(eq(preparationChecklistItems.id, id), eq(preparationChecklistItems.userId, userId)));
+  return result[0].affectedRows > 0;
+}
+
+export async function archivePreparationChecklistItem(userId: number, id: number) {
+  const db = await requiredDb();
+  const result = await db.update(preparationChecklistItems).set({ isActive: 0 }).where(and(eq(preparationChecklistItems.id, id), eq(preparationChecklistItems.userId, userId)));
+  return result[0].affectedRows > 0;
+}
+
+export async function togglePreparationChecklistCompletion(userId: number, itemId: number, cycleStartAt: Date, completed: boolean) {
+  const db = await requiredDb();
+  const item = await db.select({ id: preparationChecklistItems.id }).from(preparationChecklistItems).where(and(eq(preparationChecklistItems.id, itemId), eq(preparationChecklistItems.userId, userId), eq(preparationChecklistItems.isActive, 1))).limit(1);
+  if (!item[0]) return false;
+  if (completed) await db.insert(preparationChecklistCompletions).values({ userId, itemId, cycleStartAt }).onDuplicateKeyUpdate({ set: { completedAt: new Date() } });
+  else await db.delete(preparationChecklistCompletions).where(and(eq(preparationChecklistCompletions.userId, userId), eq(preparationChecklistCompletions.itemId, itemId), eq(preparationChecklistCompletions.cycleStartAt, cycleStartAt)));
+  return true;
+}
+
+export async function listCycleMomentReflections(userId: number) {
+  const db = await requiredDb();
+  return db.select().from(cycleMomentReflections).where(eq(cycleMomentReflections.userId, userId)).orderBy(desc(cycleMomentReflections.entryAt));
+}
+
+export async function upsertCycleMomentReflection(userId: number, values: { moment: "menstrual" | "post-menstrual" | "follicular" | "ovulation" | "premenstrual" | "luteal"; cycleStartAt: Date; whatHelped: string; entryAt: Date }) {
+  const db = await requiredDb();
+  await db.insert(cycleMomentReflections).values({ userId, ...values }).onDuplicateKeyUpdate({ set: { whatHelped: values.whatHelped, entryAt: values.entryAt } });
+  const reflection = await db.select().from(cycleMomentReflections).where(and(eq(cycleMomentReflections.userId, userId), eq(cycleMomentReflections.moment, values.moment), eq(cycleMomentReflections.cycleStartAt, values.cycleStartAt))).limit(1);
+  return reflection[0];
+}
+
+export async function getNotificationPreferences(userId: number) {
+  const db = await requiredDb();
+  await db.insert(notificationPreferences).values({ userId }).onDuplicateKeyUpdate({ set: { userId } });
+  const preferences = await db.select().from(notificationPreferences).where(eq(notificationPreferences.userId, userId)).limit(1);
+  return preferences[0]!;
+}
+
+export async function updateNotificationPreferences(userId: number, values: { ownerBrowserAlertsEnabled?: boolean; reminderTime?: string; consentedAt?: Date | null; scheduleCronTaskUid?: string | null }) {
+  const db = await requiredDb();
+  const set = {
+    ...(values.ownerBrowserAlertsEnabled === undefined ? {} : { ownerBrowserAlertsEnabled: values.ownerBrowserAlertsEnabled ? 1 : 0 }),
+    ...(values.reminderTime === undefined ? {} : { reminderTime: values.reminderTime }),
+    ...(values.consentedAt === undefined ? {} : { consentedAt: values.consentedAt }),
+    ...(values.scheduleCronTaskUid === undefined ? {} : { scheduleCronTaskUid: values.scheduleCronTaskUid }),
+  };
+  await db.insert(notificationPreferences).values({ userId, ...set }).onDuplicateKeyUpdate({ set });
+  return getNotificationPreferences(userId);
+}
+
+export async function listPartnerConnections(ownerUserId: number) {
+  const db = await requiredDb();
+  return db.select().from(partnerConnections).where(eq(partnerConnections.ownerUserId, ownerUserId)).orderBy(desc(partnerConnections.createdAt));
+}
+
+export async function createPartnerConnection(ownerUserId: number, values: { partnerEmail: string; partnerName?: string | null; tokenHash: string; emailAlertsEnabled: boolean; browserAlertsEnabled: boolean }) {
+  const db = await requiredDb();
+  const result = await db.insert(partnerConnections).values({ ownerUserId, partnerEmail: values.partnerEmail, partnerName: values.partnerName ?? null, tokenHash: values.tokenHash, consentedAt: new Date(), emailAlertsEnabled: values.emailAlertsEnabled ? 1 : 0, browserAlertsEnabled: values.browserAlertsEnabled ? 1 : 0 });
+  return Number(result[0].insertId);
+}
+
+export async function updatePartnerConnection(ownerUserId: number, id: number, values: { partnerName?: string | null; emailAlertsEnabled?: boolean; browserAlertsEnabled?: boolean }) {
+  const db = await requiredDb();
+  const set = {
+    ...(values.partnerName === undefined ? {} : { partnerName: values.partnerName }),
+    ...(values.emailAlertsEnabled === undefined ? {} : { emailAlertsEnabled: values.emailAlertsEnabled ? 1 : 0 }),
+    ...(values.browserAlertsEnabled === undefined ? {} : { browserAlertsEnabled: values.browserAlertsEnabled ? 1 : 0 }),
+  };
+  const result = await db.update(partnerConnections).set(set).where(and(eq(partnerConnections.id, id), eq(partnerConnections.ownerUserId, ownerUserId), isNull(partnerConnections.revokedAt)));
+  return result[0].affectedRows > 0;
+}
+
+export async function revokePartnerConnection(ownerUserId: number, id: number) {
+  const db = await requiredDb();
+  const result = await db.update(partnerConnections).set({ revokedAt: new Date(), emailAlertsEnabled: 0, browserAlertsEnabled: 0 }).where(and(eq(partnerConnections.id, id), eq(partnerConnections.ownerUserId, ownerUserId), isNull(partnerConnections.revokedAt)));
+  return result[0].affectedRows > 0;
+}
+
+export async function getPartnerConnectionByToken(tokenHash: string) {
+  const db = await requiredDb();
+  const connection = await db.select().from(partnerConnections).where(eq(partnerConnections.tokenHash, tokenHash)).limit(1);
+  return connection[0] && !connection[0].revokedAt ? connection[0] : undefined;
 }
 
 export async function listCycleLogs(userId: number) {

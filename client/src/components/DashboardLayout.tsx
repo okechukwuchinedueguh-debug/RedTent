@@ -19,6 +19,9 @@ import { trpc } from "@/lib/trpc";
 import OnboardingFlow from "./OnboardingFlow";
 import { MobilePeriodLogButton } from "./MobilePeriodLogButton";
 import { RedtentLoading } from "./RedtentLoading";
+import { DeviceModeChoice } from "./DeviceModeChoice";
+import { SharedDeviceCompanion } from "./SharedDeviceCompanion";
+import { readRedtentDeviceMode, saveRedtentDeviceMode, type RedtentDeviceMode } from "@/lib/deviceMode";
 
 const mobileItems = [
   { path: "/", label: "Today", icon: House },
@@ -41,6 +44,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const profile = trpc.profile.get.useQuery(undefined, { enabled: Boolean(user) });
   const [location, setLocation] = useLocation();
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== "undefined" && !navigator.onLine);
+  const [deviceMode, setDeviceMode] = useState<RedtentDeviceMode>("unset");
   const isOnboardingPreview = import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).get("onboarding") === "preview";
 
   useEffect(() => {
@@ -52,6 +56,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       window.removeEventListener("offline", updateStatus);
     };
   }, []);
+
+  useEffect(() => {
+    if (user) setDeviceMode(readRedtentDeviceMode(user.id));
+  }, [user?.id]);
 
   if (loading) {
     return <RedtentLoading />;
@@ -71,6 +79,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
     );
   }
+
+  const chooseDeviceMode = (mode: "owner" | "partner") => { saveRedtentDeviceMode(user.id, mode); setDeviceMode(mode); };
+  if (deviceMode === "partner") return <SharedDeviceCompanion onExit={() => chooseDeviceMode("owner")} />;
 
   const nav = (items: typeof desktopItems, compact = false) => items.map(({ path, label, icon: Icon }) => {
     const active = location === path;
@@ -97,6 +108,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <main className="min-h-screen pb-40 lg:ml-[250px] lg:pb-8">{children}</main>
       <nav className="app-mobile-navigation fixed inset-x-0 z-40 flex items-end border-t border-[#EBDDD7] bg-[#FFFDFB]/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden" aria-label="Primary navigation"><div className="grid flex-1 grid-cols-2">{nav(mobileNavigation[0], true)}</div><MobilePeriodLogButton navigate={setLocation} /><div className="grid flex-1 grid-cols-3">{nav(mobileNavigation[1], true)}</div></nav>
       {profile.data && (!profile.data.onboardingCompletedAt || isOnboardingPreview) ? <OnboardingFlow /> : null}
+      {deviceMode === "unset" ? <DeviceModeChoice onChoose={chooseDeviceMode} /> : null}
     </div>
   );
 }

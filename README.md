@@ -11,7 +11,9 @@ Redtent is a mobile-first, authenticated wellbeing application for menstrual-cyc
 | Journal | Create, update, and delete Markdown-enabled rich-text reflections, tagged with a cycle phase. |
 | Food Lens | Camera or gallery capture with Before You Eat and I Ate This framing, protected object storage, LLM vision analysis, user corrections, structured macro estimates, micronutrient highlights, and phase-specific suggestions. |
 | Nourish | Non-prescriptive, phase-aware food ideas with prominent wellness and uncertainty language. |
-| Your Patterns and Tomorrow | Deterministic observations and an on-demand next-day briefing derived only from the user’s saved records. They state uncertainty and do not diagnose or claim causation. |
+| Your Patterns and Tomorrow | Deterministic observations and an on-demand next-day briefing derived only from the user’s saved records. The expanded personal trend dashboard summarizes logged mood, energy, signals, recent cycle timing, and what-helped notes without diagnosing or claiming causation. |
+| Preparation and reflection | A private, editable pre-period preparation checklist plus one optional “what helped” reflection for each current cycle moment. Both are scoped to the signed-in user and are never required. |
+| Partner companion | A consent-first, restricted support page is available by revocable private link. An owner can also select “This is a partner’s phone” after signing into their own account on that device, which replaces the full dashboard with a limited local companion mode. |
 | Ask Redtent | A contextual AI surface where the user explicitly chooses whether recent wellness, Food Lens, and Your Space data is included for a single question. Conversation messages are kept in browser session state, not persisted as a new personal-data record. |
 | Personal preferences | Optional food-culture, preference, restriction, and wellness-goal fields that help Food Lens and Ask Redtent produce more relevant general guidance. |
 | Account identity | An optional unique Redtent username and replaceable or removable profile photo, with a private fallback avatar when no image is chosen. |
@@ -26,7 +28,7 @@ The application uses a React 19 and TypeScript client with Tailwind CSS, an Expr
 | Layer | Responsibility |
 |---|---|
 | `client/src/pages` | Feature pages for the personalized dashboard, cycle calendar, daily log, Your Space, Food Lens, Nourish, Your Patterns, Ask Redtent, and profile. |
-| `client/src/components/DashboardLayout.tsx` | Authenticated shell that adapts from desktop sidebar to mobile bottom navigation. |
+| `client/src/components/DashboardLayout.tsx` | Authenticated shell that adapts from desktop sidebar to mobile bottom navigation and offers an account-scoped owner or partner-device choice. |
 | `server/routers.ts` | Typed tRPC procedures, input validation, authenticated access control, and the food-analysis orchestration. |
 | `server/db.ts` | Database helpers that always accept the authenticated numeric `userId`. |
 | `server/cycle.ts` | Pure cycle summary and calendar-marking calculations, covered by unit tests. |
@@ -34,7 +36,7 @@ The application uses a React 19 and TypeScript client with Tailwind CSS, an Expr
 | `server/askRedtent.ts` | Safety-first, context-limited system-prompt builder for Ask Redtent. |
 | `server/foodAnalysis.ts` | Structured result contract for food-image analysis. |
 | `server/storage.ts` | Server-side object storage helper; database rows store only keys and URLs, never image bytes. |
-| `drizzle/schema.ts` | User-scoped tables and indexed relations for cycle logs, wellness entries, journal entries, food entries, and preferences. |
+| `drizzle/schema.ts` | User-scoped tables and indexed relations for cycle logs, wellness entries, journals, food entries, preparation routines, moment reflections, companion consent, and notification preferences. |
 
 ## Privacy model
 
@@ -44,6 +46,8 @@ Food image files are uploaded under a user-specific object-storage path. Only th
 
 Profile photos follow the same user-specific storage approach. Redtent accepts only JPEG, PNG, or WebP files up to 2 MB, stores only the generated object key and serving URL in the user’s own profile row, and scopes every identity mutation to the authenticated user. A user may remove their photo at any time; Redtent clears the stored references and restores the fallback avatar. Usernames are normalized to lowercase characters, numbers, and underscores, then protected by a unique database index.
 
+The standalone companion link is high-entropy and revocable. Its response deliberately omits the owner’s email, journal, food history, individual symptoms, fertility information, and full dashboard. Shared-device companion mode is a convenience guard implemented in that browser’s local storage, not an independent identity boundary. The owner must use a separate private link rather than a shared account sign-in when they need independently revocable access.
+
 ## Cycle and health-safety boundaries
 
 Redtent labels period timing, phase timing, and food observations as **estimates**. Calculations learn from logged history but intentionally use cautious confidence categories when information is limited. The application does not diagnose conditions, prescribe medication, make fertility or pregnancy claims, or treat photo estimates as exact nutritional values.
@@ -52,7 +56,7 @@ Redtent labels period timing, phase timing, and food observations as **estimates
 
 Food Lens is specifically a vision-model observation of visible items. It always returns a macro estimate, micronutrient highlights, phase-specific dietary suggestions, confidence, limitations, and a safety note. The user can correct visible-food labels on a saved entry. Suggestions are optional wellness ideas; they are not medical nutrition therapy.
 
-Your Patterns is intentionally conservative. It only reflects explicitly logged, user-scoped records and never creates an observation until enough related entries exist. Tomorrow is an on-demand briefing, not an automatic notification service. Recurring notifications, background reports, and end-user schedule settings require a separately selected scheduling model and explicit product decisions before implementation.
+Your Patterns is intentionally conservative. It only reflects explicitly logged, user-scoped records and never creates an observation until enough related entries exist. The pre-period checklist, moment reflections, and companion cues are optional general-wellness tools, not requirements or clinical records. Email delivery has been selected for future Resend configuration but is deliberately inactive until a verified sender and secure credentials are provided. Browser and email preference controls therefore do not send messages in this release.
 
 Ask Redtent accepts a one-off user question and lets the user decide whether wellness check-ins, Food Lens snapshots, and/or recent Your Space entries are included as context. It is instructed to avoid diagnosis, medical treatment, fertility or pregnancy claims, eating-disorder inference, and ungrounded personal-data claims.
 
@@ -72,7 +76,7 @@ When changing the schema, generate the migration, inspect the resulting SQL, and
 
 ## Verification coverage
 
-The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, strict validation of LLM nutrition-analysis output, safe deterministic pattern observations, Tomorrow safety language, the Ask Redtent context prompt, unique username handling, user-scoped profile-photo storage, theme-control states, reduced-motion-safe theme transitions, public invitation-link generation, and copy-link success and failure feedback. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
+The automated test suite covers the cycle-phase boundaries and estimates, historical versus predicted calendar markings, daily wellness date normalization, user ID scoping for destructive procedures, strict validation of LLM nutrition-analysis output, safe deterministic pattern observations, multi-cycle trend summaries, companion-response privacy boundaries, owner-account shared-device mode, Tomorrow safety language, the Ask Redtent context prompt, unique username handling, user-scoped profile-photo storage, theme-control states, reduced-motion-safe theme transitions, public invitation-link generation, and copy-link success and failure feedback. Run `pnpm test` and `pnpm check` before creating a delivery checkpoint.
 
 ## Deployment
 
