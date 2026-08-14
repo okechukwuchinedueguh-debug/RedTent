@@ -95,10 +95,10 @@ export default function ProfilePage() {
     else toast.error(result.message);
   };
 
-  return <div className="mx-auto max-w-3xl px-4 pb-8 pt-5 sm:px-7 lg:px-10 lg:pt-9">
+  return <div className="redtent-feature-page redtent-profile-page mx-auto max-w-3xl px-4 pb-8 pt-5 sm:px-7 lg:px-10 lg:pt-9">
     <header><p className="eyebrow">Your Redtent account</p><h1 className="mt-1 font-display text-3xl sm:text-4xl">Your story stays yours.</h1><p className="mt-2 text-sm text-[#806A63]">Choose how you appear in your private Redtent space, then set the context that helps your food and wellness suggestions feel relevant.</p></header>
 
-    <section className="rose-card mt-7 p-5 sm:p-7">
+    <section className="redtent-profile-identity rose-card mt-7 p-5 sm:p-7">
       <p className="eyebrow">Your Redtent identity</p>
       <h2 className="mt-1 font-display text-2xl">Make your space feel like yours.</h2>
       <p className="mt-2 text-sm leading-6 text-[#806A63]">Your username is unique to Redtent. Your profile photo is private to your account and can be replaced or removed whenever you choose.</p>

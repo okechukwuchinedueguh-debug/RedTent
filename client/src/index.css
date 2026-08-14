@@ -134,6 +134,16 @@ html[data-accent-intensity="bold"] { --redtent-accent: #650016; --redtent-accent
   .font-display { font-family: "Playfair Display", Georgia, serif; letter-spacing: -0.028em; }
   .warm-canvas { background: radial-gradient(circle at 83% 4%, rgba(128, 0, 32, 0.10), transparent 25rem), radial-gradient(circle at 4% 36%, rgba(248, 236, 239, 0.9), transparent 28rem), #fff8f5; }
   .brand-mark { display: grid; height: 2.25rem; width: 2.25rem; place-items: center; border-radius: 1.1rem 1.1rem 1.1rem 0.2rem; background: linear-gradient(145deg, #940027, #5a0018); color: white; box-shadow: 0 8px 18px rgba(90, 0, 24, 0.22); }
+  .redtent-logo { display: inline-flex; align-items: center; gap: 0.68rem; color: #5a0018; text-align: left; }
+  .redtent-logo__mark { display: grid; height: 2.35rem; width: 2.35rem; flex: 0 0 auto; place-items: center; border-radius: 1.12rem 1.12rem 1.12rem 0.26rem; background: linear-gradient(145deg, #940027, #5a0018); color: #fff8f5; box-shadow: 0 8px 18px rgba(90, 0, 24, 0.22); }
+  .redtent-logo__mark svg { height: 1.27rem; width: 1.27rem; }
+  .redtent-logo__copy { display: grid; gap: 0.12rem; }
+  .redtent-logo__name { font-family: "Playfair Display", Georgia, serif; font-size: 1.7rem; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+  .redtent-logo__tagline { color: #8d5d65; font-size: 0.56rem; font-weight: 800; letter-spacing: 0.105em; line-height: 1.25; text-transform: uppercase; }
+  .redtent-logo--compact .redtent-logo__mark { height: 2.05rem; width: 2.05rem; }
+  .redtent-mobile-brand { position: fixed; top: max(0.78rem, env(safe-area-inset-top)); left: 1rem; z-index: 46; border-radius: 999px; background: rgba(255, 248, 248, 0.84); padding: 0.24rem 0.66rem 0.24rem 0.24rem; box-shadow: 0 8px 24px rgba(90, 0, 24, 0.12); backdrop-filter: blur(12px); }
+  .redtent-mobile-brand .redtent-logo__mark { height: 2rem; width: 2rem; }
+  .redtent-mobile-brand .redtent-logo__name { font-size: 1.25rem; }
   .eyebrow { font-size: 0.69rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: #8d2944; }
   .rose-card { border: 1px solid rgba(128, 0, 32, 0.12); border-radius: 1.35rem; background: rgba(255, 255, 255, 0.92); box-shadow: 0 12px 34px rgba(90, 0, 24, 0.07); }
   .redtent-care-hero { overflow: hidden; border-radius: 1.55rem; background: radial-gradient(circle at 85% 6%, rgba(212, 175, 87, 0.22), transparent 13rem), linear-gradient(135deg, #5a0018, #800020 56%, #40101e); color: #fff8f5; box-shadow: 0 18px 44px rgba(90, 0, 24, 0.24); }
@@ -149,6 +159,26 @@ html[data-accent-intensity="bold"] { --redtent-accent: #650016; --redtent-accent
   .redtent-safety-callout { border-color: #e8d6db; background: #fff8f5; color: #704f55; }
   .redtent-safety-callout__action { background: #f8ecef; color: #800020; }
   .redtent-safety-callout__action:hover { background: #f0d5db; }
+  .redtent-log-action { display: grid; min-height: 8.2rem; align-content: start; gap: 0.72rem; border: 1px solid rgba(128, 0, 32, 0.12); border-radius: 1.2rem; background: rgba(255, 255, 255, 0.92); padding: 1rem; box-shadow: 0 10px 24px rgba(90, 0, 24, 0.06); transition: border-color 160ms ease-out, box-shadow 160ms ease-out, transform 160ms ease-out; }
+  .redtent-log-action:hover { border-color: #b34c63; box-shadow: 0 14px 30px rgba(90, 0, 24, 0.12); transform: translateY(-2px); }
+  .redtent-log-action__icon { display: grid; height: 2.45rem; width: 2.45rem; place-items: center; border-radius: 999px; background: #ffe1e3; color: #800020; }
+  .cycle-dashboard-card { position: relative; }
+  .cycle-dashboard-card__ornaments { display: flex; align-items: center; gap: 0.55rem; }
+  .cycle-dashboard-orbit { display: grid; height: 2.7rem; width: 2.7rem; place-items: center; border-radius: 50%; background: conic-gradient(#800020 0 66%, #f6d7db 66% 100%); }
+  .cycle-dashboard-orbit i { height: 1.94rem; width: 1.94rem; border-radius: 50%; background: #fffdfb; }
+  .wellness-entry-surface { box-shadow: 0 14px 32px rgba(90, 0, 24, 0.09); }
+  .wellness-entry-surface__header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; padding-bottom: 1rem; border-bottom: 1px solid #eedcdf; }
+  .redtent-feature-page > header { position: relative; }
+  .redtent-feature-page > header::after { content: ""; display: block; width: 3.5rem; height: 0.18rem; margin-top: 1rem; border-radius: 999px; background: linear-gradient(90deg, #800020, #d4af57); }
+  .redtent-feature-page .rose-card { box-shadow: 0 12px 30px rgba(90, 0, 24, 0.07); }
+  .redtent-feature-hero { background: radial-gradient(circle at 88% 10%, rgba(212, 175, 87, 0.24), transparent 14rem), linear-gradient(135deg, #5a0018, #800020 58%, #3f0b1b); }
+  .redtent-nourish-hero { background: linear-gradient(135deg, #f9e8e9, #f0d5db 58%, #ead1ad); box-shadow: 0 14px 32px rgba(90, 0, 24, 0.1); }
+  .redtent-private-space-page .rose-card, .ask-redtent-page .rose-card { border-radius: 1.35rem; }
+  .redtent-profile-identity { position: relative; overflow: hidden; isolation: isolate; padding-top: 4.65rem !important; }
+  .redtent-profile-identity::before { content: ""; position: absolute; inset: 0 0 auto; z-index: -1; height: 4rem; background: radial-gradient(circle at 88% 30%, rgba(212, 175, 87, 0.34), transparent 9rem), linear-gradient(100deg, #800020, #a52745); }
+  .redtent-profile-page .rose-card > .eyebrow:first-child { color: #8b2941; }
+  .redtent-profile-page .field-input { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72); }
+  @media (max-width: 639px) { .redtent-feature-page > header::after { margin-top: 0.75rem; } .redtent-feature-page .font-display.text-3xl { font-size: 1.95rem; } .redtent-feature-page .rose-card { border-radius: 1.15rem; } }
   .phase-pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 0.4rem 0.7rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.02em; }
   .nav-side-item { display: flex; width: 100%; align-items: center; gap: 0.75rem; border-radius: 0.9rem; padding: 0.75rem; color: #7b6159; font-size: 0.875rem; font-weight: 600; transition: background 160ms ease-out, color 160ms ease-out, transform 160ms ease-out; }
   .nav-side-item:hover { background: #f9ebe7; color: #a04759; }
@@ -204,6 +234,9 @@ html[data-accent-intensity="bold"] { --redtent-accent: #650016; --redtent-accent
 }
 
 .dark .warm-canvas { background: radial-gradient(circle at 86% 2%, rgba(151, 0, 39, 0.38), transparent 23rem), radial-gradient(circle at 4% 28%, rgba(212, 175, 87, 0.08), transparent 20rem), linear-gradient(148deg, #250710 0%, #410b1a 54%, #260811 100%); }
+.dark .redtent-logo { color: #fff4ef; }
+.dark .redtent-logo__tagline { color: #e8abb8; }
+.dark .redtent-mobile-brand { background: rgba(42, 6, 18, 0.86); box-shadow: 0 8px 24px rgba(8, 1, 4, 0.34); }
 .dark .rose-card { border-color: rgba(255, 225, 220, 0.18); background: rgba(60, 13, 27, 0.96); box-shadow: 0 14px 36px rgba(13, 2, 7, 0.32); }
 .dark .eyebrow { color: #f0a9b7; }
 .dark .nav-side-item { color: #f0d8d2; }
@@ -236,7 +269,17 @@ html[data-accent-intensity="bold"] { --redtent-accent: #650016; --redtent-accent
   .dark .care-safety strong { color: #ffd1d8 !important; }
   .dark .redtent-safety-callout { border-color: #8f3a51; background: #3d0c1b; color: #fff0eb; }
   .dark .redtent-safety-callout__action { background: #f4dce0; color: #68001c; }
-  .dark .redtent-safety-callout__action:hover { background: #fff8f5; }
+.dark .redtent-safety-callout__action:hover { background: #fff8f5; }
+  .dark .redtent-log-action { border-color: #713045; background: #3c0d1b; box-shadow: 0 12px 30px rgba(8, 1, 4, 0.28); }
+  .dark .redtent-log-action__icon { background: #5d152b; color: #ffd3db; }
+  .dark .cycle-dashboard-orbit { background: conic-gradient(#d48193 0 66%, #5d2032 66% 100%); }
+  .dark .cycle-dashboard-orbit i { background: #3d0c1b; }
+  .dark .wellness-entry-surface__header { border-color: #713045; }
+  .dark .redtent-feature-page .rose-card { box-shadow: 0 14px 32px rgba(8, 1, 4, 0.25); }
+  .dark .redtent-feature-hero { background: radial-gradient(circle at 88% 10%, rgba(212, 175, 87, 0.18), transparent 14rem), linear-gradient(135deg, #4a0b1d, #850025 58%, #310712); }
+  .dark .redtent-nourish-hero { background: linear-gradient(135deg, #4a1325, #5a1a2e 58%, #4e331a); box-shadow: 0 14px 32px rgba(8, 1, 4, 0.28); }
+  .dark .redtent-profile-identity::before { background: radial-gradient(circle at 88% 30%, rgba(212, 175, 87, 0.2), transparent 9rem), linear-gradient(100deg, #560017, #8f0027); }
+  .dark .redtent-profile-page .rose-card > .eyebrow:first-child { color: #f1adba; }
 .dark .accent-intensity-help { color: #ffc7d1; }
 .dark .accent-intensity-help:hover, .dark .accent-intensity-help:focus-visible { background: #804959; outline-color: #ffb4c1; }
 .dark .accessibility-switch { background: #9a5c6b; }

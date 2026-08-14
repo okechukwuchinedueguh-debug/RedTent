@@ -192,3 +192,9 @@
 - [x] Align the product’s burgundy, deep-wine, blush, cream, and restrained-gold presentation with the supplied RedTent brand board.
 - [x] Refine the shared product copy to match the board’s empowering, private, care-connected RedTent voice without health claims.
 - [x] Add regression coverage, visually verify mobile and desktop light and dark states, and synchronize the brand-aligned release to GitHub and Vercel.
+- [x] Create a reusable RedTent flame-logo component and place it consistently in authenticated, unauthenticated, loading, and mobile navigation contexts.
+- [x] Refine the shared responsive desktop sidebar and mobile navigation to match the supplied premium burgundy, blush, cream, and editorial interface language.
+- [x] Refresh Today, Cycle, wellness logging, and calendar surfaces with clearer responsive hierarchy inspired by the supplied dashboard reference.
+- [x] Update Care, Your Patterns, Nourish, Ask Redtent, and Your Space layouts with the supplied care-navigation, community, and private-record visual direction without enabling unverified services.
+- [x] Refresh Profile and appearance settings with the supplied responsive settings-card hierarchy while preserving user-scoped controls.
+- [x] Add regression coverage, validate mobile and desktop light and dark layouts, and synchronize the completed UI refresh to GitHub and Vercel.

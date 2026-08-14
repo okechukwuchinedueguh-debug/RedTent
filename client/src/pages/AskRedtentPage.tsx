@@ -71,7 +71,7 @@ export default function AskRedtentPage() {
 
   const isPending = ask.isPending || continueConversation.isPending;
 
-  return <div className="ask-redtent-page mx-auto max-w-5xl px-4 pb-48 pt-5 sm:px-7 sm:pb-12 lg:px-10 lg:pt-9">
+  return <div className="redtent-feature-page ask-redtent-page mx-auto max-w-5xl px-4 pb-48 pt-5 sm:px-7 sm:pb-12 lg:px-10 lg:pt-9">
     <header className="max-w-3xl">
       <p className="eyebrow">Ask Redtent</p>
       <div className="mt-1 flex flex-wrap items-end justify-between gap-4">

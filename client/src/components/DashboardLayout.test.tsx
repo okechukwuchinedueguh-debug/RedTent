@@ -40,3 +40,10 @@ it("shows the global Light and Dark appearance control in the authenticated shel
   expect(screen.getAllByRole("button", { name: /light/i }).length).toBeGreaterThan(0);
   expect(screen.getAllByRole("button", { name: /dark/i }).length).toBeGreaterThan(0);
 });
+
+it("keeps the shared Redtent flame lockup available in the mobile and desktop shell", () => {
+  render(<ThemeProvider><DashboardLayout><p>Today’s cycle overview</p></DashboardLayout></ThemeProvider>);
+
+  expect(screen.getAllByRole("button", { name: "Go to Redtent Today" }).length).toBeGreaterThan(0);
+  expect(screen.getAllByLabelText("Redtent").length).toBeGreaterThanOrEqual(2);
+});

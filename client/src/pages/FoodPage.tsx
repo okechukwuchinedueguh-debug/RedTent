@@ -127,7 +127,7 @@ export default function FoodPage() {
   const activePhase = overview.data.summary.phase as Phase;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-8 pt-5 sm:px-7 lg:px-10 lg:pt-9">
+    <div className="redtent-feature-page redtent-food-page mx-auto max-w-6xl px-4 pb-8 pt-5 sm:px-7 lg:px-10 lg:pt-9">
       <header><p className="eyebrow">Food Lens</p><h1 className="mt-1 font-display text-3xl sm:text-4xl">Snap it. Ask it. Understand it.</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-[#806A63]">Food Lens helps you explore what is visible in a meal with cultural context, uncertainty, and gentle ideas. It is never a scorecard for your body or food choices.</p></header>
       <section className="mt-7 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="overflow-hidden rounded-[1.7rem] bg-[#512F37] p-6 text-[#FFF9F7] shadow-[0_18px_50px_rgba(77,36,47,0.2)] sm:p-8">
