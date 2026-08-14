@@ -19,6 +19,7 @@ import { trpc } from "@/lib/trpc";
 import OnboardingFlow from "./OnboardingFlow";
 import { MobilePeriodLogButton } from "./MobilePeriodLogButton";
 import { RedtentLoading } from "./RedtentLoading";
+import { GlobalThemeToggle } from "./GlobalThemeToggle";
 
 const mobileItems = [
   { path: "/", label: "Today", icon: House },
@@ -60,6 +61,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!user) {
     return (
       <div className="min-h-screen warm-canvas px-5 py-8 grid place-items-center">
+        <div className="global-theme-control"><GlobalThemeToggle /></div>
         <section className="w-full max-w-md rounded-[2rem] bg-white/80 p-8 shadow-[0_24px_65px_rgba(89,55,46,0.14)] ring-1 ring-[#EBDCD4] backdrop-blur">
           <div className="mb-8 flex items-center gap-3"><div className="brand-mark">R</div><span className="font-display text-3xl text-[#3F2A25]">Redtent</span></div>
           <p className="eyebrow">Your body. Your cycle. Your story.</p>
@@ -85,7 +87,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen warm-canvas text-[#3F2A25]">
-      {isOffline && <div role="status" className="fixed inset-x-3 top-3 z-50 mx-auto max-w-md rounded-xl bg-[#513039] px-4 py-3 text-center text-xs font-semibold text-white shadow-lg">You’re offline. Your latest saved information may not be available until you reconnect.</div>}
+      <div className="global-theme-control"><GlobalThemeToggle /></div>
+      {isOffline && <div role="status" className="fixed inset-x-3 top-20 z-50 mx-auto max-w-md rounded-xl bg-[#513039] px-4 py-3 text-center text-xs font-semibold text-white shadow-lg">You’re offline. Your latest saved information may not be available until you reconnect.</div>}
       <aside className="app-sidebar fixed inset-y-0 left-0 z-30 hidden w-[250px] flex-col border-r border-[#E9D9D2] bg-[#FFFDFB]/90 px-4 py-5 backdrop-blur lg:flex">
         <button className="flex items-center gap-3 px-3 text-left" onClick={() => setLocation("/")}><div className="brand-mark">R</div><span className="font-display text-[27px]">Redtent</span></button>
         <nav className="mt-10 space-y-1">{nav(desktopItems)}</nav>

@@ -161,3 +161,6 @@
 - [x] Remove partner login, shared-device companion selection, companion routes, and partner-support controls from the current Redtent experience while preserving private user records.
 - [x] Build an accessible user-only multi-cycle trends dashboard with clear logged-pattern summaries, recent-cycle comparisons, and non-diagnostic analytics visuals.
 - [x] Add focused trend-calculation and companion-removal regression coverage, mobile validation, and release synchronization.
+- [x] Add a visible Light and Dark preference control at the top-right of every authenticated Redtent page on mobile and desktop, preserving the user’s selected preference.
+- [x] Review and repair dark-mode badge and status-label contrast across the active Redtent experience.
+- [x] Add focused theme-control and contrast regression coverage, validate mobile and desktop layouts, and synchronize the release.

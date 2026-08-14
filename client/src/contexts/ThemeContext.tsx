@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_THEME_PREFERENCE, nextThemeTransition, resolveThemePreference, type ResolvedTheme, type ThemePreference } from "@/lib/themePreference";
 import { runThemeTransition } from "@/lib/themeTransition";
 
@@ -35,7 +35,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       root.classList.toggle("dark", theme === "dark");
       root.style.colorScheme = theme;
     };
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduceMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cleanup = runThemeTransition({ root, previousTheme: previousTheme.current, nextTheme: theme, prefersReducedMotion: reduceMotion, applyTheme, requestFrame: callback => window.requestAnimationFrame(callback), cancelFrame: id => window.cancelAnimationFrame(id), scheduleTimeout: (callback, delay) => window.setTimeout(callback, delay), clearScheduledTimeout: id => window.clearTimeout(id) });
     previousTheme.current = theme;
     return cleanup;
