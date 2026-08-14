@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 import { runThemeTransition, shouldAnimateThemeTransition } from "./themeTransition";
 
 describe("theme transition motion", () => {
-  it("animates only between different resolved themes", () => {
+  it("animates only between different appearance states", () => {
     expect(shouldAnimateThemeTransition(null, "dark", false)).toBe(false);
-    expect(shouldAnimateThemeTransition("light", "light", false)).toBe(false);
-    expect(shouldAnimateThemeTransition("light", "dark", false)).toBe(true);
+    expect(shouldAnimateThemeTransition("light:balanced:standard", "light:balanced:standard", false)).toBe(false);
+    expect(shouldAnimateThemeTransition("light:balanced:standard", "dark:balanced:standard", false)).toBe(true);
+    expect(shouldAnimateThemeTransition("dark:balanced:standard", "dark:balanced:high", false)).toBe(true);
   });
 
   it("does not animate when the user prefers reduced motion", () => {
@@ -19,8 +20,8 @@ describe("theme transition motion", () => {
     const applied: string[] = [];
     runThemeTransition({
       root: { classList: { add: value => classes.add(value), remove: value => classes.delete(value) } },
-      previousTheme: "light",
-      nextTheme: "dark",
+      previousAppearance: "light:balanced:standard",
+      nextAppearance: "dark:balanced:standard",
       prefersReducedMotion: false,
       applyTheme: () => applied.push("dark"),
       requestFrame: callback => { frames.push(callback); return 1; },
@@ -41,8 +42,8 @@ describe("theme transition motion", () => {
     const applied: string[] = [];
     runThemeTransition({
       root: { classList: { add: value => classes.add(value), remove: value => classes.delete(value) } },
-      previousTheme: "light",
-      nextTheme: "dark",
+      previousAppearance: "light:balanced:standard",
+      nextAppearance: "dark:balanced:standard",
       prefersReducedMotion: true,
       applyTheme: () => applied.push("dark"),
       requestFrame: () => 1,

@@ -1,15 +1,15 @@
 import type { ResolvedTheme } from "./themePreference";
 
-export function shouldAnimateThemeTransition(previousTheme: ResolvedTheme | null, nextTheme: ResolvedTheme, prefersReducedMotion: boolean) {
-  return previousTheme !== null && previousTheme !== nextTheme && !prefersReducedMotion;
+export function shouldAnimateThemeTransition(previousAppearance: string | null, nextAppearance: string, prefersReducedMotion: boolean) {
+  return previousAppearance !== null && previousAppearance !== nextAppearance && !prefersReducedMotion;
 }
 
 type ThemeTransitionRoot = { classList: { add: (name: string) => void; remove: (name: string) => void } };
 
-export function runThemeTransition({ root, previousTheme, nextTheme, prefersReducedMotion, applyTheme, requestFrame, cancelFrame, scheduleTimeout, clearScheduledTimeout }: {
+export function runThemeTransition({ root, previousAppearance, nextAppearance, prefersReducedMotion, applyTheme, requestFrame, cancelFrame, scheduleTimeout, clearScheduledTimeout }: {
   root: ThemeTransitionRoot;
-  previousTheme: ResolvedTheme | null;
-  nextTheme: ResolvedTheme;
+  previousAppearance: string | null;
+  nextAppearance: string;
   prefersReducedMotion: boolean;
   applyTheme: () => void;
   requestFrame: (callback: () => void) => number;
@@ -17,7 +17,7 @@ export function runThemeTransition({ root, previousTheme, nextTheme, prefersRedu
   scheduleTimeout: (callback: () => void, delay: number) => number;
   clearScheduledTimeout: (id: number) => void;
 }) {
-  if (!shouldAnimateThemeTransition(previousTheme, nextTheme, prefersReducedMotion)) {
+  if (!shouldAnimateThemeTransition(previousAppearance, nextAppearance, prefersReducedMotion)) {
     applyTheme();
     return undefined;
   }

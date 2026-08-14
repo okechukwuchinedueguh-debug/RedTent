@@ -46,7 +46,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [highContrast, setHighContrast] = useState(readHighContrastPreference);
   const [now, setNow] = useState(() => new Date());
   const theme = useMemo(() => resolveThemePreference(preference, now), [preference, now]);
-  const previousTheme = useRef<ResolvedTheme | null>(null);
+  const previousAppearance = useRef<string | null>(null);
+  const appearanceSignature = `${theme}:${accentIntensity}:${highContrast ? "high" : "standard"}`;
 
   useEffect(() => {
     const root = document.documentElement;
@@ -57,10 +58,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       root.style.colorScheme = theme;
     };
     const reduceMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const cleanup = runThemeTransition({ root, previousTheme: previousTheme.current, nextTheme: theme, prefersReducedMotion: reduceMotion, applyTheme, requestFrame: callback => window.requestAnimationFrame(callback), cancelFrame: id => window.cancelAnimationFrame(id), scheduleTimeout: (callback, delay) => window.setTimeout(callback, delay), clearScheduledTimeout: id => window.clearTimeout(id) });
-    previousTheme.current = theme;
+    const cleanup = runThemeTransition({ root, previousAppearance: previousAppearance.current, nextAppearance: appearanceSignature, prefersReducedMotion: reduceMotion, applyTheme, requestFrame: callback => window.requestAnimationFrame(callback), cancelFrame: id => window.cancelAnimationFrame(id), scheduleTimeout: (callback, delay) => window.setTimeout(callback, delay), clearScheduledTimeout: id => window.clearTimeout(id) });
+    previousAppearance.current = appearanceSignature;
     return cleanup;
-  }, [theme, accentIntensity, highContrast]);
+  }, [theme, accentIntensity, highContrast, appearanceSignature]);
 
   useEffect(() => {
     window.localStorage.setItem("redtent-theme-preference", preference);

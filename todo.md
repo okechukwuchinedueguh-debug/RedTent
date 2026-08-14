@@ -168,3 +168,7 @@
 - [x] Add saved accent-intensity and high-contrast accessibility preferences to Redtent’s appearance settings.
 - [x] Add a private client-side export action for the user’s logged multi-cycle trend analytics.
 - [x] Add focused appearance and export regression coverage, validate responsive layouts, and synchronize the release.
+- [x] Remove the visible Appearance label, substantially narrow the floating Light and Dark control, and keep it clear of page content.
+- [x] Add an accessible tooltip that explains how accent intensity changes the dashboard’s visual emphasis.
+- [x] Add smooth reduced-motion-safe fade transitions for Light, Dark, and high-contrast appearance changes.
+- [x] Add focused regression coverage, validate responsive layouts and motion behavior, and synchronize the release.
