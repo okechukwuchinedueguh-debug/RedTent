@@ -188,3 +188,7 @@
 - [x] Extend the responsive navigation, profile, and supporting product framing for the Redtent Health ecosystem without removing existing private wellness tools.
 - [x] Update README product positioning, architecture boundaries, and deferred integration plan for verified clinicians, payments, WhatsApp, pharmacies, and laboratories.
 - [x] Add focused regression coverage, validate responsive light and dark layouts, and synchronize the complete Redtent update to GitHub and Vercel.
+- [x] Rework dark-mode background, card, safety-callout, and navigation contrast to remove unreadable pale-on-pale states.
+- [x] Align the product’s burgundy, deep-wine, blush, cream, and restrained-gold presentation with the supplied RedTent brand board.
+- [x] Refine the shared product copy to match the board’s empowering, private, care-connected RedTent voice without health claims.
+- [x] Add regression coverage, visually verify mobile and desktop light and dark states, and synchronize the brand-aligned release to GitHub and Vercel.

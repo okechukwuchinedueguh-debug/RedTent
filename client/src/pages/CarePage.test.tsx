@@ -10,7 +10,8 @@ import CarePage from "./CarePage";
 it("presents care navigation without unverified listings, booking, or diagnostic claims", () => {
   const markup = renderToStaticMarkup(<CarePage />);
 
-  expect(markup).toContain("Care, when a next step feels useful.");
+  expect(markup).toContain("Find care, when a next step feels useful.");
+  expect(markup).toContain("Understand your body. Connect with care.");
   expect(markup).toContain("locally verified partners");
   expect(markup).toContain("Doctors");
   expect(markup).toContain("Pharmacy &amp; labs");

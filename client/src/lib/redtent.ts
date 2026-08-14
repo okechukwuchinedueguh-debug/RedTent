@@ -32,8 +32,8 @@ export const displayDate = (value: Date | string, options: Intl.DateTimeFormatOp
 
 export const copy = {
   tagline: "Your Cycle. Your Care. Your Power.",
-  appDescription: "Redtent is a private women’s health and care-navigation platform for Africa. Understand your cycle, food, symptoms, and personal patterns, then choose a thoughtful next step.",
+  appDescription: "Redtent is a private women’s health platform for Africa. Track your cycle, understand your context, and choose a thoughtful care path that fits your life.",
   safety: "Redtent shares general wellness information, not medical advice. Cycle forecasts, food observations, and personal patterns are estimates based on what you choose to log. For symptoms that feel severe, persistent, unusual, or worrying, speak with a qualified healthcare professional.",
-  privateSpace: "Your cycle, reflections, check-ins, Food Lens snapshots, and care preferences stay inside your private Redtent space.",
+  privateSpace: "Your cycle, reflections, check-ins, Food Lens snapshots, and care preferences stay inside your private Redtent space. Your data remains yours.",
   foodLens: "Snap it. Ask it. Understand it.",
 } as const;
