@@ -156,4 +156,5 @@
 - [x] Build an opt-in partner support invitation, revocation control, and restricted companion page that never exposes the owner’s full Redtent dashboard or private logs.
 - [x] Add a shared-device companion mode that lets the owner select a partner’s phone after signing into their own Redtent account, while keeping the full dashboard and private logs hidden.
 - [x] Keep Resend-powered opt-in email delivery as a saved future integration and complete safety copy, focused regression coverage, mobile validation, and release synchronization for the current companion release.
-- [ ] Reconcile the latest Redtent checkpoint with the GitHub release branch and Vercel, then verify the live publication the user can access.
+- [x] Reconcile the latest Redtent checkpoint with the GitHub release branch and Vercel, then verify the live publication the user can access.
+- [x] Repair Vercel production routing so Redtent serves the application at the public root rather than the bundled server JavaScript, then revalidate and publish the corrected production release.
