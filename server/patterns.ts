@@ -69,18 +69,37 @@ export function buildCycleTrendDashboard({ logs, wellness, reflections, cycleLen
   dated.forEach(({ entry }) => {
     try { (JSON.parse(entry.symptoms) as string[]).forEach(symptom => symptomCounts.set(symptom, (symptomCounts.get(symptom) || 0) + 1)); } catch { /* Preserve the existing legacy-data guard. */ }
   });
-  const cycleStarts = [...logs].sort((a, b) => b.startAt.getTime() - a.startAt.getTime()).slice(0, 4);
-  const recentCycles = cycleStarts.map((log, index) => {
-    const prior = cycleStarts[index + 1];
-    return { startAt: log.startAt, length: prior ? Math.round((log.startAt.getTime() - prior.startAt.getTime()) / 86_400_000) : null };
+  const chronologicalLogs = [...logs].sort((a, b) => a.startAt.getTime() - b.startAt.getTime());
+  const cycleRows = chronologicalLogs.map((log, index) => {
+    const next = chronologicalLogs[index + 1];
+    const length = next ? Math.round((next.startAt.getTime() - log.startAt.getTime()) / 86_400_000) : null;
+    const checkIns = wellness.filter(entry => entry.entryAt >= log.startAt && (!next || entry.entryAt < next.startAt)).length;
+    const reflectionCount = reflections.filter(reflection => reflection.cycleStartAt.getTime() === log.startAt.getTime()).length;
+    return { startAt: log.startAt, length, checkIns, reflectionCount };
   });
+  const trackedIntervals = cycleRows.map(row => row.length).filter((length): length is number => length !== null && length > 0);
+  const averageLength = trackedIntervals.length ? Math.round(trackedIntervals.reduce((sum, length) => sum + length, 0) / trackedIntervals.length) : null;
+  const shortestLength = trackedIntervals.length ? Math.min(...trackedIntervals) : null;
+  const longestLength = trackedIntervals.length ? Math.max(...trackedIntervals) : null;
+  const recentCycles = cycleRows.slice(-4).reverse();
   return {
     sample: { cyclesTracked: logs.length, checkIns: wellness.length, reflections: reflections.length },
+    timing: {
+      averageLength,
+      shortestLength,
+      longestLength,
+      variation: shortestLength !== null && longestLength !== null ? longestLength - shortestLength : null,
+      intervalsTracked: trackedIntervals.length,
+    },
+    coverage: {
+      cyclesWithCheckIns: cycleRows.filter(row => row.checkIns > 0).length,
+      cyclesWithReflections: cycleRows.filter(row => row.reflectionCount > 0).length,
+    },
     moodCounts,
     energyCounts,
     topSignals: Array.from(symptomCounts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([label, count]) => ({ label, count })),
     recentCycles,
     recentReflections: reflections.slice(0, 3).map(reflection => ({ moment: reflection.moment, whatHelped: reflection.whatHelped, entryAt: reflection.entryAt })),
-    note: "This view reflects only the cycle dates, check-ins, and reflections you chose to log. It is not a diagnosis, prediction, or measure of what you should feel.",
+    note: "This view reflects only the cycle dates, check-ins, and reflections you chose to log. Timing ranges are descriptions of logged starts, not a diagnosis, prediction, or measure of what you should feel.",
   };
 }

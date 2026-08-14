@@ -1,12 +1,11 @@
 import { TRPCError } from "@trpc/server";
-import { createHash, randomBytes } from "node:crypto";
 import { z } from "zod";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { invokeLLM, listLLMModels } from "./_core/llm";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
-import { getCalendarMarks, getCycleExperience, getCycleSummary, phaseGuidance, type CycleMoment, type CyclePhase } from "./cycle";
+import { getCalendarMarks, getCycleExperience, getCycleSummary, phaseGuidance, type CyclePhase } from "./cycle";
 import * as db from "./db";
 import { foodAnalysisSchema, visionOutputSchema } from "./foodAnalysis";
 import { buildAskRedtentSystemPrompt } from "./askRedtent";
@@ -19,22 +18,6 @@ const cycleMomentSchema = z.enum(["menstrual", "post-menstrual", "follicular", "
 const daySchema = z.coerce.date();
 function ensureDateIsNormalised(date: Date) {
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-}
-
-function hashPartnerToken(token: string) {
-  return createHash("sha256").update(token).digest("hex");
-}
-
-function buildPartnerSupportCopy(experience: { id: CycleMoment; title: string }) {
-  const notes: Record<CycleMoment, string> = {
-    menstrual: "They may appreciate rest, practical help, or simply being listened to. Let their own words lead.",
-    "post-menstrual": "This is a personal check-in time after an estimated period. A small, thoughtful gesture can be enough.",
-    follicular: "This is an estimated post-period part of their cycle. Ask what support would feel useful today.",
-    ovulation: "This is an estimated mid-cycle window. Check in with care instead of assuming what they need.",
-    premenstrual: "Their estimated period may be approaching. Offer patience, practical support, and space to say what would help.",
-    luteal: "This is an estimated later-cycle window. A calm check-in can be more helpful than assumptions.",
-  };
-  return { title: experience.title, detail: notes[experience.id], privacy: "This companion view never includes private journals, food, symptoms, fertility information, or the full Redtent dashboard." };
 }
 
 async function getCurrentCycle(userId: number) {
@@ -210,35 +193,6 @@ export const appRouter = router({
   notifications: router({
     get: protectedProcedure.query(({ ctx }) => db.getNotificationPreferences(ctx.user.id)),
     save: protectedProcedure.input(z.object({ ownerBrowserAlertsEnabled: z.boolean(), reminderTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Choose a valid local time.") })).mutation(({ ctx, input }) => db.updateNotificationPreferences(ctx.user.id, { ...input, consentedAt: input.ownerBrowserAlertsEnabled ? new Date() : null })),
-  }),
-  partner: router({
-    list: protectedProcedure.query(({ ctx }) => db.listPartnerConnections(ctx.user.id)),
-    create: protectedProcedure.input(z.object({ partnerEmail: z.string().trim().toLowerCase().email(), partnerName: z.string().trim().max(80).nullable().optional(), emailAlertsEnabled: z.boolean(), browserAlertsEnabled: z.boolean(), consent: z.literal(true) })).mutation(async ({ ctx, input }) => {
-      const token = randomBytes(32).toString("base64url");
-      const id = await db.createPartnerConnection(ctx.user.id, { partnerEmail: input.partnerEmail, partnerName: input.partnerName, tokenHash: hashPartnerToken(token), emailAlertsEnabled: input.emailAlertsEnabled, browserAlertsEnabled: input.browserAlertsEnabled });
-      return { id, inviteUrl: `https://redtentapp-n2tdag4a.manus.space/companion?token=${token}` };
-    }),
-    update: protectedProcedure.input(z.object({ id: z.number().int().positive(), partnerName: z.string().trim().max(80).nullable().optional(), emailAlertsEnabled: z.boolean().optional(), browserAlertsEnabled: z.boolean().optional() })).mutation(async ({ ctx, input }) => {
-      const { id, ...values } = input;
-      const updated = await db.updatePartnerConnection(ctx.user.id, id, values);
-      if (!updated) throw new TRPCError({ code: "NOT_FOUND", message: "That active partner connection was not found." });
-      return { success: true };
-    }),
-    revoke: protectedProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => {
-      const revoked = await db.revokePartnerConnection(ctx.user.id, input.id);
-      if (!revoked) throw new TRPCError({ code: "NOT_FOUND", message: "That active partner connection was not found." });
-      return { success: true };
-    }),
-    companion: publicProcedure.input(z.object({ token: z.string().min(20).max(120) })).query(async ({ input }) => {
-      const connection = await db.getPartnerConnectionByToken(hashPartnerToken(input.token));
-      if (!connection) throw new TRPCError({ code: "NOT_FOUND", message: "This companion link is no longer available." });
-      const { profile, experience } = await getCurrentCycle(connection.ownerUserId);
-      return { partnerName: connection.partnerName, ownerName: profile.username || "Your partner", support: buildPartnerSupportCopy(experience), browserAlertsEnabled: Boolean(connection.browserAlertsEnabled), emailAlertsEnabled: Boolean(connection.emailAlertsEnabled) };
-    }),
-    sharedCompanion: protectedProcedure.query(async ({ ctx }) => {
-      const { profile, experience } = await getCurrentCycle(ctx.user.id);
-      return { ownerName: profile.username || "Your partner", support: buildPartnerSupportCopy(experience) };
-    }),
   }),
   profile: router({
     get: protectedProcedure.query(({ ctx }) => db.getOrCreateProfile(ctx.user.id)),

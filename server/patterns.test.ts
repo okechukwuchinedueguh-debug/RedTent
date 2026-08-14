@@ -41,6 +41,8 @@ describe("Redtent pattern observations", () => {
     });
 
     expect(dashboard.sample).toEqual({ cyclesTracked: 2, checkIns: 2, reflections: 1 });
+    expect(dashboard.timing).toMatchObject({ averageLength: 28, shortestLength: 28, longestLength: 28, variation: 0, intervalsTracked: 1 });
+    expect(dashboard.recentCycles[0]).toMatchObject({ length: null, checkIns: 2, reflectionCount: 1 });
     expect(dashboard.topSignals).toEqual(expect.arrayContaining([{ label: "Bloating", count: 1 }]));
     expect(dashboard.recentReflections[0]?.whatHelped).toBe("I kept an easier evening.");
     expect(dashboard.note).toContain("not a diagnosis");

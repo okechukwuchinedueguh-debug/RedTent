@@ -13,7 +13,6 @@ import JournalPage from "./pages/JournalPage";
 import NotFound from "./pages/NotFound";
 import ProfilePage from "./pages/ProfilePage";
 import PatternsPage from "./pages/PatternsPage";
-import PartnerCompanionPage from "./pages/PartnerCompanionPage";
 import WellnessPage from "./pages/WellnessPage";
 
 function DashboardRoutes() {
@@ -31,7 +30,7 @@ function DashboardRoutes() {
   </Switch></DashboardLayout>;
 }
 
-function Router() { return <Switch><Route path="/companion" component={PartnerCompanionPage} /><Route component={DashboardRoutes} /></Switch>; }
+function Router() { return <Switch><Route component={DashboardRoutes} /></Switch>; }
 
 export default function App() {
   return <ErrorBoundary><ThemeProvider><TooltipProvider><Toaster /><Router /></TooltipProvider></ThemeProvider></ErrorBoundary>;

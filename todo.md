@@ -158,3 +158,6 @@
 - [x] Keep Resend-powered opt-in email delivery as a saved future integration and complete safety copy, focused regression coverage, mobile validation, and release synchronization for the current companion release.
 - [x] Reconcile the latest Redtent checkpoint with the GitHub release branch and Vercel, then verify the live publication the user can access.
 - [x] Repair Vercel production routing so Redtent serves the application at the public root rather than the bundled server JavaScript, then revalidate and publish the corrected production release.
+- [x] Remove partner login, shared-device companion selection, companion routes, and partner-support controls from the current Redtent experience while preserving private user records.
+- [x] Build an accessible user-only multi-cycle trends dashboard with clear logged-pattern summaries, recent-cycle comparisons, and non-diagnostic analytics visuals.
+- [x] Add focused trend-calculation and companion-removal regression coverage, mobile validation, and release synchronization.
