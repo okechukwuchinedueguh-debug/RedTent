@@ -177,3 +177,6 @@
 - [x] Add an accessibility-settings shortcut within the global appearance control.
 - [x] Repair the mobile dark-mode bottom-navigation contrast and selected-state treatment shown in the reported screenshot.
 - [x] Add regression coverage, validate the appearance and mobile dark-mode improvements, and synchronize the release.
+- [x] Remove the intrusive floating Appearance and accessibility settings popup from the compact global theme control.
+- [x] Preserve the clean label-free Light and Dark selector after removing the popup trigger.
+- [x] Validate the corrected mobile theme control and synchronize the release to GitHub and Vercel.

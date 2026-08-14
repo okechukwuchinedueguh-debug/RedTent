@@ -148,12 +148,6 @@ html[data-accent-intensity="bold"] { --redtent-accent: #8e3048; --redtent-accent
   .global-theme-toggle__choices { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2rem; }
   .global-theme-toggle__option { display: inline-flex; min-height: 1.66rem; align-items: center; justify-content: center; gap: 0.16rem; border-radius: 0.52rem; padding: 0.18rem 0.18rem; color: #765650; font-size: 0.56rem; font-weight: 800; }
   .global-theme-toggle__option.active { background: var(--redtent-accent); color: #fff8f6; box-shadow: 0 2px 8px rgba(127, 56, 72, 0.22); }
-  .global-theme-toggle__menu-trigger { display: inline-flex; width: 100%; min-height: 1.38rem; align-items: center; justify-content: center; gap: 0.18rem; margin-top: 0.14rem; border-radius: 0.46rem; color: #815f58; font-size: 0.53rem; font-weight: 800; }
-  .global-theme-toggle__menu-trigger:hover, .global-theme-toggle__menu-trigger:focus-visible { background: #f8e5e1; color: var(--redtent-accent-strong); outline: 2px solid var(--redtent-accent); outline-offset: 2px; }
-  .global-theme-toggle__menu { min-width: 13.5rem; border-color: #e4cbc6; background: #fffdfb; color: #593d37; box-shadow: 0 14px 30px rgba(88, 53, 48, 0.2); }
-  .global-theme-toggle__menu-label { color: #96716a; font-size: 0.63rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-  .global-theme-toggle__menu-item { gap: 0.55rem; color: #613f3a; font-size: 0.75rem; font-weight: 700; }
-  .global-theme-toggle__menu-item:focus { background: #f8e5e1; color: var(--redtent-accent-strong); }
   .appearance-intensity-choice { display: grid; min-height: 4.15rem; justify-items: start; border: 1px solid #e7d8d3; border-radius: 0.85rem; background: #fffdfb; padding: 0.7rem; color: #694e48; text-align: left; }
   .appearance-intensity-choice__heading { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 0.4rem; font-size: 0.8rem; font-weight: 800; }
   .appearance-intensity-choice small { margin-top: 0.18rem; color: #8b7068; font-size: 0.66rem; line-height: 1.25; }
@@ -210,12 +204,6 @@ html[data-accent-intensity="bold"] { --redtent-accent: #8e3048; --redtent-accent
 .dark .global-theme-toggle__label { color: #f0bdc5; }
   .dark .global-theme-toggle__option { color: #f8e4df; }
   .dark .global-theme-toggle__option.active { background: #dc7c91; color: #341f28; box-shadow: 0 2px 10px rgba(38, 18, 27, 0.28); }
-  .dark .global-theme-toggle__menu-trigger { color: #f5d7d1; }
-  .dark .global-theme-toggle__menu-trigger:hover, .dark .global-theme-toggle__menu-trigger:focus-visible { background: #8d4d5e; color: #fff8f5; outline-color: #ffc2cd; }
-  .dark .global-theme-toggle__menu { border-color: #bd7080; background: #593241; color: #fff5f1; }
-  .dark .global-theme-toggle__menu-label { color: #efbdc5; }
-  .dark .global-theme-toggle__menu-item { color: #fff5f1; }
-  .dark .global-theme-toggle__menu-item:focus { background: #8d4d5e; color: #fff8f5; }
 .dark .phase-pill, .dark .signal-badge, .dark .trend-badge, .dark .confidence-badge { border: 1px solid #e29aaa; background: #8c4d5d !important; color: #fff8f5 !important; }
 .dark .confidence-badge { background: #a75c6c !important; color: #fffaf7 !important; }
 .dark .appearance-intensity-choice { border-color: #9b5b6a; background: #653b49; color: #fff4ef; }
