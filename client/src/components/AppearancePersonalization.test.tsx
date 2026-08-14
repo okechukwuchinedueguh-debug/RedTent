@@ -16,6 +16,10 @@ it("renders the saved visual-emphasis and high-contrast choices", () => {
   expect(markup).toContain("Gentle");
   expect(markup).toContain("Balanced");
   expect(markup).toContain("Bold");
+  expect(markup).toContain('data-accent-preview="soft"');
+  expect(markup).toContain('data-accent-preview="balanced"');
+  expect(markup).toContain('data-accent-preview="bold"');
+  expect(markup).toContain('aria-label="Gentle accent preview"');
   expect(markup).toContain("High contrast");
   expect(markup).toContain('aria-checked="false"');
   expect(setAccentIntensity).not.toHaveBeenCalled();

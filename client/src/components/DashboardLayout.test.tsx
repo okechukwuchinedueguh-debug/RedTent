@@ -39,4 +39,13 @@ it("shows the global Light and Dark appearance control in the authenticated shel
   expect(screen.getAllByRole("group", { name: "Choose light or dark appearance" }).length).toBeGreaterThan(0);
   expect(screen.getAllByRole("button", { name: /light/i }).length).toBeGreaterThan(0);
   expect(screen.getAllByRole("button", { name: /dark/i }).length).toBeGreaterThan(0);
+  expect(screen.getAllByRole("button", { name: "Open appearance and accessibility menu" }).length).toBeGreaterThan(0);
+});
+
+it("opens the global appearance menu with a direct accessibility-settings shortcut", async () => {
+  const user = userEvent.setup();
+  render(<ThemeProvider><DashboardLayout><p>Today’s cycle overview</p></DashboardLayout></ThemeProvider>);
+
+  await user.click(screen.getAllByRole("button", { name: "Open appearance and accessibility menu" })[0]);
+  expect(screen.getByRole("menuitem", { name: "Appearance and accessibility settings" })).not.toBeNull();
 });

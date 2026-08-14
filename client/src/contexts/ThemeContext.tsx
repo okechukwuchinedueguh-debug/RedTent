@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_THEME_PREFERENCE, nextThemeTransition, resolveThemePreference, type ResolvedTheme, type ThemePreference } from "@/lib/themePreference";
 import { runThemeTransition } from "@/lib/themeTransition";
+import { toast } from "sonner";
 
 interface ThemeContextType {
   theme: ResolvedTheme;
@@ -42,8 +43,8 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [preference, setPreference] = useState<ThemePreference>(readInitialPreference);
-  const [accentIntensity, setAccentIntensity] = useState<AccentIntensity>(readAccentIntensity);
-  const [highContrast, setHighContrast] = useState(readHighContrastPreference);
+  const [accentIntensity, setAccentIntensityState] = useState<AccentIntensity>(readAccentIntensity);
+  const [highContrast, setHighContrastState] = useState(readHighContrastPreference);
   const [now, setNow] = useState(() => new Date());
   const theme = useMemo(() => resolveThemePreference(preference, now), [preference, now]);
   const previousAppearance = useRef<string | null>(null);
@@ -82,8 +83,28 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     return () => window.clearTimeout(timeout);
   }, [now, preference]);
 
+  const setThemePreference = (nextPreference: ThemePreference) => {
+    if (nextPreference === preference) return;
+    setPreference(nextPreference);
+    const label = nextPreference === "auto" ? "Automatic mode" : `${nextPreference[0].toUpperCase()}${nextPreference.slice(1)} mode`;
+    toast.success(`Appearance updated: ${label}.`);
+  };
+
+  const setAccentIntensity = (nextIntensity: AccentIntensity) => {
+    if (nextIntensity === accentIntensity) return;
+    setAccentIntensityState(nextIntensity);
+    const label = nextIntensity === "soft" ? "Gentle" : nextIntensity === "bold" ? "Bold" : "Balanced";
+    toast.success(`Appearance updated: ${label} accents.`);
+  };
+
+  const setHighContrast = (enabled: boolean) => {
+    if (enabled === highContrast) return;
+    setHighContrastState(enabled);
+    toast.success(`Appearance updated: High contrast ${enabled ? "on" : "off"}.`);
+  };
+
   return (
-    <ThemeContext.Provider value={{ theme, preference, setThemePreference: setPreference, toggleTheme: () => setPreference(theme === "light" ? "dark" : "light"), accentIntensity, setAccentIntensity, highContrast, setHighContrast }}>
+    <ThemeContext.Provider value={{ theme, preference, setThemePreference, toggleTheme: () => setThemePreference(theme === "light" ? "dark" : "light"), accentIntensity, setAccentIntensity, highContrast, setHighContrast }}>
       {children}
     </ThemeContext.Provider>
   );

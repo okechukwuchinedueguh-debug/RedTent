@@ -172,3 +172,8 @@
 - [x] Add an accessible tooltip that explains how accent intensity changes the dashboard’s visual emphasis.
 - [x] Add smooth reduced-motion-safe fade transitions for Light, Dark, and high-contrast appearance changes.
 - [x] Add focused regression coverage, validate responsive layouts and motion behavior, and synchronize the release.
+- [x] Add a brief in-app confirmation after an appearance preference changes.
+- [x] Add visible accent preview swatches for Gentle, Balanced, and Bold settings.
+- [x] Add an accessibility-settings shortcut within the global appearance control.
+- [x] Repair the mobile dark-mode bottom-navigation contrast and selected-state treatment shown in the reported screenshot.
+- [x] Add regression coverage, validate the appearance and mobile dark-mode improvements, and synchronize the release.

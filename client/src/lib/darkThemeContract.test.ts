@@ -11,6 +11,9 @@ describe("Redtent dark-theme contrast contract", () => {
     expect(stylesheet).toContain(".dark .onboarding-surface");
     expect(stylesheet).toContain(".dark .onboarding-choice");
     expect(stylesheet).toContain(".dark .app-mobile-navigation");
+    expect(stylesheet).toContain(".dark .nav-mobile-item.active { background: #bd6378; color: #fffaf7;");
+    expect(stylesheet).toContain("html.dark[data-accent-intensity] .nav-mobile-item.active");
+    expect(stylesheet).toContain("html.dark.high-contrast .nav-mobile-item.active");
     expect(stylesheet).toContain("bg-[#F7E7E3]");
     expect(stylesheet).toContain("background: #784452 !important");
     expect(stylesheet).toContain(".dark .ask-redtent-context label");
@@ -25,6 +28,7 @@ describe("Redtent dark-theme contrast contract", () => {
     expect(stylesheet).toContain("bg-[#E9D8DD]");
     expect(stylesheet).toContain(".dark .global-theme-toggle");
     expect(stylesheet).toContain(".dark .global-theme-toggle__option.active");
+    expect(stylesheet).toContain(".dark .global-theme-toggle__menu-trigger");
     expect(stylesheet).toContain(".dark .phase-pill, .dark .signal-badge, .dark .trend-badge, .dark .confidence-badge");
     expect(stylesheet).toContain("html.high-contrast");
     expect(stylesheet).toContain("html.dark.high-contrast");
