@@ -26,5 +26,9 @@ describe("Redtent dark-theme contrast contract", () => {
     expect(stylesheet).toContain(".dark .global-theme-toggle");
     expect(stylesheet).toContain(".dark .global-theme-toggle__option.active");
     expect(stylesheet).toContain(".dark .phase-pill, .dark .signal-badge, .dark .trend-badge, .dark .confidence-badge");
+    expect(stylesheet).toContain("html.high-contrast");
+    expect(stylesheet).toContain("html.dark.high-contrast");
+    expect(stylesheet).toContain("top: calc(max(0.75rem, env(safe-area-inset-top)) + 4.75rem)");
+    expect(stylesheet).toContain("html[data-accent-intensity=\"bold\"]");
   });
 });

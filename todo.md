@@ -164,3 +164,7 @@
 - [x] Add a visible Light and Dark preference control at the top-right of every authenticated Redtent page on mobile and desktop, preserving the user’s selected preference.
 - [x] Review and repair dark-mode badge and status-label contrast across the active Redtent experience.
 - [x] Add focused theme-control and contrast regression coverage, validate mobile and desktop layouts, and synchronize the release.
+- [x] Move and compact the global Light and Dark control so it clears the account avatar on mobile and desktop.
+- [x] Add saved accent-intensity and high-contrast accessibility preferences to Redtent’s appearance settings.
+- [x] Add a private client-side export action for the user’s logged multi-cycle trend analytics.
+- [x] Add focused appearance and export regression coverage, validate responsive layouts, and synchronize the release.

@@ -7,7 +7,13 @@ interface ThemeContextType {
   preference: ThemePreference;
   setThemePreference: (preference: ThemePreference) => void;
   toggleTheme: () => void;
+  accentIntensity: AccentIntensity;
+  setAccentIntensity: (intensity: AccentIntensity) => void;
+  highContrast: boolean;
+  setHighContrast: (enabled: boolean) => void;
 }
+
+export type AccentIntensity = "soft" | "balanced" | "bold";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
@@ -19,12 +25,25 @@ function readInitialPreference(): ThemePreference {
   return stored === "light" || stored === "dark" || stored === "auto" ? stored : DEFAULT_THEME_PREFERENCE;
 }
 
+function readAccentIntensity(): AccentIntensity {
+  if (typeof window === "undefined") return "balanced";
+  const stored = window.localStorage.getItem("redtent-accent-intensity");
+  return stored === "soft" || stored === "bold" || stored === "balanced" ? stored : "balanced";
+}
+
+function readHighContrastPreference() {
+  if (typeof window === "undefined") return false;
+  return window.localStorage.getItem("redtent-high-contrast") === "true";
+}
+
 interface ThemeProviderProps {
   children: React.ReactNode;
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [preference, setPreference] = useState<ThemePreference>(readInitialPreference);
+  const [accentIntensity, setAccentIntensity] = useState<AccentIntensity>(readAccentIntensity);
+  const [highContrast, setHighContrast] = useState(readHighContrastPreference);
   const [now, setNow] = useState(() => new Date());
   const theme = useMemo(() => resolveThemePreference(preference, now), [preference, now]);
   const previousTheme = useRef<ResolvedTheme | null>(null);
@@ -33,17 +52,27 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     const root = document.documentElement;
     const applyTheme = () => {
       root.classList.toggle("dark", theme === "dark");
+      root.classList.toggle("high-contrast", highContrast);
+      root.dataset.accentIntensity = accentIntensity;
       root.style.colorScheme = theme;
     };
     const reduceMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cleanup = runThemeTransition({ root, previousTheme: previousTheme.current, nextTheme: theme, prefersReducedMotion: reduceMotion, applyTheme, requestFrame: callback => window.requestAnimationFrame(callback), cancelFrame: id => window.cancelAnimationFrame(id), scheduleTimeout: (callback, delay) => window.setTimeout(callback, delay), clearScheduledTimeout: id => window.clearTimeout(id) });
     previousTheme.current = theme;
     return cleanup;
-  }, [theme]);
+  }, [theme, accentIntensity, highContrast]);
 
   useEffect(() => {
     window.localStorage.setItem("redtent-theme-preference", preference);
   }, [preference]);
+
+  useEffect(() => {
+    window.localStorage.setItem("redtent-accent-intensity", accentIntensity);
+  }, [accentIntensity]);
+
+  useEffect(() => {
+    window.localStorage.setItem("redtent-high-contrast", String(highContrast));
+  }, [highContrast]);
 
   useEffect(() => {
     const next = nextThemeTransition(preference, now);
@@ -53,7 +82,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   }, [now, preference]);
 
   return (
-    <ThemeContext.Provider value={{ theme, preference, setThemePreference: setPreference, toggleTheme: () => setPreference(theme === "light" ? "dark" : "light") }}>
+    <ThemeContext.Provider value={{ theme, preference, setThemePreference: setPreference, toggleTheme: () => setPreference(theme === "light" ? "dark" : "light"), accentIntensity, setAccentIntensity, highContrast, setHighContrast }}>
       {children}
     </ThemeContext.Provider>
   );
